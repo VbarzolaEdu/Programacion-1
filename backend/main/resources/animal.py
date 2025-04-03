@@ -39,3 +39,4 @@ class Animales(Resource):
         id = int(max(ANIMALES.keys()))+1
         ANIMALES[id] = animal
         return ANIMALES[id], 201
+        
