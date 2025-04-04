@@ -4,5 +4,12 @@
 /lib64
 pyvenv.cfg
 .env
-venv/
+# Ignorar entornos virtuales
 .venv/
+venv/
+../.venv/
+
+# Ignorar pycache
+__pycache__/
+
+
