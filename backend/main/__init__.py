@@ -19,6 +19,9 @@ def create_app():
     api.add_resource(resources.UsersResource, '/users')
     api.add_resource(resources.PedidoResource, '/pedido/<id>')
     api.add_resource(resources.PedidosResource, '/pedidos')
+    api.add_resource(resources.ValoracionesResource, '/valoraciones')
+    api.add_resource(resources.ValoracionResource, '/valoracion/<int:id>')
+    api.add_resource(resources.NotificacionResource, '/notificacion')
     
     api.init_app(app)
     return app
