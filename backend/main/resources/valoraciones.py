@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request
 
 VALORACIONES = {
-    1: {'Usuario': 'usuario@gmail.com', 'plato': 'Milanesa con papas',"puntuacion":5 , 'comentario': "Excelente comida!"},
+    1:{'Usuario': 'usuario@gmail.com', 'plato': 'Milanesa con papas',"puntuacion":5 , 'comentario': "Excelente comida!"},
     2:{'Usuario': 'usuario@gmail.com', 'plato': 'Ensalada césar',"puntuacion":3 , 'comentario': "Buen plato, pero le falto condimentos"},
 }
 
