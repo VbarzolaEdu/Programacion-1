@@ -20,9 +20,6 @@ def create_app():
     api.add_resource(resources.PedidoResource, '/pedido/<id>')
     api.add_resource(resources.PedidosResource, '/pedidos')
     api.add_resource(resources.logoutResource, '/logout/<id>')
-    api.add_resource(resources.NotificacionesResources, '/Notificaciones')
-    api.add_resource(resources.ValoracionResources, '/valoraciones')
-    api.add_resource(resources.ValoracionesResources, '/valoracion/<id>')
     
     api.init_app(app)
     return app
