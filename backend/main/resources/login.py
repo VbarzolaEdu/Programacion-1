@@ -6,7 +6,7 @@ USERS = {
     'lcsbos@gmail.com': {'name': 'Lucas', 'apellido': 'Boschin', 'password': 'riverplate', 'role': 'user'},
     'frnlop@gmail.com': {'name': 'Francisco', 'apellido': 'Lopez', 'password': 'messi181222', 'role': 'user'},
     'mrtsan@gmail.com': {'name': 'Martin', 'apellido': 'Sanz', 'password': 'elpepe32', 'role': 'moderator'},
-    'frcber@gmail.com': {'name': 'Franco', 'apellido': 'Berardo', 'password': 'contraseña23', 'role': 'user'}
+    'frcber@gmail.com': {'name': 'Franco', 'apellido': 'Berardo', 'password': 'micontra23', 'role': 'user'}
 }
 
 class Login(Resource):
