@@ -1,2 +1,7 @@
 flask
+<<<<<<< HEAD
 python-dotenv
+=======
+python-dotenv
+flask-restful
+>>>>>>> flg
