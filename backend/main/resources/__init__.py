@@ -10,3 +10,5 @@ from .animal import Animales as AnimalesResource
 from .notificacioness import Notificaciones as Notificaciones
 from .valoracioness import Valoracion as Valoracion
 from .valoracioness import Valoraciones as Valoraciones
+from .auth import Login
+from .auth import Logout
