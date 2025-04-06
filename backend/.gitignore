@@ -7,3 +7,7 @@ pyvenv.cfg
 venv/
 .venv/
 tutorial-env/
+../.venv/
+# Ignorar pycache
+__pycache__/
+backend/main/__pycache__/
