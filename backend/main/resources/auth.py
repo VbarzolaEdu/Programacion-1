@@ -9,6 +9,8 @@ USERS = {
     'frcber@gmail.com': {'name': 'Franco', 'apellido': 'Berardo', 'password': 'micontra23', 'role': 'user'}
 }
 
+TOKENS = {}
+
 class Login(Resource):
     def post(self):
         data = request.get_json()
@@ -20,9 +22,26 @@ class Login(Resource):
         
         user = USERS.get(username)
         if user and user["password"] == password:
+            token = f"token-{username}"
+            TOKENS[token] = username  # Almacena el token como activo
             return {
                 "message": "Usuario autenticado correctamente.",
-                "role": user["role"]
+                "role": user["role"],
+                "token": token
             }, 200
         else:
             return {"error": "Credenciales inválidas"}, 401
+
+class Logout(Resource):
+    def post(self):
+        data = request.get_json()
+        token = data.get('token')
+        
+        if not token:
+            return {"error": "Token no proporcionado"}, 400
+        
+        if token in TOKENS:
+            del TOKENS[token] 
+            return {"message": "Sesión cerrada correctamente."}, 200
+        else:
+            return {"error": "Token inválido o ya expirado"}, 401

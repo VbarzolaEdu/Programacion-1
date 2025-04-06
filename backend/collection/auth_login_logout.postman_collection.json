@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "ea3e51b8-1328-42f7-ba3c-ced9eadc6765",
-		"name": "login",
+		"_postman_id": "b3a06cfa-6840-4bf9-9474-46cca93c3ae6",
+		"name": "login2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "39618932"
 	},
@@ -13,13 +13,7 @@
 					"type": "noauth"
 				},
 				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"username\": \"lcsbos@gmail.com\",\n    \"password\": \"riverplate\"\n}",
@@ -41,6 +35,40 @@
 					"port": "5000",
 					"path": [
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/logout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"token-lcsbos@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/logout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"logout"
 					]
 				}
 			},

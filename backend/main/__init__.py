@@ -18,6 +18,7 @@ def create_app():
     api.add_resource(resources.AnimalResource, '/animal/<id>')
     api.add_resource(resources.AnimalesResource, '/animales')
     api.add_resource(resources.Login, '/login')
+    api.add_resource(resources.Logout, '/logout')
     
     api.init_app(app)
     return app
