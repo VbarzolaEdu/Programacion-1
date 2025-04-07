@@ -27,15 +27,11 @@ def create_app():
     api.add_resource(resources.ValoracionResource, '/valoracion/<int:id>')
     api.add_resource(resources.NotificacionResource, '/notificacion')
     
-    api.add_resource(resources.Notificaciones, '/Notificaciones')
 
-    api.add_resource(resources.Valoraciones, '/valoraciones')
-
-    api.add_resource(resources.Valoracion, '/valoraciones/<int:id>')
     api.add_resource(resources.Login, '/login')
     api.add_resource(resources.Logout, '/logout')
 
-    api.add_resource(resources.Valoracion, '/valoraciones/<id>')
+ 
 
     
     api.init_app(app)
