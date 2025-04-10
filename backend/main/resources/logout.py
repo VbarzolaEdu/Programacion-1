@@ -1,5 +1,6 @@
 from flask_restful import Resource
 from flask import request
+from flask import Response
 
 USERS = {
     1:{'name': 'Valentin' ,'apellido' : 'Barzola' , 'mail':'vlnbar@gmail.com' , 'cellphone':'123456789'}, 
@@ -13,10 +14,8 @@ class logout(Resource):
 
     def get(self):
         return USERS
-    
-    def post(self):
-        user = request.get_json()
-        id = int(max(USERS.keys()))+1
-        USERS[id] = user
-        return USERS[id], 201
+
+    def logout():
+        message = "Logout exitoso"
+        return Response(message, status=200, mimetype='text/plain')
     
