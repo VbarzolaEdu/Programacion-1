@@ -2,8 +2,8 @@ from flask_restful import Resource
 from flask import request
 
 PEDIDOS = {
-    1: {'cliente': 'Juan', 'plato': 'Milanesa con papas', 'cantidad': 2},
-    2: {'cliente': 'Ana', 'plato': 'Ensalada César', 'cantidad': 1}
+    1: {'cliente': 'Juan', 'plato': 'Milanesa con papas', 'cantidad': 2, 'precio': 1500,'fecha': '2023-10-01', 'estado': 'pendiente'},
+    2: {'cliente': 'Ana', 'plato': 'Ensalada César', 'cantidad': 1, 'precio': 800,'fecha': '2023-10-02', 'estado': 'en preparación'},
 }
 
 class Pedido(Resource):
