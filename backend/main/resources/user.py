@@ -10,7 +10,6 @@ USERS = {
     }
 
 class User(Resource):
-    
     def get(self,id):
         if int(id) in USERS:
             return USERS[int(id)]

@@ -16,15 +16,16 @@ class Notificaciones(Resource):
     def post(self):
         data = request.get_json()
         
-     
+        #verificacion de rol
         rol_emisor = data.get('rol_emisor')
         if rol_emisor not in ['ADMIN', 'ENCARGADO']:
             return {'error': 'Rol no autorizado para enviar notificaciones'}, 403  
 
-        
+        #verifico los campos
         if not all(key in data for key in ['mensaje', 'destinatario']):
             return {'error': 'Faltan campos obligatorios (mensaje, destinatario)'}, 400
 
+        #agrego
         id = int(max(NOTIFICACIONES.keys())) + 1 if NOTIFICACIONES else 1
         NOTIFICACIONES[id] = {
             'mensaje': data['mensaje'],
@@ -32,3 +33,11 @@ class Notificaciones(Resource):
             'rol_emisor': rol_emisor
         }
         return NOTIFICACIONES[id], 201  
+
+
+
+
+
+
+
+
