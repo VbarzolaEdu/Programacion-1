@@ -5,7 +5,9 @@ from flask_restful import Api
 
 import main.resources as resources
 
+
 # Inicializamos restful
+
 api = Api()
 
 def create_app():
@@ -14,7 +16,9 @@ def create_app():
     # Cargamos variables de entorno
     load_dotenv()
        
+
     # Cargar los recursos
+
     api.add_resource(resources.UserResource, '/user/<id>')
     api.add_resource(resources.UsersResource, '/users')
     api.add_resource(resources.PedidoResource, '/pedido/<id>')
@@ -23,12 +27,12 @@ def create_app():
     api.add_resource(resources.ValoracionResource, '/valoracion/<int:id>')
     api.add_resource(resources.NotificacionResource, '/notificacion')
     
-    api.add_resource(resources.Notificaciones, '/Notificaciones')
 
-    api.add_resource(resources.Valoraciones, '/valoraciones')
-    api.add_resource(resources.Valoracion, '/valoraciones/<int:id>')
     api.add_resource(resources.Login, '/login')
     api.add_resource(resources.Logout, '/logout')
+
+ 
+
     
     api.init_app(app)
     return app
