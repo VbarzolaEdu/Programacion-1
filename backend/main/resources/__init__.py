@@ -7,5 +7,8 @@ from .valoraciones import Valoraciones as ValoracionesResource
 from .notificaciones import Notificaciones as NotificacionResource
 from .auth import Login
 from .auth import Logout
+from .producto import Producto as ProductoResource
+from .producto import Productos as ProductosResource
+
 
 

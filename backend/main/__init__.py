@@ -36,6 +36,8 @@ def create_app():
     api.add_resource(resources.NotificacionResource, '/notificacion')
     api.add_resource(resources.Login, '/login')
     api.add_resource(resources.Logout, '/logout')
+    api.add_resource(resources.ProductoResource, '/producto/<int:id>')
+    api.add_resource(resources.ProductosResource, '/productos')
 
  
 

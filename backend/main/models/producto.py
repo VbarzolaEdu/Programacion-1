@@ -1,0 +1,32 @@
+from .. import db
+
+class Producto(db.Model):
+    id= db.Column(db.Integer, primary_key=True)
+    nombre= db.Column(db.String(50), nullable=False)
+    precio= db.Column(db.Float, nullable=False)
+
+    # def __repr__(self):
+    #     return 
+
+    def to_json(self):
+        producto_json = {
+            'id': self.id,
+            'nombre': self.nombre,
+            'precio': self.precio
+        }
+        return producto_json
+    
+    # def to_json_complete(self):
+    #     producto_json = {
+    #         'id': self.id,
+    #         'nombre': self.nombre,
+    #         'precio': self.precio
+    #     }
+    #     return producto_json
+    
+    @staticmethod
+    def from_json(producto_json):
+        id = producto_json.get('id')
+        nombre = producto_json.get('nombre')
+        precio = producto_json.get('precio')
+        return Producto(id=id, nombre=nombre, precio=precio)
