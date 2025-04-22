@@ -1,13 +1,17 @@
 from datetime import datetime
 from .. import db
 from . import UserModel
+from .associations import pedido_producto
 
 class Pedido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     precio_final = db.Column(db.Integer, nullable=False)
     fecha = db.Column(db.DateTime, nullable=False)  # Cambiado a db.DateTime
+
     user = db.relationship('User', back_populates='pedidos')
+    notificaciones = db.relationship('Notificacion', back_populates='pedido')
+    productos = db.relationship('Producto', secondary=pedido_producto, back_populates='pedidos')
 
     def __repr__(self):
         return '<Pedido: %r %r>' % (self.id_user, self.precio_final)
