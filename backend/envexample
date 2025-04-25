@@ -1,2 +1,0 @@
-export PORT = 7000
-export NAME_APP = 'Esta variable lleva el user de la BD'

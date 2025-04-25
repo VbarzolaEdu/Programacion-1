@@ -43,8 +43,28 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_user\":1,\n    \"precio_final\":1500,\n    \"fecha\":\"2025-04-20T14:30:00\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:5000/pedidos",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"pedidos"
+					]
 				}
 			},
 			"response": []

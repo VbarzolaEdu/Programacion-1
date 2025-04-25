@@ -12,3 +12,4 @@ tutorial-env/
 __pycache__/
 backend/main/__pycache__/
 backend/main/resources/__pycache__/
+../tutorial-env/
