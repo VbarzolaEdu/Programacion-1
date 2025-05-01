@@ -1,7 +1,12 @@
 from datetime import datetime
 from .. import db
 from . import UserModel
-from .associations import pedido_producto
+
+pedido_producto = db.Table(
+    'pedido_producto',
+    db.Column('pedido_id', db.Integer, db.ForeignKey('pedido.id'), primary_key=True),
+    db.Column('producto_id', db.Integer, db.ForeignKey('producto.id'), primary_key=True)
+)
 
 class Pedido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,7 +16,8 @@ class Pedido(db.Model):
 
     user = db.relationship('User', back_populates='pedidos')
     notificaciones = db.relationship('Notificacion', back_populates='pedido')
-    productos = db.relationship('Producto', secondary=pedido_producto, back_populates='pedidos')
+    productos = db.relationship('Producto', secondary=pedido_producto,backref=db.backref('pedidos', lazy='dynamic'))  # Cambiado a 'productos' para evitar confusión
+    # back_populates='pedidos'
 
     def __repr__(self):
         return '<Pedido: %r %r>' % (self.id_user, self.precio_final)
@@ -21,7 +27,8 @@ class Pedido(db.Model):
             'id': self.id,
             'precio_final': self.precio_final,
             'fecha': self.fecha.isoformat(),  # Convierte a formato ISO 8601
-            'user': self.user.to_json()
+            'user': self.user.to_json(),
+            'productos': [producto.to_json() for producto in self.productos],
         }
         return pedido_json
 

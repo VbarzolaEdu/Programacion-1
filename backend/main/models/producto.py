@@ -1,5 +1,5 @@
 from .. import db
-from .associations import pedido_producto
+# from pedidos import pedido_producto
 
 class Producto(db.Model):
     id= db.Column(db.Integer, primary_key=True)
@@ -7,7 +7,7 @@ class Producto(db.Model):
     precio= db.Column(db.Float, nullable=False)
 
     valoracion=db.relationship('Valoracion', back_populates='producto', lazy=True)
-    pedidos = db.relationship('Pedido', secondary=pedido_producto, back_populates='productos')
+    # pedidos = db.relationship('Pedido', secondary=pedido_producto, back_populates='productos')
 
     # def __repr__(self):
     #     return 
