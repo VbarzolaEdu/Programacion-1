@@ -7,6 +7,8 @@ class User(db.Model):
     email = db.Column(db.String(120), nullable=False)
     cellphone = db.Column(db.Integer, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    rol= db.Column(db.String(120), nullable=False)  
+    estado= db.Column(db.String(120), nullable=False)
     #relacion con tabla pedidos
     pedidos= db.relationship('Pedido', back_populates='user', cascade="all, delete-orphan")
     valoraciones=db.relationship('Valoracion', back_populates='user', cascade="all, delete-orphan")
@@ -22,7 +24,9 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
-            'password': str(self.password)
+            'password': str(self.password),
+            'rol': str(self.rol),
+            'estado': str(self.estado)
         }
         return user_json
     
@@ -35,6 +39,8 @@ class User(db.Model):
             'email': str(self.email),
             'cellphone': self.cellphone,
             'password': str(self.password),
+            'rol': str(self.rol),
+            'estado': str(self.estado),
             'pedidos': pedidos
         }
     
@@ -47,4 +53,6 @@ class User(db.Model):
         email = user_json.get('email')
         cellphone = user_json.get('cellphone')
         password = user_json.get('password')
-        return User(id=id, nombre=nombre, apellidos=apellidos, email=email, cellphone=cellphone, password=password)
+        rol = user_json.get('rol')
+        estado = user_json.get('estado')
+        return User(id=id, nombre=nombre, apellidos=apellidos, email=email, cellphone=cellphone, password=password, rol=rol, estado=estado)

@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from .. import db
-from main.models import ProductoModel
+from main.models import ProductoModel, PedidoModel
 from flask import jsonify
 
 class Producto(Resource):
@@ -31,7 +31,12 @@ class Productos(Resource):
         return jsonify([producto.to_json() for producto in productos])
     
     def post(self):
+        pedido_ids= request.get_json().get('pedidos')
         productos= ProductoModel.from_json(request.get_json())
+        if pedido_ids:
+            pedidos= PedidoModel.query.filter(PedidoModel.id.in_(pedido_ids)).all()
+            productos.pedidos.extend(pedidos)
+
         db.session.add(productos)
         db.session.commit()
         return productos.to_json(), 201
