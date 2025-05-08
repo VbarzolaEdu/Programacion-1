@@ -4,10 +4,10 @@ from .. import db
 from main.models import PedidoModel
 from flask import jsonify
 
-PEDIDOS = {
-    1: {'cliente': 'Juan', 'plato': 'Milanesa con papas', 'cantidad': 2},
-    2: {'cliente': 'Ana', 'plato': 'Ensalada César', 'cantidad': 1}
-}
+# PEDIDOS = {
+#     1: {'cliente': 'Juan', 'plato': 'Milanesa con papas', 'cantidad': 2},
+#     2: {'cliente': 'Ana', 'plato': 'Ensalada César', 'cantidad': 1}
+# }
 
 class Pedido(Resource):
     def get(self, id):
