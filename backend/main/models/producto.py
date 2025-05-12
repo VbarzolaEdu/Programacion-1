@@ -5,7 +5,6 @@ class Producto(db.Model):
     id= db.Column(db.Integer, primary_key=True)
     nombre= db.Column(db.String(50), nullable=False)
     preparacion= db.Column(db.Float, nullable=False)
-    acompañamiento= db.Column(db.Float, nullable=False)
     precio= db.Column(db.Float, nullable=False)
     categoria= db.Column(db.String(50), nullable=False)
     disponibilidad= db.Column(db.String(50), nullable=False)
@@ -21,7 +20,6 @@ class Producto(db.Model):
             'id': self.id,
             'nombre': self.nombre,
             'estilo_de_preparacion': self.preparacion,
-            'acompañamiento': self.acompañamiento,
             'precio': self.precio,
             'categoria': self.categoria,
             'disponibilidad': self.disponibilidad
@@ -41,8 +39,7 @@ class Producto(db.Model):
         id = producto_json.get('id')
         nombre = producto_json.get('nombre')
         preparacion = producto_json.get('estilo_de_preparacion')
-        acompañamiento = producto_json.get('acompañamiento')
         precio = producto_json.get('precio')
         categoria = producto_json.get('categoria')
         disponibilidad = producto_json.get('disponibilidad')
-        return Producto(id=id, nombre=nombre,preparacion=preparacion,acompañamiento=acompañamiento, precio=precio, categoria=categoria, disponibilidad=disponibilidad)
+        return Producto(id=id, nombre=nombre,preparacion=preparacion, precio=precio, categoria=categoria, disponibilidad=disponibilidad)
