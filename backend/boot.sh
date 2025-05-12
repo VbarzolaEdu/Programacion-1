@@ -1,5 +1,5 @@
 #boot.sh
-source restaurente/backend/venv/bin/activate
+source restaurente/bin/activate
 python3 app.py
 
 #Permisos
