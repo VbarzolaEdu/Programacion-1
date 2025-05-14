@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from .. import db
-from main.models import Notificacion
+from main.models.notificaciones import Notificacion
 from flask import jsonify
 
 
