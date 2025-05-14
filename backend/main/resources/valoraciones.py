@@ -1,51 +1,44 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
 from .. import db
 from main.models import ValoracionModel
-from flask import jsonify
-
-# VALORACIONES = {
-#     1:{'Usuario': 'usuario@gmail.com', 'plato': 'Milanesa con papas',"puntuacion":5 , 'comentario': "Excelente comida!"},
-#     2:{'Usuario': 'usuario@gmail.com', 'plato': 'Ensalada césar',"puntuacion":3 , 'comentario': "Buen plato, pero le falto condimentos"},
-# }
-
 
 class Valoracion(Resource):
     def get(self, id):
-       valoracion=db.session.query(ValoracionModel).get_or_404(id)
-       return valoracion.to_json()
-    
+        valoracion = db.session.query(ValoracionModel).get_or_404(id)
+        return valoracion.to_json()
 
 class Valoraciones(Resource):
-    def get(self): 
-        valoracion=db.session.query(ValoracionModel).all()
-        return jsonify([valoracion.to_json() for valoracion in valoracion])
+    def get(self):
+        # Obtener parámetros de consulta
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+        id_usuario = request.args.get('id_usuario')
+        id_producto = request.args.get('id_producto')
+        puntuacion = request.args.get('puntuacion')
+
+        # Armar la consulta
+        query = db.session.query(ValoracionModel)
+
+        if id_usuario:
+            query = query.filter(ValoracionModel.id_usuario == int(id_usuario))
+        if id_producto:
+            query = query.filter(ValoracionModel.id_producto == int(id_producto))
+        if puntuacion:
+            query = query.filter(ValoracionModel.puntuacion == int(puntuacion))
+
+        # Aplicar paginación
+        valoraciones_paginadas = query.paginate(page=page, per_page=per_page, error_out=False)
+
+        return {
+            'valoraciones': [v.to_json() for v in valoraciones_paginadas.items],
+            'total': valoraciones_paginadas.total,
+            'pages': valoraciones_paginadas.pages,
+            'page': valoraciones_paginadas.page
+        }
 
     def post(self):
-        valoracion=ValoracionModel.from_json(request.get_json())
+        valoracion = ValoracionModel.from_json(request.get_json())
         db.session.add(valoracion)
         db.session.commit()
         return valoracion.to_json(), 201
-
-        
-        # data = request.get_json()
-
-        
-        # rol = data.get('rol')
-        # if rol != 'USER':
-        #     return {'error': 'Solo los usuarios pueden agregar valoraciones'}, 403
-
-        
-        # campos_requeridos = ['usuario', 'plato', 'puntuacion']
-        # if not all(key in data for key in campos_requeridos):
-        #     return {'error': f'Faltan campos obligatorios: {campos_requeridos}'}, 400
-
-        
-        # id = int(max(VALORACIONES.keys())) + 1 if VALORACIONES else 1
-        # VALORACIONES[id] = {
-        #     'usuario': data['usuario'],
-        #     'plato': data['plato'],
-        #     'puntuacion': data['puntuacion'],
-        #     'comentario': data.get('comentario', '')  
-        # }
-        # return VALORACIONES[id], 201
