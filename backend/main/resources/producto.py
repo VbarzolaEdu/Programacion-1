@@ -27,8 +27,41 @@ class Producto(Resource):
     
 class Productos(Resource):
     def get(self):
-        productos = db.session.query(ProductoModel).all()
-        return jsonify([producto.to_json() for producto in productos])
+        query = db.session.query(ProductoModel)
+
+        # Filtros
+        nombre = request.args.get('nombre')
+        if nombre:
+            query = query.filter(ProductoModel.nombre.ilike(f'%{nombre}%'))
+
+        precio_min = request.args.get('precio_min')
+        if precio_min:
+            query = query.filter(ProductoModel.precio >= float(precio_min))
+
+        precio_max = request.args.get('precio_max')
+        if precio_max:
+            query = query.filter(ProductoModel.precio <= float(precio_max))
+
+        categoria = request.args.get('categoria')
+        if categoria:
+            query = query.filter(ProductoModel.categoria.ilike(f'%{categoria}%'))
+
+        disponibilidad = request.args.get('disponibilidad')
+        if disponibilidad:
+            query = query.filter(ProductoModel.disponibilidad == disponibilidad)
+
+        # Paginación
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+        return jsonify({
+            'productos': [producto.to_json() for producto in pagination.items],
+            'total': pagination.total,
+            'pages': pagination.pages,
+            'page': pagination.page
+        })
+
     
     def post(self):
         pedido_ids= request.get_json().get('pedidos')
