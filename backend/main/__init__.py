@@ -3,12 +3,13 @@ from dotenv import load_dotenv
 from flask_restful import Api
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 #inicializamos restful
 api = Api()
-
 #inicializamos sqlalchemy
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     #Inicializar flask
@@ -24,6 +25,7 @@ def create_app():
     #Url de configuración de base de datos
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////'+os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME')
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # Cargar los recursos
     import main.resources as resources
