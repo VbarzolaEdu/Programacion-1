@@ -16,18 +16,16 @@ class Valoracion(db.Model):
 
     
     def to_json(self):
-        valoracion_json = {
-            'id': self.id,
-            'id_usuario': self.id_usuario,
-            'id_producto': self.id_producto,
-            'puntuacion': self.puntuacion,
-            'comentario': self.comentario,
-            'user': self.user.to_json(),
-            'producto': self.producto.to_json()
+        return {
+        'id': self.id,
+        'id_usuario': self.id_usuario,
+        'id_producto': self.id_producto,
+        'puntuacion': self.puntuacion,
+        'comentario': self.comentario,
+        'user': self.user.to_json() if self.user else None,
+        'producto': self.producto.to_json() if self.producto else None
+    }
 
-        }
-        return valoracion_json
-    
     # def to_json_complete(self):
         
     #     valoracion_json = {
