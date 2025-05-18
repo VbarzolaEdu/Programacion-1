@@ -1,22 +1,24 @@
 from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
-import os
 from flask_sqlalchemy import SQLAlchemy
+import os
 from flask_migrate import Migrate
 
-#inicializamos restful
+
+# Inicializamos restful
+
 api = Api()
-#inicializamos sqlalchemy
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 def create_app():
-    #Inicializar flask
+    # Inicializar flask
     app = Flask(__name__)
-    #cargamos variables de entorno
+    # Cargamos variables de entorno
     load_dotenv()
-    
+    #crear archivo bd sino existe
     if not os.path.exists(os.getenv('DATABASE_PATH') +os.getenv('DATABASE_NAME')):
         os.mknod(os.getenv('DATABASE_PATH') +os.getenv('DATABASE_NAME'))
     
@@ -41,5 +43,8 @@ def create_app():
     api.add_resource(resources.ProductoResource, '/producto/<int:id>')
     api.add_resource(resources.ProductosResource, '/productos')
 
+ 
+
+    
     api.init_app(app)
     return app

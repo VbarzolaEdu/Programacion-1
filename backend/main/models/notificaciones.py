@@ -1,4 +1,6 @@
 from .. import db
+import json
+from datetime import datetime
 
 class Notificacion(db.Model):
     id= db.Column(db.Integer, primary_key=True)
@@ -8,6 +10,7 @@ class Notificacion(db.Model):
 
     user = db.relationship('User', back_populates='notificaciones')
     pedido = db.relationship('Pedido', back_populates='notificaciones')
+
     def to_json(self):
         notificaciones_json = {
             'id': self.id,
@@ -21,7 +24,6 @@ class Notificacion(db.Model):
     
     @staticmethod
     def from_json(notificaciones_json):
-
         id=notificaciones_json.get('id')
         id_usuario=notificaciones_json.get('id_usuario')
         mensaje=notificaciones_json.get('mensaje')

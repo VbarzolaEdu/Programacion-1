@@ -1,65 +1,77 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
 from .. import db
-from main.models import PedidoModel
-from flask import jsonify
-
-# PEDIDOS = {
-#     1: {'cliente': 'Juan', 'plato': 'Milanesa con papas', 'cantidad': 2},
-#     2: {'cliente': 'Ana', 'plato': 'Ensalada César', 'cantidad': 1}
-# }
+from main.models import PedidoModel, ProductoModel
 
 class Pedido(Resource):
     def get(self, id):
-        pedido=db.session.query(PedidoModel).get_or_404(id)
-        return pedido.to_json()
+        pedido = db.session.query(PedidoModel).get_or_404(id)
+        return pedido.to_json(), 200
 
-        # if int(id) in PEDIDOS:
-        #     return PEDIDOS[int(id)]
-        
-        # return 'El id es inexistente', 404
-    
     def delete(self, id):
-        pedido=db.session.query(PedidoModel).get_or_404(id)
+        pedido = db.session.query(PedidoModel).get_or_404(id)
         db.session.delete(pedido)
         db.session.commit()
-        return '',204
-        # if int(id) in PEDIDOS:
-        #     del PEDIDOS[int(id)]
-        #     return 'Eliminado con exito', 204
-        
-        # return 'El id a eliminar es inexistente', 404
-    
+        return '', 204
+
     def put(self, id):
-        pedido=db.session.query(PedidoModel).get_or_404(id)
-        data= request.get_json().items()
-        for key, value in data:
-            setattr(pedido, key, value)
+        pedido = db.session.query(PedidoModel).get_or_404(id)
+        data = request.get_json()
+
+        for key, value in data.items():
+            if key != 'productos':  # Evitamos asignar directamente productos
+                setattr(pedido, key, value)
+
+        # Si se pasan productos para actualizar la relación
+        producto_ids = data.get('productos')
+        if producto_ids is not None:
+            productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
+            pedido.productos = productos  # Reemplaza productos asociados
+
+        db.session.add(pedido)
+        db.session.commit()
+        return pedido.to_json(), 200
+
+
+class Pedidos(Resource):
+    def get(self):
+        query = db.session.query(PedidoModel)
+
+        # Filtros
+        estado = request.args.get('estado')
+        if estado:
+            query = query.filter(PedidoModel.estado.ilike(f'%{estado}%'))
+
+        id_user = request.args.get('id_user')
+        if id_user:
+            query = query.filter(PedidoModel.id_user == int(id_user))
+
+        fecha = request.args.get('fecha')
+        if fecha:
+            query = query.filter(db.func.date(PedidoModel.fecha) == fecha)
+
+        # Paginación
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+
+        return jsonify({
+            'pedidos': [pedido.to_json() for pedido in pagination.items],
+            'total': pagination.total,
+            'pages': pagination.pages,
+            'page': pagination.page
+        })
+
+    def post(self):
+        data = request.get_json()
+        pedido = PedidoModel.from_json(data)
+
+        # Asociar productos si se mandan
+        producto_ids = data.get('productos')
+        if producto_ids:
+            productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
+            pedido.productos.extend(productos)
+
         db.session.add(pedido)
         db.session.commit()
         return pedido.to_json(), 201
-
-        # if int(id) in PEDIDOS:
-        #     pedido = PEDIDOS[int(id)]
-        #     data = request.get_json()
-        #     pedido.update(data)
-        #     return 'Pedido editado con exito', 201
-        
-        # return 'El id que intentan editar es inexistente', 404
-    
-class Pedidos(Resource):
-    def get(self):
-        pedidos=db.session.query(PedidoModel).all()
-        return jsonify([pedido.to_json() for pedido in pedidos])
-        
-    
-    def post(self):
-        pedidos = PedidoModel.from_json(request.get_json())
-        db.session.add(pedidos)
-        db.session.commit()
-        return pedidos.to_json(),201
-
-        # pedido = request.get_json()
-        # id = int(max(PEDIDOS.keys()))+1
-        # PEDIDOS[id] = pedido
-        # return PEDIDOS[id], 201
