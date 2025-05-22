@@ -4,6 +4,7 @@ from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 
 
 # Inicializamos restful
@@ -11,6 +12,7 @@ from flask_migrate import Migrate
 api = Api()
 db = SQLAlchemy()
 migrate = Migrate()
+jwt = JWTManager()
 
 
 def create_app():
@@ -43,8 +45,17 @@ def create_app():
     api.add_resource(resources.ProductoResource, '/producto/<int:id>')
     api.add_resource(resources.ProductosResource, '/productos')
 
- 
+    # cargar aplicacion en la api de restful
+    api.init_app(app)
+    #cargar clave secreta
+    app.config['JWT_SECRET_KEY'] = int(os.getenv('JWT_SECRET_KEY'))
+    #cargar el tiempo de expiracion del token
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
+    jwt.init_app(app)
 
-    
+    from main.auth import routes
+    app.register_blueprint(routes.auth)
+
+
     api.init_app(app)
     return app

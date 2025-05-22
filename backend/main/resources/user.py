@@ -1,8 +1,10 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
 from .. import db
 from main.models import UserModel
-from flask import jsonify
+from sqlalchemy import func, desc
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from main.auth.decorators import role_required
 
 # USERS = {
 #     1:{'name': 'Valentin' ,'apellido' : 'Barzola' , 'mail':'vlnbar@gmail.com' , 'cellphone':'123456789'}, 
@@ -13,15 +15,21 @@ from flask import jsonify
 #     }
 
 class User(Resource):
+    @jwt_required(optional=True)
     def get(self,id):
         user=db.session.query(UserModel).get_or_404(id)
-        return user.to_json()
+        current_identity = get_jwt_identity()
+        if current_identity == user.id:
+            return user.to_json_complete()
+        else:
+            return user.to_json()
 
         # if int(id) in USERS:
         #     return USERS[int(id)]
         
         # return 'User not found', 404
-        
+    
+    @jwt_required()
     def put(self,id):
 
         user=db.session.query(UserModel).get_or_404(id)
@@ -39,14 +47,17 @@ class User(Resource):
         #     return 'User updated', 201
         
         # return 'User not found', 404
-    
+
+    @role_required(roles = ["admin","users"])
     def delete(self,id):
         user=db.session.query(UserModel).get_or_404(id)
+        rol = get_jwt().get('rol')
+        if rol == 'users' and user.id != get_jwt_identity():
+            return 'No tienes permisos para eliminar este usuario', 403
         db.session.delete(user)
         db.session.commit()
         return user.to_json(), 204
     
-
         # if int(id) in USERS:
         #     del USERS[int(id)]
         #     return 'User deleted', 204
@@ -54,6 +65,7 @@ class User(Resource):
         # return 'User not found', 404
 
 class Users(Resource):
+    @role_required(roles = ["admin"])
     def get(self):
         # Obtener parámetros de consulta para filtrado
         args = request.args
@@ -78,6 +90,7 @@ class Users(Resource):
         # Devolver resultados
         return jsonify([user.to_json() for user in users])
     
+    @role_required(roles = ["admin"])
     def post(self):
         data = request.get_json()
         user = UserModel.from_json(data)
