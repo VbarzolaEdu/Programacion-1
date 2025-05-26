@@ -72,4 +72,13 @@ class User(db.Model):
         password = user_json.get('password')
         rol = user_json.get('rol')
         estado = user_json.get('estado')
-        return User(id=id, nombre=nombre, apellidos=apellidos, email=email, cellphone=cellphone, password=password, rol=rol, estado=estado)
+        return User(id=id, 
+                    nombre=nombre, 
+                    apellidos=apellidos, 
+                    email=email, 
+                    cellphone=cellphone, 
+                    plain_password=password, 
+                    rol=rol, 
+                    estado=estado
+                    )
+    
