@@ -55,14 +55,25 @@ class User(Resource):
 
 class Users(Resource):
     def get(self):
-        users=db.session.query(UserModel).all()
+        # Obtener parámetros de consulta para filtrado
+        args = request.args
+        query = db.session.query(UserModel)
+
+        # Filtrado (por nombre, email, etc.)
+        if 'nombre' in args:
+            query = query.filter(UserModel.nombre.like(f"%{args['nombre']}%"))
+        if 'email' in args:
+            query = query.filter(UserModel.email.like(f"%{args['email']}%"))
+        if 'rol' in args:
+            query = query.filter(UserModel.rol == args['rol'])
+
+        # Paginación
+        limit = int(args.get('limit', 10))  # Límite de resultados (por defecto 10)
+        page = int(args.get('page', 1))  # Número de página (por defecto 1)
+        offset = (page - 1) * limit  # Desplazamiento
+
+        # Aplicar paginación
+        users = query.offset(offset).limit(limit).all()
+
+        # Devolver resultados
         return jsonify([user.to_json() for user in users])
-    
-    def post(self):
-        user = UserModel.from_json(request.get_json())
-        db.session.add(user)
-        db.session.commit()
-        return user.to_json(), 201
-        # id = int(max(USERS.keys()))+1
-        # USERS[id] = user
-        # return USERS[id], 201 
