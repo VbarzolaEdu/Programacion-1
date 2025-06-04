@@ -20,6 +20,7 @@ def login():
     #Genera un nuevo token
     #Pasa el objeto user como identidad
     access_token = create_access_token(identity=user)
+    
     #Devolver valores y token
     data = {
         'id': str(user.id),

@@ -41,9 +41,6 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
-            'password': str(self.password),
-            'rol': str(self.rol),
-            'estado': str(self.estado)
         }
         return user_json
     
@@ -55,11 +52,11 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
-            'password': str(self.password),
             'rol': str(self.rol),
             'estado': str(self.estado),
             'pedidos': pedidos
         }
+        return user_json
     
     @staticmethod
     #convierto json a objeto
