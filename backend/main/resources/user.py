@@ -90,10 +90,10 @@ class Users(Resource):
         # Devolver resultados
         return jsonify([user.to_json() for user in users])
     
-    @role_required(roles = ["admin"])
     def post(self):
         data = request.get_json()
         user = UserModel.from_json(data)
         db.session.add(user)
         db.session.commit()
         return user.to_json(), 201
+    
