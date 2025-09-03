@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuarios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .header { background-color: #f7c546; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; text-align: center; padding: 20px; }
+    .header h2 { color: #d62828; font-weight: bold; }
+    .user-card { background-color: #fff; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+    .badge-pendiente { background-color: #fdd5c0; color: #d62828; }
+    .navbar { background-color: #f25c2a; border-top-left-radius: 15px; border-top-right-radius: 15px; }
+    .navbar a { color: white; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h2>Gestión de Usuarios</h2>
+  </div>
+
+  <!-- Barra de búsqueda -->
+  <div class="container my-3">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Buscar...">
+      <button class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="mb-3">
+      <button class="btn btn-sm btn-danger">Para Validar</button>
+      <button class="btn btn-sm btn-secondary">Todos</button>
+      <button class="btn btn-sm btn-dark">Bloqueados</button>
+    </div>
+
+    <!-- Usuario -->
+    <div class="user-card d-flex align-items-center">
+      <div class="rounded-circle bg-secondary me-3" style="width:40px; height:40px;"></div>
+      <div class="flex-grow-1">
+        <p class="mb-0 fw-bold">Gustavo Lopez</p>
+        <p class="mb-0">gustavolopez@gmail.com</p>
+        <span class="badge badge-pendiente">Pendiente</span>
+      </div>
+      <div>
+        <button class="btn btn-sm btn-success">Validar</button>
+        <button class="btn btn-sm btn-danger">Bloquear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar inferior -->
+  <nav class="navbar fixed-bottom navbar-expand d-flex justify-content-around">
+    <a href="index.html"><i class="bi bi-box"></i></a>
+    <a href="productos.html"><i class="bi bi-basket"></i></a>
+    <a href="#"><i class="bi bi-house"></i></a>
+    <a href="#"><i class="bi bi-person"></i></a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+</body>
+</html>

@@ -24,7 +24,7 @@ def role_required(roles):
 @jwt.user_identity_loader
 def user_identity_lookup(user):
     #Definir ID como atributo identificatorio
-    return user.id
+    return str(user.id)
 
 #Define que atributos se guardarán dentro del token
 @jwt.additional_claims_loader
