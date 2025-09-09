@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrarme</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #fff; font-family: 'Segoe UI', sans-serif; }
+    .app-header { background: #FFD966; padding: 20px; text-align: center; font-weight: bold; font-size: 1.4rem; color: #F25C2A; }
+    .card { border-radius: 16px; }
+  </style>
+</head>
+<body>
+  <div class="app-header">Crear cuenta</div>
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6">
+        <div class="card shadow-sm p-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Nombre y apellido</label>
+              <input type="text" class="form-control" placeholder="Juan Pérez">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" placeholder="tu@correo.com">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Teléfono</label>
+              <input type="tel" class="form-control" placeholder="+54 9 ...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Contraseña</label>
+              <input type="password" class="form-control" placeholder="••••••">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Repetir contraseña</label>
+              <input type="password" class="form-control" placeholder="••••••">
+            </div>
+          </div>
+          <button class="btn btn-success w-100 mt-3" onclick="crear()">Crear cuenta</button>
+          <div class="text-center mt-3">
+            <small>¿Ya tenés cuenta? <a href="login.html">Iniciá sesión</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function crear(){
+      alert('¡Cuenta creada! Ingresando...');
+      window.location.href = 'cliente-home.html';
+    }
+  </script>
+</body>
+</html>
