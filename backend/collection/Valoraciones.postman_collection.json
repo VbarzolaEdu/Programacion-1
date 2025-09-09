@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "e48ff0ae-af73-485c-8075-a0c77a8a556a",
+		"name": "Valoraciones",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43538764",
+		"_collection_link": "https://grupo-j-7728.postman.co/workspace/Grupo-J~726de4a9-183d-4da8-898c-8a3f3c2e43b3/collection/43571490-e48ff0ae-af73-485c-8075-a0c77a8a556a?action=share&source=collection_link&creator=43538764"
+	},
+	"item": [
+		{
+			"name": "get_all_valoracion",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/valoraciones",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"valoraciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "valoracion_post",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{        \"usuario\": \"usuario@gmail.com\",        \n          \"plato\": \"Milanesa con papas\",        \n          \"puntuacion\": 2,        \n          \"comentario\": \"La milanesa estaba cruda\",        \n          \"rol\":\"USER\"    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/valoraciones",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"valoraciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "valoracion_id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/valoracion/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"valoracion",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
