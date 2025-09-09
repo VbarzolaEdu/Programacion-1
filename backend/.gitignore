@@ -1,15 +1,23 @@
-/bin
-/include
-/lib
-/lib64
-pyvenv.cfg
-.env
+#entorno virtual
 venv/
 .venv/
-tutorial-env/
-../.venv/
-# Ignorar pycache
+env/
+.env
+*.env
+pyvenv.cfg
+
+#python
 __pycache__/
-backend/main/__pycache__/
-backend/main/resources/__pycache__/
-../tutorial-env/
+*.py[cod]
+
+
+bin/
+include/
+lib/
+lib64/
+
+#Base de datos local
+*.db
+
+
+*.sqlite3
