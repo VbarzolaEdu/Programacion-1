@@ -75,11 +75,3 @@ class Notificaciones(Resource):
         db.session.add(notificaciones)
         db.session.commit()
         return notificaciones.to_json(), 201
-
-
-
-
-
-
-
-

@@ -1,6 +1,7 @@
 from main import create_app
 import os
 
+# Cargar las variables de entorno
 
 app = create_app()
 

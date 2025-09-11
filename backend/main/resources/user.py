@@ -18,8 +18,8 @@ class User(Resource):
     @jwt_required(optional=True)
     def get(self,id):
         user=db.session.query(UserModel).get_or_404(id)
-        current_identity = get_jwt_identity()
-        if current_identity == user.id:
+        current_identity = get_jwt_identity() 
+        if str(current_identity) == str(user.id):
             return user.to_json_complete()
         else:
             return user.to_json()

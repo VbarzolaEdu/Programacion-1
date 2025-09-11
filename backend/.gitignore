@@ -12,3 +12,11 @@ tutorial-env/
 __pycache__/
 backend/main/__pycache__/
 backend/main/resources/__pycache__/
+#entorno virtual
+venv/
+.venv/
+env/
+.env
+*.env
+pyvenv.cfg
+# 

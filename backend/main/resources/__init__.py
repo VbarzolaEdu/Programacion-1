@@ -10,4 +10,3 @@ from .auth import Logout
 from .producto import Producto as ProductoResource
 from .producto import Productos as ProductosResource
 from .asignaciones import Asignacion as AsignacionResource
-

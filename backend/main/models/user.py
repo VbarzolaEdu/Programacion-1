@@ -5,16 +5,18 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)
     apellidos = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True, index=True)
-    cellphone = db.Column(db.Integer, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    rol= db.Column(db.String(120), nullable=False, server_default="users")  
+    cellphone = db.Column(db.Integer, nullable=False) 
     estado= db.Column(db.String(120), nullable=False)
+    
+    password = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(64),unique=True,index=True, nullable=False)
+    rol= db.Column(db.String(10), nullable=False, server_default="users") 
     #relacion con tabla pedidos
     pedidos= db.relationship('Pedido', back_populates='user', cascade="all, delete-orphan")
     valoraciones=db.relationship('Valoracion', back_populates='user', cascade="all, delete-orphan")
     notificaciones=db.relationship('Notificacion', back_populates='user', cascade="all, delete-orphan")
 
+    #"encriptar" contraseña en la base de datos
     @property
     def plain_password(self):
         raise AttributeError('Password cant be read')
@@ -27,6 +29,8 @@ class User(db.Model):
     def validate_pass(self,password):
         return check_password_hash(self.password, password)
 
+
+
     def __repr__(self):
         return '<User %r>' % self.nombre
 
@@ -37,9 +41,6 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
-            'password': str(self.password),
-            'rol': str(self.rol),
-            'estado': str(self.estado)
         }
         return user_json
     
@@ -51,11 +52,11 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
-            'password': str(self.password),
             'rol': str(self.rol),
             'estado': str(self.estado),
             'pedidos': pedidos
         }
+        return user_json
     
     @staticmethod
     #convierto json a objeto
@@ -68,4 +69,13 @@ class User(db.Model):
         password = user_json.get('password')
         rol = user_json.get('rol')
         estado = user_json.get('estado')
-        return User(id=id, nombre=nombre, apellidos=apellidos, email=email, cellphone=cellphone, plain_password=password, rol=rol, estado=estado)
+        return User(id=id, 
+                    nombre=nombre, 
+                    apellidos=apellidos, 
+                    email=email, 
+                    cellphone=cellphone, 
+                    plain_password=password, 
+                    rol=rol, 
+                    estado=estado
+                    )
+    

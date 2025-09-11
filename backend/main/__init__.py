@@ -1,3 +1,4 @@
+#Importar librerias 
 from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
@@ -5,16 +6,15 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
-from flask_mail import Mail
+from flask_mail import Mail 
 
-
-# Inicializamos restful
+# Iniciar
 
 api = Api()
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
-mailsender = Mail()
+mailsender=Mail()
 
 def create_app():
     # Inicializar flask
@@ -46,17 +46,16 @@ def create_app():
     api.add_resource(resources.ProductoResource, '/producto/<int:id>')
     api.add_resource(resources.ProductosResource, '/productos')
 
-    # cargar aplicacion en la api de restful
     api.init_app(app)
     #cargar clave secreta
-    app.config['JWT_SECRET_KEY'] = int(os.getenv('JWT_SECRET_KEY'))
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     #cargar el tiempo de expiracion del token
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
     jwt.init_app(app)
 
     from main.auth import routes
     app.register_blueprint(routes.auth)
-    
+
     #Configuracion del mail
     app.config['MAIL_HOSTNAME'] = os.getenv('MAIL_HOSTNAME')
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -68,4 +67,6 @@ def create_app():
     
     mailsender.init_app(app)
 
+
+    
     return app
