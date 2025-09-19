@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body { background: #fff; font-family: 'Segoe UI', sans-serif; padding-bottom: 70px; }
+    .app-header {
+      background: #FFD966;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: #F25C2A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .app-header img { width: 35px; height: 35px; }
+    .list-group-item { font-size: 1rem; }
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: #fff; border-top: 2px solid #FFD966;
+      display: flex; justify-content: space-around;
+      padding: 10px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    }
+    .bottom-nav a { color: #F25C2A; font-size: 1.3rem; text-decoration: none; }
+    .bottom-nav a.active { color: #D9534F; }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Hamburguesa">
+    Mis Pedidos
+  </div>
+
+  <div class="container mt-3">
+    <div class="list-group">
+      <div class="list-group-item">Pedido #1 - <span class="text-warning">En camino</span></div>
+      <div class="list-group-item">Pedido #2 - <span class="text-success">Entregado</span></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="cliente-home.html"><i class="bi bi-house-door-fill"></i></a>
+    <a href="calificaciones.html"><i class="bi bi-star-fill"></i></a>
+    <a href="pedidos.html" class="active"><i class="bi bi-bag-fill"></i></a>
+    <a href="perfil.html"><i class="bi bi-person-fill"></i></a>
+  </div>
+
+</body>
+</html>
