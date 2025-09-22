@@ -1,0 +1,28 @@
+<div class="app-header">Iniciar sesión</div>
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+      <div class="card shadow-sm p-4">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" placeholder="tu@correo.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <input type="password" class="form-control" placeholder="••••••••">
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rec">
+            <label class="form-check-label" for="rec">Recordarme</label>
+          </div>
+          <a href="#" class="small">Olvidé mi contraseña</a>
+        </div>
+        <button class="btn btn-primary w-100" routerLink="/cliente/cliente-home">Ingresar</button>
+        <div class="text-center mt-3">
+          <small>¿No tenés cuenta? <a routerLink="/auth/register">Registrate</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
