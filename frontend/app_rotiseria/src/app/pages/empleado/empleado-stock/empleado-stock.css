@@ -1,0 +1,50 @@
+body {
+      background-color: #fff;
+    }
+    .header {
+      background-color: #FFD966;
+      color: #D9534F;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .stock-card {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 15px;
+      background: #fff;
+      margin-bottom: 15px;
+    }
+    .item-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .btn-qty {
+      background-color: #FFD6C2;
+      border: none;
+      color: #D9534F;
+      font-weight: bold;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+    .btn-save {
+      background-color: #FFD6C2;
+      color: #D9534F;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border: none;
+      padding: 10px 30px;
+      border-radius: 20px;
+    }
+    .bottom-nav {
+      background-color: #D9534F;
+      padding: 10px 0;
+    }
+    .bottom-nav i {
+      font-size: 1.8rem;
+      color: white;
+    }
