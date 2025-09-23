@@ -33,6 +33,8 @@ export const routes: Routes = [
     {path: 'auth/login', component: Login},
 
     {path: 'auth/register', component: Register},
+
+    { path: 'cliente/hacer-pedido/:id', component: HacerPedido }
     
     
 

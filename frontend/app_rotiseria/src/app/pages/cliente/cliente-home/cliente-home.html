@@ -7,22 +7,22 @@
 <div class="container mt-4">
   <div class="row g-3">
     <div class="col-6">
-      <a class="card" routerLink="/cliente/hacer-pedido" style="text-decoration: none;">
-        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Producto 1">
-        <div class="card-body text-center">
+      <div class="card text-center" style="cursor:pointer;" (click)="irAHacerPedido(1)">
+        
+        <div class="card-body">
           <h5 class="card-title">Producto 1</h5>
           <p class="card-text">$1000</p>
         </div>
-      </a>
+      </div>
     </div>
     <div class="col-6">
-      <a class="card" routerLink="/cliente/hacer-pedido" style="text-decoration: none;">
-        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Producto 2">
-        <div class="card-body text-center">
+      <div class="card text-center" style="cursor:pointer;" (click)="irAHacerPedido(2)">
+       
+        <div class="card-body">
           <h5 class="card-title">Producto 2</h5>
           <p class="card-text">$1500</p>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </div>
