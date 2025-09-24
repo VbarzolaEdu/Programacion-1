@@ -1,0 +1,48 @@
+ <app-nav-admin></app-nav-admin>
+ <!-- Header -->
+  <div class="header">
+    <h2>Productos</h2>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="container my-3">
+    <div class="card mb-3 card-producto">
+      <div class="row g-0 align-items-center">
+        <div class="col-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="img-fluid rounded-start" alt="burger">
+        </div>
+        <div class="col-8">
+          <div class="p-2">
+            <p><strong>Nombre:</strong> Triple</p>
+            <p><strong>Categoría:</strong> Burger</p>
+            <p><strong>Precio:</strong> $12.000</p>
+            <p><strong>Disponibilidad:</strong> Sí</p>
+            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
+            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Repetición de productos -->
+    <div class="card mb-3 card-producto">
+      <div class="row g-0 align-items-center">
+        <div class="col-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="img-fluid rounded-start" alt="burger">
+        </div>
+        <div class="col-8">
+          <div class="p-2">
+            <p><strong>Nombre:</strong> Triple</p>
+            <p><strong>Categoría:</strong> Burger</p>
+            <p><strong>Precio:</strong> $12.000</p>
+            <p><strong>Disponibilidad:</strong> Sí</p>
+            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
+            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+

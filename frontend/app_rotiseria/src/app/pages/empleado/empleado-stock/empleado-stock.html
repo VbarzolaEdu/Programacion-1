@@ -1,0 +1,65 @@
+<app-nav-empleado></app-nav-empleado>
+  <!-- Header -->
+  <div class="header">
+    Stock
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="container my-4">
+
+    <!-- Producto 1 -->
+    <div class="stock-card d-flex align-items-center justify-content-between">
+      <img src="assets/pan.jpeg" alt="Pan" class="item-img">
+      <div class="flex-grow-1 ms-3">
+        <p class="mb-0"><strong>Cantidad:</strong> <span id="qty1">29</span></p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn-qty" onclick="changeQty('qty1', -1)">-</button>
+        <button class="btn-qty" onclick="changeQty('qty1', 1)">+</button>
+      </div>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="stock-card d-flex align-items-center justify-content-between">
+      <img src="assets/medallonDeCarne.jpeg" alt="Carne" class="item-img">
+      <div class="flex-grow-1 ms-3">
+        <p class="mb-0"><strong>Cantidad:</strong> <span id="qty2">14</span></p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn-qty" onclick="changeQty('qty2', -1)">-</button>
+        <button class="btn-qty" onclick="changeQty('qty2', 1)">+</button>
+      </div>
+    </div>
+
+    <!-- Producto 3 -->
+    <div class="stock-card d-flex align-items-center justify-content-between">
+      <img src="assets/queso.jpeg" alt="Queso" class="item-img">
+      <div class="flex-grow-1 ms-3">
+        <p class="mb-0"><strong>Cantidad:</strong> <span id="qty3">4</span></p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn-qty" onclick="changeQty('qty3', -1)">-</button>
+        <button class="btn-qty" onclick="changeQty('qty3', 1)">+</button>
+      </div>
+    </div>
+
+    <!-- Botón Guardar -->
+    <div class="text-center mt-4">
+      <button class="btn-save">Guardar</button>
+    </div>
+
+  </div>
+
+
+
+
+
+  <script>
+    // Función para cambiar cantidades
+    function changeQty(id, change) {
+      const qtyEl = document.getElementById(id);
+      let qty = parseInt(qtyEl.innerText);
+      qty = Math.max(0, qty + change); // Evita valores negativos
+      qtyEl.innerText = qty;
+    }
+  </script>

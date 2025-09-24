@@ -1,0 +1,6 @@
+    body { background-color: #f8f9fa; }
+    .header { background-color: #f7c546; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; text-align: center; padding: 20px; }
+    .header h2 { color: #d62828; font-weight: bold; }
+    .card-precio { background-color: #fde0db; border-radius: 12px; padding: 10px; }
+    .navbar { background-color: #f25c2a; border-top-left-radius: 15px; border-top-right-radius: 15px; }
+    .navbar a { color: white; }

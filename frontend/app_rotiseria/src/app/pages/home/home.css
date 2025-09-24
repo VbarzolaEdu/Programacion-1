@@ -1,0 +1,22 @@
+body {
+  background: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.app-header {
+  background: #FFD966;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #F25C2A;
+}
+
+.hero {
+  text-align: center;
+  padding: 48px 16px;
+
+}
+.img-rotiseria {
+  margin-bottom: 32px; 
+}

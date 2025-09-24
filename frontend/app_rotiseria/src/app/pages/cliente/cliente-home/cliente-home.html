@@ -1,0 +1,33 @@
+<app-nav-cliente></app-nav-cliente>
+
+<!-- Header -->
+<div class="app-header">Menú</div>
+
+<!-- Contenido -->
+<div class="container mt-4">
+  <div class="row g-3">
+    <!-- Producto 1 -->
+    <div class="col-6 text-center">
+      <img src="assets/buger1.jpg" alt="Pan" class="item-img mb-2" style="max-width: 150px; border-radius: 10px;">
+
+      <div class="card text-center" style="cursor:pointer;" (click)="irAHacerPedido(1)">
+        <div class="card-body">
+          <h5 class="card-title">Producto 1</h5>
+          <p class="card-text">$1000</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="col-6 text-center">
+      <img src="assets/buger1.jpg" alt="Pan" class="item-img mb-2" style="max-width: 150px; border-radius: 10px;">
+
+      <div class="card text-center" style="cursor:pointer;" (click)="irAHacerPedido(2)">
+        <div class="card-body">
+          <h5 class="card-title">Producto 2</h5>
+          <p class="card-text">$1500</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

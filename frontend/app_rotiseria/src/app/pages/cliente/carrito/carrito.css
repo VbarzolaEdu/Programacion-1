@@ -1,0 +1,7 @@
+body { background: #fff; font-family: 'Segoe UI', sans-serif; padding-bottom: 70px; }
+    .app-header { background: #FFD966; padding: 15px; text-align: center; font-weight: bold; font-size: 1.3rem; color: #F25C2A; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #F25C2A; display: flex; justify-content: space-around; padding: 12px 0; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    .bottom-nav a { color: #fff; font-size: 1.3rem; }
+    .producto-img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+    .qty { display: flex; align-items: center; gap: 8px; }
+    .totales { background: #fde0db; border-radius: 12px; padding: 16px; }
