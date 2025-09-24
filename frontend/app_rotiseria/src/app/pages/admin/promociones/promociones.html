@@ -1,3 +1,4 @@
+ <app-nav-admin></app-nav-admin>
  <!-- Header -->
   <div class="header">
     <h2>Promos por Email</h2>
@@ -50,7 +51,8 @@
 
       <div class="d-flex justify-content-between">
         <button type="button" class="btn btn-outline-secondary">Vista previa</button>
-        <button type="submit" class="btn btn-danger">Enviar</button>
+       
+        <button type="submit" class="btn btn-danger" (click)="mostrarMensaje()">Enviar</button>
       </div>
     </form>
   </div>

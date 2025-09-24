@@ -1,3 +1,4 @@
+ <app-nav-admin></app-nav-admin>
  <!-- Header -->
   <div class="header">
     <h2>Productos</h2>
@@ -17,8 +18,7 @@
             <p><strong>Precio:</strong> $12.000</p>
             <p><strong>Disponibilidad:</strong> Sí</p>
             <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
-            <a href="#" class="btn btn-sm btn-warning">Editar</a>
-            <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
           </div>
         </div>
       </div>
@@ -36,8 +36,8 @@
             <p><strong>Categoría:</strong> Burger</p>
             <p><strong>Precio:</strong> $12.000</p>
             <p><strong>Disponibilidad:</strong> Sí</p>
-            <a href="#" class="btn btn-sm btn-warning">Editar</a>
-            <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
+            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
           </div>
         </div>
       </div>

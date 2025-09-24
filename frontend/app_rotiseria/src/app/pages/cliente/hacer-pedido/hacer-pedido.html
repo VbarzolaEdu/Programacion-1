@@ -13,8 +13,11 @@
       Precio: {{ productoId === 1 ? '$1000' : '$1500' }}
     </p>
     <div class="mb-3">
+      <label for="cantidad" class="form-label">Comentario</label>
+      <input type="text" class="form-control" id="cantidad" >
       <label for="cantidad" class="form-label">Cantidad</label>
       <input type="number" class="form-control" id="cantidad" value="1" min="1">
+
     </div>
     <button class="btn btn-success w-100" (click)="confirmarPedido()">Confirmar Pedido</button>
   </div>

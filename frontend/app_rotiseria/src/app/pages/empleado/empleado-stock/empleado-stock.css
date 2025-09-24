@@ -48,3 +48,6 @@ body {
       font-size: 1.8rem;
       color: white;
     }
+    .bottom-nav a.active {
+      color: #FFD966 ;
+    }
