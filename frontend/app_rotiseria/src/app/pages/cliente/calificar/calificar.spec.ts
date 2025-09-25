@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavEmpleado } from './nav-empleado';
+import { Calificar } from './calificar';
 
-describe('NavEmpleado', () => {
-  let component: NavEmpleado;
-  let fixture: ComponentFixture<NavEmpleado>;
+describe('Calificar', () => {
+  let component: Calificar;
+  let fixture: ComponentFixture<Calificar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavEmpleado]
+      imports: [Calificar]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NavEmpleado);
+    fixture = TestBed.createComponent(Calificar);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
