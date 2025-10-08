@@ -1,48 +1,39 @@
- <app-nav-admin></app-nav-admin>
- <!-- Header -->
-  <div class="header">
-    <h2>Productos</h2>
-  </div>
+<app-nav-admin></app-nav-admin>
 
-  <!-- Lista de productos -->
-  <div class="container my-3">
-    <div class="card mb-3 card-producto">
-      <div class="row g-0 align-items-center">
-        <div class="col-4">
-          <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="img-fluid rounded-start" alt="burger">
-        </div>
-        <div class="col-8">
-          <div class="p-2">
-            <p><strong>Nombre:</strong> Triple</p>
-            <p><strong>Categoría:</strong> Burger</p>
-            <p><strong>Precio:</strong> $12.000</p>
-            <p><strong>Disponibilidad:</strong> Sí</p>
-            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
-            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
-          </div>
-        </div>
+<!-- Header -->
+<div class="header">
+  <h2>Productos</h2>
+</div>
+
+<!-- Lista dinámica -->
+<div class="container my-3">
+  <div
+    class="card mb-3 card-producto"
+    *ngFor="let p of productos"
+  >
+    <div class="row g-0 align-items-center">
+      <div class="col-4">
+        <img
+          [src]="p.imagen"
+          class="img-fluid rounded-start"
+          [alt]="p.nombre"
+        />
       </div>
-    </div>
+      <div class="col-8">
+        <div class="p-2">
+          <p><strong>Nombre:</strong> {{ p.nombre }}</p>
+          <p><strong>Categoría:</strong> {{ p.categoria }}</p>
+          <p><strong>Precio:</strong> ${{ p.precio | number }}</p>
+          <p><strong>Disponibilidad:</strong> {{ p.disponible ? 'Sí' : 'No' }}</p>
 
-    <!-- Repetición de productos -->
-    <div class="card mb-3 card-producto">
-      <div class="row g-0 align-items-center">
-        <div class="col-4">
-          <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="img-fluid rounded-start" alt="burger">
-        </div>
-        <div class="col-8">
-          <div class="p-2">
-            <p><strong>Nombre:</strong> Triple</p>
-            <p><strong>Categoría:</strong> Burger</p>
-            <p><strong>Precio:</strong> $12.000</p>
-            <p><strong>Disponibilidad:</strong> Sí</p>
-            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
-            <button class="btn btn-sm btn-danger" (click)="mostrarMensaje()">Eliminar</button>
-          </div>
+          <button class="btn btn-sm btn-warning me-2" (click)="editarProducto(p.id)">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarProducto(p.id)">
+            🗑 Eliminar
+          </button>
         </div>
       </div>
     </div>
   </div>
-
-
-
+</div>
