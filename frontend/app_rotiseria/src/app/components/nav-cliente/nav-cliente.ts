@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-nav-cliente',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './nav-cliente.html',
   styleUrls: ['./nav-cliente.css']
 })
-export class NavCliente {}
+export class NavCliente {
+  constructor(public cart: CartService) {}
+}

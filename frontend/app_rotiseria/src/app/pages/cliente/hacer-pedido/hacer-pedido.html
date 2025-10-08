@@ -1,31 +1,53 @@
 <app-nav-cliente></app-nav-cliente>
+
 <div class="app-header">
-  <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Hamburguesa">
-  Hacer Pedido
+  {{ producto ? 'Editar pedido' : 'Nuevo pedido' }}
 </div>
 
-<div class="container mt-3">
+<div class="container mt-3" *ngIf="producto">
   <div class="card p-3">
-    <h5 class="card-title">
-      {{ productoId === 1 ? 'Producto 1' : 'Producto 2' }}
-    </h5>
-    <p class="card-text">
-      Precio: {{ productoId === 1 ? '$1000' : '$1500' }}
-    </p>
+    <h5 class="card-title">{{ producto.nombre }}</h5>
+    <p class="card-text">Precio: ${{ producto.precio }}</p>
+
     <div class="mb-3">
-      <label for="cantidad" class="form-label">Comentario</label>
-      <input type="text" class="form-control" id="cantidad" >
       <label for="cantidad" class="form-label">Cantidad</label>
-      <input type="number" class="form-control" id="cantidad" value="1" min="1">
-
+      <input
+        type="number"
+        class="form-control"
+        id="cantidad"
+        [(ngModel)]="producto.cantidad"
+        min="1"
+      />
     </div>
-    <button class="btn btn-success w-100" (click)="confirmarPedido()">Confirmar Pedido</button>
-  </div>
-</div>
 
-<div class="bottom-nav">
-  <a routerLink="/cliente/cliente-home"><i class="bi bi-house-door-fill"></i></a>
-  <a routerLink="/cliente/calificaciones"><i class="bi bi-star-fill"></i></a>
-  <a routerLink="/cliente/pedidos"><i class="bi bi-bag-fill"></i></a>
-  <a routerLink="/cliente/perfil"><i class="bi bi-person-fill"></i></a>
+    <h6>Ingredientes</h6>
+    <div *ngFor="let ing of ingredientes" class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [(ngModel)]="ing.incluido"
+        [id]="ing.nombre"
+      />
+      <label class="form-check-label" [for]="ing.nombre">{{ ing.nombre }}</label>
+    </div>
+
+    <div class="mt-3">
+      <label for="nota" class="form-label">Comentarios</label>
+      <textarea
+        id="nota"
+        [(ngModel)]="nota"
+        class="form-control"
+        placeholder="Ej: sin cebolla, extra queso..."
+      ></textarea>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button class="btn btn-success flex-fill" (click)="guardarCambios()">
+        Guardar cambios
+      </button>
+      <button class="btn btn-secondary flex-fill" (click)="agregarAlCarrito()">
+        Agregar nuevo
+      </button>
+    </div>
+  </div>
 </div>

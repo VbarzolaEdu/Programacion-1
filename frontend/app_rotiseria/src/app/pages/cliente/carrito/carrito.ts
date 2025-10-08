@@ -1,12 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
+import { CartService, CartItem } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-carrito',
-  imports: [NavCliente],
+  standalone: true,
+  imports: [CommonModule, NavCliente],
   templateUrl: './carrito.html',
-  styleUrl: './carrito.css'
+  styleUrls: ['./carrito.css']
 })
-export class Carrito {
+export class Carrito implements OnInit {
+  items: CartItem[] = [];
 
+  constructor(private cart: CartService, private router: Router) {}
+
+  ngOnInit() {
+    this.cart.items$.subscribe(items => (this.items = items));
+  }
+
+  sumar(item: CartItem) {
+    this.cart.updateCantidad(item.id, item.cantidad + 1);
+  }
+
+  restar(item: CartItem) {
+    if (item.cantidad > 1) {
+      this.cart.updateCantidad(item.id, item.cantidad - 1);
+    }
+  }
+
+  eliminar(id: number) {
+    this.cart.removeItem(id);
+  }
+
+  total() {
+    return this.cart.getTotal();
+  }
+
+  confirmar() {
+    alert('✅ Pedido confirmado. ¡Gracias por tu compra!');
+    this.cart.clear();
+  }
+
+  editar(item: CartItem) {
+    localStorage.setItem('productoEditando', JSON.stringify(item));
+    this.router.navigate(['/cliente/hacer-pedido', item.id]);
+  }
 }

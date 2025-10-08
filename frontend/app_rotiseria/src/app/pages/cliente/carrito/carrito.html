@@ -1,88 +1,69 @@
 <app-nav-cliente></app-nav-cliente>
 <div class="app-header">Carrito</div>
 
-  <div class="container my-3">
-    <ul class="list-group">
-      <li class="list-group-item d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-3">
-          <img src="medallonDeCarne.jpeg" alt="Medallón de carne" class="producto-img">
-          <div>
-            <div class="fw-bold">Medallón de carne</div>
-            <small class="text-muted">$1500</small>
-          </div>
+<div class="container my-3" *ngIf="items.length > 0; else vacio">
+  <ul class="list-group">
+    <li
+      class="list-group-item d-flex align-items-center justify-content-between"
+      *ngFor="let i of items"
+    >
+      <!-- Info del producto -->
+      <div class="d-flex align-items-center gap-3">
+        <img
+          [src]="i.imagen || 'assets/placeholder.jpg'"
+          alt="{{ i.nombre }}"
+          class="producto-img"
+          style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;"
+        />
+        <div>
+          <div class="fw-bold">{{ i.nombre }}</div>
+          <small class="text-muted">${{ i.precio }}</small>
         </div>
-        <div class="qty">
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item1', -1)">−</button>
-          <span id="item1" class="fw-bold">1</span>
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item1', 1)">+</button>
-        </div>
-      </li>
-      <li class="list-group-item d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-3">
-          <img src="queso.jpeg" alt="Queso cheddar" class="producto-img">
-          <div>
-            <div class="fw-bold">Queso cheddar</div>
-            <small class="text-muted">$600</small>
-          </div>
-        </div>
-        <div class="qty">
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item2', -1)">−</button>
-          <span id="item2" class="fw-bold">1</span>
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item2', 1)">+</button>
-        </div>
-      </li>
-      <li class="list-group-item d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-3">
-          <img src="pan.jpeg" alt="Pan brioche" class="producto-img">
-          <div>
-            <div class="fw-bold">Pan brioche</div>
-            <small class="text-muted">$400</small>
-          </div>
-        </div>
-        <div class="qty">
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item3', -1)">−</button>
-          <span id="item3" class="fw-bold">1</span>
-          <button class="btn btn-outline-secondary btn-sm" onclick="cambiar('item3', 1)">+</button>
-        </div>
-      </li>
-    </ul>
+      </div>
 
-    <div class="totales mt-3">
-      <div class="d-flex justify-content-between"><span>Subtotal</span><span id="subtotal">$2.500</span></div>
-      <div class="d-flex justify-content-between"><span>Envío</span><span id="envio">$0</span></div>
-      <hr>
-      <div class="d-flex justify-content-between fw-bold"><span>Total</span><span id="total">$2.500</span></div>
-      <button class="btn btn-success w-100 mt-3" onclick="confirmar()">Confirmar pedido</button>
+      <!-- Controles -->
+      <div class="qty d-flex align-items-center gap-2">
+        <button class="btn btn-outline-secondary btn-sm" (click)="restar(i)">−</button>
+        <span class="fw-bold">{{ i.cantidad }}</span>
+        <button class="btn btn-outline-secondary btn-sm" (click)="sumar(i)">＋</button>
+
+        <!-- Editar pedido -->
+        <button class="btn btn-sm btn-warning" (click)="editar(i)">✏️</button>
+
+        <!-- Eliminar -->
+        <button class="btn btn-sm btn-danger" (click)="eliminar(i.id)">🗑</button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Totales -->
+  <div class="totales mt-3 p-3 rounded" style="background: #f6e3d8;">
+    <div class="d-flex justify-content-between">
+      <span>Subtotal</span>
+      <span>${{ total() }}</span>
     </div>
-  </div>
 
-  <div class="bottom-nav">
-    <a href="cliente-home.html"><i class="bi bi-house-door-fill"></i></a>
-    <a href="calificaciones.html"><i class="bi bi-star-fill"></i></a>
-    <a href="pedidos.html"><i class="bi bi-bag-fill"></i></a>
-    <a href="perfil.html"><i class="bi bi-person-fill"></i></a>
-  </div>
+    <div class="d-flex justify-content-between">
+      <span>Envío</span>
+      <span>$0</span>
+    </div>
 
-  <script>
-    const precios = { item1: 1500, item2: 600, item3: 400 };
-    function cambiar(id, delta) {
-      const el = document.getElementById(id);
-      let v = Math.max(0, parseInt(el.textContent || '0') + delta);
-      el.textContent = v;
-      calcular();
-    }
-    function calcular() {
-      let total = 0;
-      for (const [id, precio] of Object.entries(precios)) {
-        const cant = parseInt(document.getElementById(id).textContent || '0');
-        total += cant * precio;
-      }
-      document.getElementById('subtotal').textContent = `$${total.toLocaleString('es-AR')}`;
-      document.getElementById('total').textContent = `$${total.toLocaleString('es-AR')}`;
-    }
-    function confirmar() {
-      alert('¡Pedido confirmado!');
-      window.location.href = 'pedidos.html';
-    }
-    calcular();
-  </script>
+    <hr />
+
+    <div class="d-flex justify-content-between fw-bold">
+      <span>Total</span>
+      <span>${{ total() }}</span>
+    </div>
+
+    <button class="btn btn-success w-100 mt-3" (click)="confirmar()">
+      Confirmar pedido
+    </button>
+  </div>
+</div>
+
+<!-- Estado vacío -->
+<ng-template #vacio>
+  <div class="text-center mt-5 text-muted">
+    Tu carrito está vacío
+  </div>
+</ng-template>

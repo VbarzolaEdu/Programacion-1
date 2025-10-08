@@ -14,6 +14,14 @@
         <div class="card-body">
           <h5 class="card-title">Producto 1</h5>
           <p class="card-text">$1000</p>
+
+          <button class="btn btn-sm btn-primary me-2" (click)="irAHacerPedido(1)">
+            📦 Pedir
+          </button>
+
+          <button class="btn btn-sm btn-success" (click)="agregarAlCarrito({ id: 1, nombre: 'Producto 1', precio: 1000 })">
+            🛒 Agregar
+          </button>
         </div>
       </div>
     </div>
@@ -26,6 +34,14 @@
         <div class="card-body">
           <h5 class="card-title">Producto 2</h5>
           <p class="card-text">$1500</p>
+
+          <button class="btn btn-sm btn-primary me-2" (click)="irAHacerPedido(2)">
+            📦 Pedir
+          </button>
+
+          <button class="btn btn-sm btn-success" (click)="agregarAlCarrito({ id: 2, nombre: 'Producto 2', precio: 1500 })">
+            🛒 Agregar
+          </button>
         </div>
       </div>
     </div>
