@@ -1,0 +1,21 @@
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f25c2a;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  .bottom-nav a {
+    color: white;
+    font-size: 1.5rem;
+  }
+  
+  .bottom-nav a.active {
+    color: #ffe082;
+  }

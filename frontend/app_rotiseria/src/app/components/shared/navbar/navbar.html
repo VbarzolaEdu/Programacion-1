@@ -1,0 +1,9 @@
+<div class="bottom-nav">
+    <a
+      *ngFor="let item of items"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+    >
+      <i [class]="item.icon"></i>
+    </a>
+  </div>

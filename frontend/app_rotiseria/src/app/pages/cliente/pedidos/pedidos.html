@@ -1,20 +1,29 @@
- <app-nav-cliente></app-nav-cliente>
+<app-nav-cliente></app-nav-cliente>
+<div class="app-header">Mis pedidos</div>
 
- <div class="app-header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Hamburguesa">
-    Mis Pedidos
-  </div>
+<div class="container mt-3 mb-5">
+  <div *ngFor="let p of pedidos" class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ p.nombre }}</h5>
+      <p class="card-text">
+        <strong>Fecha:</strong> {{ p.fecha }} <br>
+        <strong>Total:</strong> ${{ p.total }} <br>
+        <strong>Estado:</strong>
+        
+        <span [ngClass]="{
+          'text-success': p.estado === 'Entregado',
+          'text-warning': p.estado === 'En preparación'
+        }">{{ p.estado }}</span>
+      </p>
 
-  <div class="container mt-3">
-    <div class="list-group">
-      <div class="list-group-item">Pedido #1 - <span class="text-warning">En camino</span></div>
-      <div class="list-group-item">Pedido #2 - <span class="text-success">Entregado</span></div>
+      <!-- Botón de Valoración: Solo visible si el estado es 'Entregado' -->
+      <button 
+        *ngIf="p.estado === 'Entregado'"
+        class="btn btn-success mt-2" 
+        (click)="irAValorar(p.id)">
+        Hacer valoración
+      </button>
+      
     </div>
   </div>
-
-  <div class="bottom-nav">
-    <a href="cliente-home.html"><i class="bi bi-house-door-fill"></i></a>
-    <a href="calificaciones.html"><i class="bi bi-star-fill"></i></a>
-    <a href="pedidos.html" class="active"><i class="bi bi-bag-fill"></i></a>
-    <a href="perfil.html"><i class="bi bi-person-fill"></i></a>
-  </div>
+</div>

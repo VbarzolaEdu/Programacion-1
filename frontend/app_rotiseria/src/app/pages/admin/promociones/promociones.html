@@ -1,58 +1,58 @@
- <app-nav-admin></app-nav-admin>
- <!-- Header -->
-  <div class="header">
-    <h2>Promos por Email</h2>
-  </div>
+<app-nav-admin></app-nav-admin>
+<!-- Header -->
+ <div class="header">
+   <h2>Promos por Email</h2>
+ </div>
 
-  <div class="container my-3">
-    <!-- Tabs -->
-    <div class="mb-3">
-      <button class="btn btn-danger btn-sm">Nueva</button>
-      <button class="btn btn-secondary btn-sm">Historial</button>
-    </div>
+ <div class="container my-3">
+   <!-- Tabs -->
+   <div class="mb-3">
+     <button class="btn btn-danger btn-sm">Nueva</button>
+     <button class="btn btn-secondary btn-sm">Historial</button>
+   </div>
 
-    <!-- Formulario -->
-    <form>
-      <div class="mb-3">
-        <label class="form-label">Asunto</label>
-        <input type="text" class="form-control" placeholder="Ej: 2x1 en La Triple este viernes">
-      </div>
+   <!-- Formulario -->
+   <form>
+     <div class="mb-3">
+       <label class="form-label">Asunto</label>
+       <input type="text" class="form-control" placeholder="Ej: 2x1 en La Triple este viernes">
+     </div>
 
-      <div class="mb-3">
-        <label class="form-label">Segmento</label>
-        <select class="form-select">
-          <option>Todos los validados</option>
-          <option>Usuarios nuevos</option>
-          <option>Usuarios frecuentes</option>
-        </select>
-      </div>
+     <div class="mb-3">
+       <label class="form-label">Segmento</label>
+       <select class="form-select">
+         <option>Todos los validados</option>
+         <option>Usuarios nuevos</option>
+         <option>Usuarios frecuentes</option>
+       </select>
+     </div>
 
-      <div class="mb-3">
-        <label class="form-label">Banner / Imagen</label>
-        <input type="file" class="form-control">
-      </div>
+     <div class="mb-3">
+       <label class="form-label">Banner / Imagen</label>
+       <input type="file" class="form-control">
+     </div>
 
-      <div class="mb-3">
-        <label class="form-label">Cuerpo (máx 400 caracteres)</label>
-        <textarea class="form-control" rows="3"></textarea>
-      </div>
+     <div class="mb-3">
+       <label class="form-label">Cuerpo (máx 400 caracteres)</label>
+       <textarea class="form-control" rows="3"></textarea>
+     </div>
 
-      <div class="mb-3 d-flex align-items-center">
-        <input type="text" class="form-control me-2" value="LATRIPLE2X1">
-        <button class="btn btn-outline-danger btn-sm">Copiar</button>
-      </div>
+     <div class="mb-3 d-flex align-items-center">
+       <input type="text" class="form-control me-2" value="LATRIPLE2X1">
+       <button class="btn btn-outline-danger btn-sm">Copiar</button>
+     </div>
 
-      <div class="mb-3">
-        <label class="form-label">Programación</label><br>
-        <button type="button" class="btn btn-success btn-sm">Enviar ahora</button>
-        <button type="button" class="btn btn-warning btn-sm">Programar</button>
-        <input type="datetime-local" class="form-control mt-2">
-      </div>
+     <div class="mb-3">
+       <label class="form-label">Programación</label><br>
+       <button type="button" class="btn btn-success btn-sm">Enviar ahora</button>
+       <button type="button" class="btn btn-warning btn-sm">Programar</button>
+       <input type="datetime-local" class="form-control mt-2">
+     </div>
 
-      <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary">Vista previa</button>
-       
-        <button type="submit" class="btn btn-danger" (click)="mostrarMensaje()">Enviar</button>
-      </div>
-    </form>
-  </div>
+     <div class="d-flex justify-content-between">
+       <button type="button" class="btn btn-outline-secondary">Vista previa</button>
+      
+       <button type="submit" class="btn btn-danger" (click)="mostrarMensaje()">Enviar</button>
+     </div>
+   </form>
+ </div>

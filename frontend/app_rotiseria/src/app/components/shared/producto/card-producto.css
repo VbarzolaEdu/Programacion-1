@@ -1,0 +1,22 @@
+.card-producto {
+    background-color: #fde0db;
+    border-radius: 12px;
+    padding: 10px;
+    transition: transform 0.2s ease-in-out;
+    margin: 20px;
+    
+  }
+  
+  .card-producto:hover {
+    transform: scale(1.02);
+  }
+  
+  .card-producto img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .card-producto p {
+    margin: 0;
+    font-size: 0.9rem;
+  }

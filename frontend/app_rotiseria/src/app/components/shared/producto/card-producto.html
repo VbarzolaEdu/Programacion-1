@@ -1,0 +1,21 @@
+<div class="card mb-3 card-producto">
+    <div class="row g-0 align-items-center">
+      <div class="col-4">
+        <img
+          [src]="imagen"
+          class="img-fluid rounded-start"
+          [alt]="nombre"
+        />
+      </div>
+  
+      <div class="col-8 p-2">
+        <p><strong>Nombre:</strong> {{ nombre }}</p>
+        <p><strong>Categoría:</strong> {{ categoria }}</p>
+        <p><strong>Precio:</strong> ${{ precio }}</p>
+        <p><strong>Disponibilidad:</strong> {{ disponible ? 'Sí' : 'No' }}</p>
+  
+        <!-- Sección dinámica: botones u otro contenido -->
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
