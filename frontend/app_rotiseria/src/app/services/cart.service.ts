@@ -7,8 +7,8 @@ export interface CartItem {
   precio: number;
   cantidad: number;
   imagen?: string;
-  extras?: string[]; // ingredientes o agregados
-  nota?: string;     // comentarios del usuario
+  extras?: string[];
+  nota?: string;    
 }
 
 @Injectable({
