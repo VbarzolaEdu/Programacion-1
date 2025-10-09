@@ -1,25 +1,22 @@
-<app-nav-admin></app-nav-admin>
+<app-navbar [items]="navItems"></app-navbar>
 
-<!-- Header -->
-<div class="header">
-  <h2>Productos</h2>
-</div>
+<div class="app-header">📦 Productos</div>
 
-<!-- Lista de productos -->
-<div class="container my-3">
+<div class="container mt-3 modo-admin">
   <app-card-producto
     *ngFor="let p of productos"
     [nombre]="p.nombre"
     [categoria]="p.categoria"
     [precio]="p.precio"
-    [disponible]="p.disponible"
-    [imagen]="p.imagen">
-    
+    [imagen]="p.imagen"
+    [disponible]="p.disponible">
+
     <button class="btn btn-sm btn-warning me-2" (click)="editarProducto(p)">
       ✏️ Editar
     </button>
+
     <button class="btn btn-sm btn-danger" (click)="eliminarProducto(p)">
-      🗑 Eliminar
+      🗑️ Eliminar
     </button>
   </app-card-producto>
 </div>
