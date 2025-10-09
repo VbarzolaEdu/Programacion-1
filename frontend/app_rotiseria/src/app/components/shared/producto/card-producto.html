@@ -1,21 +1,45 @@
 <div class="card mb-3 card-producto">
   <div class="row g-0 align-items-center">
     <div class="col-4">
-      <img
-        [src]="imagen"
-        class="img-fluid rounded-start"
-        [alt]="nombre"
-      />
+      <img [src]="imagen" class="img-fluid rounded-start" [alt]="nombre">
     </div>
 
     <div class="col-8 p-2">
-      <p><strong>Nombre:</strong> {{ nombre }}</p>
-      <p><strong>Categoría:</strong> {{ categoria }}</p>
-      <p><strong>Precio:</strong> ${{ precio }}</p>
-      <p><strong>Disponibilidad:</strong> {{ disponible ? 'Sí' : 'No' }}</p>
+      <!-- Vista normal -->
+      <div *ngIf="!editMode">
+        <p><strong>Nombre:</strong> {{ nombre }}</p>
+        <p><strong>Categoría:</strong> {{ categoria }}</p>
+        <p><strong>Precio:</strong> ${{ precio }}</p>
+        <p><strong>Disponibilidad:</strong> {{ disponible ? 'Sí' : 'No' }}</p>
 
-      <!-- Sección dinámica: botones u otro contenido -->
-      <ng-content></ng-content>
+        <div class="acciones mt-2">
+          <button class="btn btn-sm btn-warning me-2" (click)="habilitarEdicion()">✏️ Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="eliminar()">🗑 Eliminar</button>
+        </div>
+      </div>
+
+      <!-- Modo edición -->
+      <div *ngIf="editMode">
+        <label><strong>Nombre:</strong></label>
+        <input class="form-control mb-2" [(ngModel)]="productoTemporal.nombre" />
+
+        <label><strong>Categoría:</strong></label>
+        <input class="form-control mb-2" [(ngModel)]="productoTemporal.categoria" />
+
+        <label><strong>Precio:</strong></label>
+        <input type="number" class="form-control mb-2" [(ngModel)]="productoTemporal.precio" />
+
+        <label><strong>Disponibilidad:</strong></label>
+        <select class="form-control mb-2" [(ngModel)]="productoTemporal.disponible">
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
+
+        <div class="acciones mt-2">
+          <button class="btn btn-success btn-sm me-2" (click)="guardarCambios()">💾 Guardar</button>
+          <button class="btn btn-secondary btn-sm" (click)="cancelarEdicion()">❌ Cancelar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

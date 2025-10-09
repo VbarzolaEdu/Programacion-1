@@ -6,7 +6,7 @@ import { NavAdmin } from '../../../components/nav-admin/nav-admin';
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule,CardProducto,NavAdmin],
+  imports: [CommonModule, CardProducto, NavAdmin],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -24,13 +24,14 @@ export class Productos {
     { icon: 'bi bi-tags-fill', route: '/admin/promociones' }
   ];
 
-  editarProducto(producto: any) {
-    alert(`✏️ Editar producto: ${producto.nombre}`);
+  editarProducto(datosEditados: any, productoOriginal: any) {
+    Object.assign(productoOriginal, datosEditados);
   }
 
-  eliminarProducto(producto: any) {
-    if (confirm(`¿Seguro que querés eliminar "${producto.nombre}"?`)) {
-      this.productos = this.productos.filter(p => p.id !== producto.id);
-    }
+eliminarProducto(producto: any) {
+  if (confirm(`¿Seguro que querés eliminar "${producto.nombre}"?`)) {
+    this.productos = this.productos.filter(p => p.id !== producto.id);
   }
+}
+
 }

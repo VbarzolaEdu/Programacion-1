@@ -3,20 +3,17 @@
 <div class="app-header">📦 Productos</div>
 
 <div class="container mt-3 modo-admin">
-  <app-card-producto
-    *ngFor="let p of productos"
-    [nombre]="p.nombre"
-    [categoria]="p.categoria"
-    [precio]="p.precio"
-    [imagen]="p.imagen"
-    [disponible]="p.disponible">
+<app-card-producto
+  *ngFor="let p of productos"
+  [nombre]="p.nombre"
+  [categoria]="p.categoria"
+  [precio]="p.precio"
+  [imagen]="p.imagen"
+  [disponible]="p.disponible"
+  (productoEditado)="editarProducto($event, p)"
+  (productoEliminado)="eliminarProducto($event)">
 
-    <button class="btn btn-sm btn-warning me-2" (click)="editarProducto(p)">
-      ✏️ Editar
-    </button>
 
-    <button class="btn btn-sm btn-danger" (click)="eliminarProducto(p)">
-      🗑️ Eliminar
-    </button>
-  </app-card-producto>
+</app-card-producto>
+
 </div>

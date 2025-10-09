@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-calificar',
   standalone: true,
-  imports: [NavCliente, CommonModule, FormsModule,RouterLink], 
+  imports: [NavCliente, CommonModule, FormsModule,RouterLink,], 
   templateUrl: './calificar.html',
   styleUrl: './calificar.css'
 })
