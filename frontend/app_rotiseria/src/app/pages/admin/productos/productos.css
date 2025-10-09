@@ -1,44 +1,30 @@
+
 .app-header {
-  text-align: center;
+      background-color: #FFD966;
+      color: #D9534F;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+
+.header h2 {
+  color: #D9534F;
   font-weight: bold;
-  background-color: #f7c546;
-  color: #d62828;
-  padding: 10px;
-  border-radius: 0 0 20px 20px;
 }
 
-/* Compactar cards en admin */
-.container.modo-admin {
-  padding: 0.5rem 1rem;
-  margin-bottom: 80px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 0.75rem;
+
+/* Centrar cards y permitir varias por fila */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.container.modo-admin .card-producto {
-  transform: scale(0.9);
-  background-color: #fff8f4;
-  border-radius: 10px;
-  padding: 8px;
-  transition: transform 0.2s ease;
+
+button {
+  margin-right: 5px;
 }
 
-.container.modo-admin .card-producto:hover {
-  transform: scale(0.93);
-}
 
-.container.modo-admin img {
-  max-width: 80px !important;
-  border-radius: 8px;
-}
-
-.container.modo-admin p {
-  font-size: 0.85rem;
-  margin-bottom: 0.25rem;
-}
-
-.container.modo-admin .btn {
-  font-size: 0.75rem;
-  padding: 2px 6px;
-}

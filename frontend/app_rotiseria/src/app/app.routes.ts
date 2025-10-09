@@ -19,7 +19,7 @@ import { EmpleadoIndex } from './pages/empleado/empleado-index/empleado-index';
 import { EmpleadoStock } from './pages/empleado/empleado-stock/empleado-stock';
 import { EstadoP } from './pages/empleado/estado-p/estado-p';
 import { GDU } from './pages/empleado/gdu/gdu';
-
+import { FormsModule } from '@angular/forms';
 
 export const routes: Routes = [
 
@@ -28,7 +28,8 @@ export const routes: Routes = [
 
     {path: 'cliente/calificaciones', component: Calificaciones},
 
-    {path: 'cliente/calificar', component: Calificar},
+    // 🚨 RUTA CORREGIDA: Ahora acepta el parámetro dinámico ':idPedido'
+    {path: 'cliente/calificar/:idPedido', component: Calificar},
 
     {path: 'cliente/carrito', component: Carrito},
 
@@ -65,13 +66,4 @@ export const routes: Routes = [
     { path: 'empleado/estado-p', component: EstadoP },
 
     { path: 'empleado/gdu', component: GDU }
-
-
-
-
-
-    
-    
-
-    
 ];

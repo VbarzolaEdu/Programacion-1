@@ -9,11 +9,21 @@
         <strong>Fecha:</strong> {{ p.fecha }} <br>
         <strong>Total:</strong> ${{ p.total }} <br>
         <strong>Estado:</strong>
+        
         <span [ngClass]="{
           'text-success': p.estado === 'Entregado',
           'text-warning': p.estado === 'En preparación'
         }">{{ p.estado }}</span>
       </p>
+
+      <!-- Botón de Valoración: Solo visible si el estado es 'Entregado' -->
+      <button 
+        *ngIf="p.estado === 'Entregado'"
+        class="btn btn-success mt-2" 
+        (click)="irAValorar(p.id)">
+        Hacer valoración
+      </button>
+      
     </div>
   </div>
 </div>

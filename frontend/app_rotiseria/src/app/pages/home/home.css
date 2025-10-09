@@ -4,12 +4,12 @@ body {
 }
 
 .app-header {
-  background: #FFD966;
-  padding: 20px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.4rem;
-  color: #F25C2A;
+background-color: #FFD966;
+      color: #D9534F;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold; 
 }
 
 .hero {

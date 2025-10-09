@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../components/shared/navbar/navbar';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
+import { NavAdmin } from '../../../components/nav-admin/nav-admin';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, Navbar, CardProducto],
+  imports: [CommonModule,CardProducto,NavAdmin],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })

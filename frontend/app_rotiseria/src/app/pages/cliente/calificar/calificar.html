@@ -2,59 +2,55 @@
 <div class="app-header">Calificar pedido</div>
 
   <div class="container my-3">
+    
+    <!-- Mensaje de Éxito o Advertencia -->
+    <div *ngIf="mensajeExito" 
+         class="alert mb-3" 
+         [ngClass]="{'alert-success': !mensajeExito.startsWith('⚠️'), 'alert-warning': mensajeExito.startsWith('⚠️')}">
+        {{ mensajeExito }}
+    </div>
+
     <div class="card p-3">
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <div class="fw-bold">Pedido #1234</div>
-          <small class="text-muted">Entregado hoy 12:35</small>
+          <!-- Usamos el pedidoId real -->
+          <div class="fw-bold">Pedido #{{ pedidoId }}</div>
+          <small class="text-muted">Entregado recientemente</small>
         </div>
         <span class="badge text-bg-success">Entregado</span>
       </div>
       <hr>
       <div class="text-center mb-2">¿Cómo estuvo tu pedido?</div>
-      <div class="text-center mb-3" id="rating">
-        <i class="bi bi-star estrella" data-v="1"></i>
-        <i class="bi bi-star estrella" data-v="2"></i>
-        <i class="bi bi-star estrella" data-v="3"></i>
-        <i class="bi bi-star estrella" data-v="4"></i>
-        <i class="bi bi-star estrella" data-v="5"></i>
+      
+      <!-- 🚨 LÓGICA DE ESTRELLAS CON ANGULAR -->
+      <div class="text-center mb-3 rating-stars" (mouseleave)="resetHoverRating()">
+        <i *ngFor="let star of [1, 2, 3, 4, 5]" 
+           class="bi estrella"
+           [ngClass]="{'bi-star-fill': star <= (hoverRating || rating), 'bi-star': star > (hoverRating || rating)}"
+           (mouseenter)="setHoverRating(star)"
+           (click)="setRating(star)">
+        </i>
       </div>
+      
       <div class="mb-3">
-        <label class="form-label">Comentario (opcional)</label>
-        <textarea id="comentario" class="form-control" rows="3" placeholder="Contanos tu experiencia..."></textarea>
+        <label for="comentario" class="form-label">Comentario (opcional)</label>
+        <!-- Binding bidireccional [()] a la variable 'comentario' -->
+        <textarea id="comentario" 
+                  [(ngModel)]="comentario" 
+                  class="form-control" 
+                  rows="3" 
+                  placeholder="Contanos tu experiencia..."></textarea>
       </div>
-      <button class="btn btn-success w-100" onclick="enviar()">Enviar calificación</button>
+      
+      <!-- Llama al método del componente al hacer clic -->
+      <button class="btn btn-success w-100" (click)="enviarCalificacion()">Enviar calificación</button>
+      
     </div>
   </div>
 
   <div class="bottom-nav">
-    <a href="cliente-home.html"><i class="bi bi-house-door-fill"></i></a>
-    <a href="calificaciones.html" class="active"><i class="bi bi-star-fill"></i></a>
-    <a href="pedidos.html"><i class="bi bi-bag-fill"></i></a>
-    <a href="perfil.html"><i class="bi bi-person-fill"></i></a>
+    <a [routerLink]="['/cliente/cliente-home']"><i class="bi bi-house-door-fill"></i></a>
+    <a [routerLink]="['/cliente/calificaciones']" class="active"><i class="bi bi-star-fill"></i></a>
+    <a [routerLink]="['/cliente/pedidos']"><i class="bi bi-bag-fill"></i></a>
+    <a [routerLink]="['/cliente/perfil']"><i class="bi bi-person-fill"></i></a>
   </div>
-
-  <script>
-    let valor = 0;
-    const rating = document.getElementById('rating');
-    rating.addEventListener('mouseover', e => {
-      if (!e.target.dataset.v) return;
-      pintar(parseInt(e.target.dataset.v));
-    });
-    rating.addEventListener('click', e => {
-      if (!e.target.dataset.v) return;
-      valor = parseInt(e.target.dataset.v);
-      pintar(valor);
-    });
-    rating.addEventListener('mouseleave', () => pintar(valor));
-    function pintar(v) {
-      document.querySelectorAll('#rating .estrella').forEach((el, i) => {
-        el.className = 'bi ' + (i < v ? 'bi-star-fill' : 'bi-star') + ' estrella';
-      });
-    }
-    function enviar() {
-      if (valor === 0) { alert('Seleccioná una calificación'); return; }
-      alert('¡Gracias por tu calificación!');
-      window.location.href = 'calificaciones.html';
-    }
-  </script>

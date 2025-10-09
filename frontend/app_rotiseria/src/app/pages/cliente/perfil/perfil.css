@@ -1,11 +1,10 @@
 .app-header {
-  background-color: #f7c546;
-  color: #d62828;
-  font-weight: bold;
-  text-align: center;
-  padding: 12px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+      background-color: #FFD966;
+      color: #D9534F;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
 }
 
 .card {

@@ -12,8 +12,10 @@ import { Navbar, NavItem } from '../shared/navbar/navbar';
 export class NavAdmin {
   navItems: NavItem[] = [
     { icon: 'bi bi-house-door-fill', route: '/admin/home-index' },
-    { icon: 'bi bi-list-ul', route: '/admin/pedidos' },
     { icon: 'bi bi-box-seam', route: '/admin/productos' },
+    { icon: "bi bi-currency-dollar", route: '/admin/precios' },
+    { icon: 'bi bi-list-ul', route: '/admin/pedidos' },
+    { icon: "bi bi-percent", route: '/admin/promociones' },
     { icon: 'bi bi-person-fill', route: '/admin/usuarios' }
   ];
 }
