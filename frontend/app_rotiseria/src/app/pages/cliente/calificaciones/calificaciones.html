@@ -1,24 +1,21 @@
 <app-nav-cliente></app-nav-cliente>
 
-<div class="app-header">
-  <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Hamburguesa">
-  Calificaciones
-</div>
+<div class="app-header">⭐ Calificaciones</div>
 
 <div class="container mt-3">
-  <ul class="list-group">
-    <li class="list-group-item">Pedido #1 - ⭐⭐⭐⭐☆</li>
-    <li class="list-group-item">Pedido #2 - ⭐⭐⭐☆☆</li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      Pedido #3 - ☆☆☆☆☆
-      <button class="btn btn-primary btn-sm" (click)="irACalificar()">Hacer valoración</button>
-    </li>
-  </ul>
-</div>
-
-<div class="bottom-nav">
-  <a href="cliente-home.html"><i class="bi bi-house-door-fill"></i></a>
-  <a href="calificaciones.html" class="active"><i class="bi bi-star-fill"></i></a>
-  <a href="pedidos.html"><i class="bi bi-bag-fill"></i></a>
-  <a href="perfil.html"><i class="bi bi-person-fill"></i></a>
+  <div *ngFor="let c of calificaciones" class="card mb-3 p-3 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <strong>{{ c.usuario }}</strong>
+      <small class="text-muted">{{ c.fecha }}</small>
+    </div>
+    <p class="mb-1">{{ c.comentario }}</p>
+    <div class="text-warning">
+      <ng-container *ngFor="let _ of [].constructor(c.estrellas)">
+        ★
+      </ng-container>
+      <ng-container *ngFor="let _ of [].constructor(5 - c.estrellas)">
+        ☆
+      </ng-container>
+    </div>
+  </div>
 </div>

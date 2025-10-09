@@ -17,7 +17,7 @@ export class Carrito implements OnInit {
   constructor(private cart: CartService, private router: Router) {}
 
   ngOnInit() {
-    this.cart.items$.subscribe(items => (this.items = items));
+    this.cart.items$.subscribe(items => this.items = items);
   }
 
   sumar(item: CartItem) {
@@ -25,13 +25,15 @@ export class Carrito implements OnInit {
   }
 
   restar(item: CartItem) {
-    if (item.cantidad > 1) {
-      this.cart.updateCantidad(item.id, item.cantidad - 1);
-    }
+    if (item.cantidad > 1) this.cart.updateCantidad(item.id, item.cantidad - 1);
   }
 
   eliminar(id: number) {
     this.cart.removeItem(id);
+  }
+
+  editar(id: number) {
+    this.router.navigate(['/cliente/hacer-pedido', id]);
   }
 
   total() {
@@ -41,10 +43,5 @@ export class Carrito implements OnInit {
   confirmar() {
     alert('✅ Pedido confirmado. ¡Gracias por tu compra!');
     this.cart.clear();
-  }
-
-  editar(item: CartItem) {
-    localStorage.setItem('productoEditando', JSON.stringify(item));
-    this.router.navigate(['/cliente/hacer-pedido', item.id]);
   }
 }

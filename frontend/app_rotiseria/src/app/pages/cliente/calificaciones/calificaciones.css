@@ -1,28 +1,22 @@
+.app-header {
+  text-align: center;
+  font-weight: bold;
+  background-color: #f7c546;
+  color: #d62828;
+  padding: 10px;
+  border-radius: 0 0 20px 20px;
+}
 
-    body { background: #fff; font-family: 'Segoe UI', sans-serif; padding-bottom: 70px; }
-    .app-header {
-      background: #FFD966;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.3rem;
-      color: #F25C2A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .app-header img {
-      width: 35px;
-      height: 35px;
-    }
-    .list-group-item { font-size: 1rem; }
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; width: 100%;
-      background: #fff; border-top: 2px solid #FFD966;
-      display: flex; justify-content: space-around;
-      padding: 10px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-    }
-    .bottom-nav a { color: #F25C2A; font-size: 1.3rem; text-decoration: none; }
-    .bottom-nav a.active { color: #D9534F; }
+.container {
+  padding: 1rem;
+}
+
+.card {
+  border-radius: 12px;
+  background-color: #fff5f0;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+  font-size: 1.2rem;
+}

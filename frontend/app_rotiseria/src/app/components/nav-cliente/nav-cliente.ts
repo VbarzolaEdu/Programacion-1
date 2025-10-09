@@ -14,6 +14,7 @@ export class NavCliente {
     { icon: 'bi bi-house-door-fill', route: '/cliente/cliente-home' },
     { icon: 'bi bi-star-fill', route: '/cliente/calificaciones' },
     { icon: 'bi bi-bag-fill', route: '/cliente/pedidos' },
+    { icon: 'bi bi-cart-fill', route: '/cliente/carrito' },
     { icon: 'bi bi-person-fill', route: '/cliente/perfil' }
   ];
 }
