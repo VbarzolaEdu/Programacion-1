@@ -1,0 +1,8 @@
+<div class="card-usuario mb-3">
+  <h5>{{ nombre }}</h5>
+  <p><strong>Correo:</strong> {{ correo }}</p>
+  <p *ngIf="rol"><strong>Rol:</strong> {{ rol }}</p>
+
+  <!-- Espacio para botones u otro contenido -->
+  <ng-content></ng-content>
+</div>

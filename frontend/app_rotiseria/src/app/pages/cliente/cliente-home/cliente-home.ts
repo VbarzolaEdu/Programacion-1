@@ -1,39 +1,55 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // 👈 IMPORTANTE
 import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
-import { CartService, CartItem } from '../../../services/cart.service';
+import { CardProducto } from '../../../components/shared/producto/card-producto';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-cliente-home',
   standalone: true,
-  imports: [NavCliente],
+  imports: [CommonModule, NavCliente, CardProducto], // 👈 AÑADIDO CommonModule
   templateUrl: './cliente-home.html',
   styleUrls: ['./cliente-home.css']
 })
 export class ClienteHome {
-  constructor(
-    private router: Router,
-    private cart: CartService
-  ) {}
-
   productos = [
-    { id: 1, nombre: 'Hamburguesa Clásica', precio: 2500, imagen: 'assets/buger1.jpg' },
-    { id: 2, nombre: 'Hamburguesa Doble', precio: 3200, imagen: 'assets/buger1.jpg' },
-    { id: 3, nombre: 'Papas Fritas', precio: 1200, imagen: 'assets/papas.jpg' },
+    {
+      id: 1,
+      nombre: 'Hamburguesa Clásica',
+      categoria: 'Burger',
+      precio: 1000,
+      imagen: 'assets/buger1.jpg'
+    },
+    {
+      id: 2,
+      nombre: 'Hamburguesa Doble',
+      categoria: 'Burger',
+      precio: 1500,
+      imagen: 'assets/buger1.jpg'
+    },
+    {
+      id: 3,
+      nombre: 'Hamburguesa Veggie',
+      categoria: 'Burger',
+      precio: 1200,
+      imagen: 'assets/buger1.jpg'
+    }
   ];
 
-  irAHacerPedido(productoId: number) {
-    this.router.navigate(['/cliente/hacer-pedido', productoId]);
+  constructor(private router: Router, private cart: CartService) {}
+
+  irAHacerPedido(id: number) {
+    this.router.navigate(['/cliente/hacer-pedido', id]);
   }
 
-  agregarAlCarrito(producto: any) {
-    const item: CartItem = {
-      id: producto.id,
-      nombre: producto.nombre,
-      precio: producto.precio,
+  agregarAlCarrito(p: any) {
+    this.cart.addItem({
+      id: p.id,
+      nombre: p.nombre,
+      precio: p.precio,
       cantidad: 1
-    };
-    this.cart.addItem(item);
-    alert(`${producto.nombre} agregado al carrito 🛒`);
+    });
+    alert(`🛒 ${p.nombre} agregado al carrito`);
   }
 }

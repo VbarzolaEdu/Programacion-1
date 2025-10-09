@@ -1,34 +1,12 @@
-  <app-nav-admin></app-nav-admin>
-  <!-- Header -->
-  <div class="header">
-    <h2>Gestión de Usuarios</h2>
-  </div>
+<app-nav-admin></app-nav-admin>
+<div class="app-header">Usuarios</div>
 
-  <!-- Barra de búsqueda -->
-  <div class="container my-3">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Buscar...">
-      <button class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
-    </div>
-
-    <!-- Filtros -->
-    <div class="mb-3">
-      <button class="btn btn-sm btn-danger">Para Validar</button>
-      <button class="btn btn-sm btn-secondary">Todos</button>
-      <button class="btn btn-sm btn-dark">Bloqueados</button>
-    </div>
-
-    <!-- Usuario -->
-    <div class="user-card d-flex align-items-center">
-      <div class="rounded-circle bg-secondary me-3" style="width:40px; height:40px;"></div>
-      <div class="flex-grow-1">
-        <p class="mb-0 fw-bold">Gustavo Lopez</p>
-        <p class="mb-0">gustavolopez@gmail.com</p>
-        <span class="badge badge-pendiente">Pendiente</span>
-      </div>
-      <div>
-        <button class="btn btn-sm btn-success">Validar</button>
-        <button class="btn btn-sm btn-danger">Bloquear</button>
-      </div>
-    </div>
-  </div>
+<div class="container mt-3 mb-5">
+  <app-card-usuario
+    *ngFor="let u of usuarios"
+    [nombre]="u.nombre"
+    [correo]="u.correo"
+    [rol]="u.rol">
+    <button class="btn btn-danger btn-sm mt-2">Eliminar</button>
+  </app-card-usuario>
+</div>

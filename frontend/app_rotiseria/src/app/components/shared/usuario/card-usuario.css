@@ -1,0 +1,25 @@
+.card-usuario {
+  background-color: #fde0db;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card-usuario:hover {
+  transform: scale(1.02);
+}
+
+.card-usuario h5 {
+  color: #d62828;
+  margin-bottom: 0.5rem;
+}
+
+.card-usuario p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.btn {
+  font-size: 0.85rem;
+}

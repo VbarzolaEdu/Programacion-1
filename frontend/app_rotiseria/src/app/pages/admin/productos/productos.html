@@ -5,35 +5,21 @@
   <h2>Productos</h2>
 </div>
 
-<!-- Lista dinámica -->
+<!-- Lista de productos -->
 <div class="container my-3">
-  <div
-    class="card mb-3 card-producto"
+  <app-card-producto
     *ngFor="let p of productos"
-  >
-    <div class="row g-0 align-items-center">
-      <div class="col-4">
-        <img
-          [src]="p.imagen"
-          class="img-fluid rounded-start"
-          [alt]="p.nombre"
-        />
-      </div>
-      <div class="col-8">
-        <div class="p-2">
-          <p><strong>Nombre:</strong> {{ p.nombre }}</p>
-          <p><strong>Categoría:</strong> {{ p.categoria }}</p>
-          <p><strong>Precio:</strong> ${{ p.precio | number }}</p>
-          <p><strong>Disponibilidad:</strong> {{ p.disponible ? 'Sí' : 'No' }}</p>
-
-          <button class="btn btn-sm btn-warning me-2" (click)="editarProducto(p.id)">
-            ✏️ Editar
-          </button>
-          <button class="btn btn-sm btn-danger" (click)="eliminarProducto(p.id)">
-            🗑 Eliminar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+    [nombre]="p.nombre"
+    [categoria]="p.categoria"
+    [precio]="p.precio"
+    [disponible]="p.disponible"
+    [imagen]="p.imagen">
+    
+    <button class="btn btn-sm btn-warning me-2" (click)="editarProducto(p)">
+      ✏️ Editar
+    </button>
+    <button class="btn btn-sm btn-danger" (click)="eliminarProducto(p)">
+      🗑 Eliminar
+    </button>
+  </app-card-producto>
 </div>
