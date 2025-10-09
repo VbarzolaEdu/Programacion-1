@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'; 
-import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
+import { ActivatedRoute, Router,} from '@angular/router'; 
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms'; 
+import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
 
 @Component({
   selector: 'app-calificar',
   standalone: true,
-  imports: [NavCliente, CommonModule, FormsModule,RouterLink,], 
+  imports: [ CommonModule, FormsModule,NavCliente], 
   templateUrl: './calificar.html',
   styleUrl: './calificar.css'
 })
