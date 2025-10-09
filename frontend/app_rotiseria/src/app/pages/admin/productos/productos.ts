@@ -24,7 +24,6 @@ export class Productos {
     { icon: 'bi bi-tags-fill', route: '/admin/promociones' }
   ];
 
-  // 🔧 Métodos de acción
   editarProducto(producto: any) {
     alert(`✏️ Editar producto: ${producto.nombre}`);
   }

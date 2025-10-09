@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; // 👈 IMPORTANTE
+import { CommonModule } from '@angular/common'; 
 import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
 import { CartService } from '../../../services/cart.service';
@@ -8,7 +8,7 @@ import { CartService } from '../../../services/cart.service';
 @Component({
   selector: 'app-cliente-home',
   standalone: true,
-  imports: [CommonModule, NavCliente, CardProducto], // 👈 AÑADIDO CommonModule
+  imports: [CommonModule, NavCliente, CardProducto], 
   templateUrl: './cliente-home.html',
   styleUrls: ['./cliente-home.css']
 })

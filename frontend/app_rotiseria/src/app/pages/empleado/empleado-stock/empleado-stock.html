@@ -59,7 +59,7 @@
     function changeQty(id, change) {
       const qtyEl = document.getElementById(id);
       let qty = parseInt(qtyEl.innerText);
-      qty = Math.max(0, qty + change); // Evita valores negativos
+      qty = Math.max(0, qty + change); 
       qtyEl.innerText = qty;
     }
   </script>
