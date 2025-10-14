@@ -47,4 +47,8 @@ export class Navbar implements OnInit {
   ngOnInit() {
     this.items = NAV_CONFIG[this.simulatedRole];
   }
+
+  isToken() {
+    return localStorage.getItem('token') ;
+  }
 }

@@ -8,12 +8,13 @@ import { Observable } from 'rxjs';
 export class Auth {
 
   private http=inject(HttpClient);
-  url='http://localhost:4200';
-  login() : Observable<any> {
-    let dataLogin={
-    email: "f.berardo8@alumno.um.edu.ar",
-    password:"123"
-     }
+  url='http://localhost:5000';
+  login(dataLogin:LoginRequest) : Observable<any> {
+    
+    // let dataLogin={
+    // email: "h.berardo@alumno.um.edu.ar",
+    // password:"123"
+    //  }
     return this.http.post(this.url+'/auth/login',dataLogin);
   }
 

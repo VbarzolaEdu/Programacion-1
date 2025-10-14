@@ -1,5 +1,5 @@
 interface LoginResponse {
     access_token: string;
-    emall: string;
+    email: string;
     id:string;
 }

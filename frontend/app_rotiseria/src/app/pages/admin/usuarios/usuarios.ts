@@ -12,13 +12,17 @@ import { Header } from '../../../components/shared/header/header';
   templateUrl: './usuarios.html',
   styleUrls: ['./usuarios.css']
 })
+
 export class Usuarios {
   usuarios = [
     { id: 1, nombre: 'Juan Pérez', correo: 'juan@correo.com', rol: 'empleado' },
     { id: 2, nombre: 'Ana Gómez', correo: 'ana@correo.com', rol: 'admin' },
     { id: 3, nombre: 'Carlos Ruiz', correo: 'carlos@correo.com', rol: 'cliente' }
   ];
-
+  constructor(
+    private router: Router,
+    private UsuarioService: Usuarios)
+  {}}
   /**
    * Elimina un usuario (solo admin puede hacerlo)
    */
