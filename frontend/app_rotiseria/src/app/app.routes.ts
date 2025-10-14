@@ -9,61 +9,54 @@ import { HacerPedido } from './pages/cliente/hacer-pedido/hacer-pedido';
 import { Perfil } from './pages/cliente/perfil/perfil';
 import { Login } from './pages/auth/login/login';
 import { Register } from './pages/auth/register/register';
-import { HomeIndex } from './pages/admin/home-index/home-index';
 import { PedidosAdmin } from './pages/admin/pedidos/pedidos';
-import { Precios } from './pages/admin/precios/precios';
 import { Productos } from './pages/admin/productos/productos';
 import { Promociones } from './pages/admin/promociones/promociones';
 import { Usuarios } from './pages/admin/usuarios/usuarios';
-import { EmpleadoIndex } from './pages/empleado/empleado-index/empleado-index';
 import { EmpleadoStock } from './pages/empleado/empleado-stock/empleado-stock';
 import { EstadoP } from './pages/empleado/estado-p/estado-p';
 import { GDU } from './pages/empleado/gdu/gdu';
 import { FormsModule } from '@angular/forms';
+import { authsessionGuard } from './guards/authsession-guard';
 
 export const routes: Routes = [
 
+    // Rutas públicas
     {path: 'home', component: Home},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
-
-    {path: 'cliente/calificaciones', component: Calificaciones},
-
-    // 🚨 RUTA CORREGIDA: Ahora acepta el parámetro dinámico ':idPedido'
-    {path: 'cliente/calificar/:idPedido', component: Calificar},
-
-    {path: 'cliente/carrito', component: Carrito},
-
-    {path: 'cliente/cliente-home', component: ClienteHome},
-
-    {path: 'cliente/pedidos', component: Pedidos},
-
-    {path: 'cliente/hacer-pedido', component: HacerPedido},
-
-    {path: 'cliente/perfil', component: Perfil},
-
     {path: 'auth/login', component: Login},
-
     {path: 'auth/register', component: Register},
 
-    { path: 'cliente/hacer-pedido/:id', component: HacerPedido },
+    // Rutas de Cliente (accesibles por todos los roles autenticados)
+    {path: 'cliente/cliente-home', component: ClienteHome, canActivate: [authsessionGuard()]},
 
-    { path: 'admin/home-index', component: HomeIndex },
+    {path: 'cliente/calificaciones', component: Calificaciones, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'admin/pedidos', component: PedidosAdmin },
+    {path: 'cliente/calificar/:idPedido', component: Calificar, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'admin/precios', component: Precios },
+    {path: 'cliente/carrito', component: Carrito, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'admin/productos', component: Productos },
+    {path: 'cliente/pedidos', component: Pedidos, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'admin/promociones', component: Promociones },
+    {path: 'cliente/hacer-pedido', component: HacerPedido, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'admin/usuarios', component: Usuarios },
+    {path: 'cliente/hacer-pedido/:id', component: HacerPedido, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'empleado/empleado-index', component: EmpleadoIndex },
+    {path: 'cliente/perfil', component: Perfil, canActivate: [authsessionGuard(['cliente'])]},
 
-    { path: 'empleado/empleado-stock', component: EmpleadoStock },
+    // Rutas de Admin (solo admin)
+    {path: 'admin/pedidos', component: PedidosAdmin, canActivate: [authsessionGuard(['admin'])]},
 
-    { path: 'empleado/estado-p', component: EstadoP },
+    {path: 'admin/productos', component: Productos, canActivate: [authsessionGuard(['admin'])]},
 
-    { path: 'empleado/gdu', component: GDU }
+    {path: 'admin/promociones', component: Promociones, canActivate: [authsessionGuard(['admin'])]},
+
+    {path: 'admin/usuarios', component: Usuarios, canActivate: [authsessionGuard(['admin'])]},
+
+    // Rutas de Empleado (solo empleado)
+    {path: 'empleado/empleado-stock', component: EmpleadoStock, canActivate: [authsessionGuard(['empleado'])]},
+
+    {path: 'empleado/estado-p', component: EstadoP, canActivate: [authsessionGuard(['empleado'])]},
+
+    {path: 'empleado/gdu', component: GDU, canActivate: [authsessionGuard(['empleado'])]}
 ];

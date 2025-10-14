@@ -10,6 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class CardUsuario {
   @Input() nombre!: string;
-  @Input() correo!: string;
+  @Input() email!: string;
   @Input() rol?: string;
 }

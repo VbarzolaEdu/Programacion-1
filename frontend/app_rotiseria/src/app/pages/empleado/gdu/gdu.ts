@@ -1,32 +1,110 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardUsuario } from '../../../components/shared/usuario/card-usuario';
+import { User } from '../../../services/user';
+import { Search } from '../../../components/shared/search/search';
 
 @Component({
   selector: 'app-gdu',
-  imports: [CommonModule, RouterModule, Navbar, Header, CardUsuario],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar, Header, CardUsuario, Search],
   templateUrl: './gdu.html',
   styleUrl: './gdu.css'
 })
 export class GDU {
-  // Lista de usuarios para gestionar
-  usuarios = [
-    { id: 1, nombre: 'Juan Pérez', correo: 'juan@correo.com', rol: 'empleado', estado: 'pendiente' },
-    { id: 2, nombre: 'Ana Gómez', correo: 'ana@correo.com', rol: 'admin', estado: 'validado' },
-    { id: 3, nombre: 'Carlos López', correo: 'carlos@correo.com', rol: 'cliente', estado: 'pendiente' },
-    { id: 4, nombre: 'María Torres', correo: 'maria@correo.com', rol: 'cliente', estado: 'validado' }
-  ];
+  arrayusuarios: any[] = [];
+  usuariosFiltrados: any[] = [];
+  cargando: boolean = false;
+  terminoBusqueda: string = '';
+  filtroActivo: string = 'todos'; // 'todos', 'pendientes', 'bloqueados', 'validados'
+
+  constructor(private UsuarioService: User) {}
+
+  ngOnInit() {
+    this.cargarUsuarios();
+  }
 
   /**
-   * Valida un usuario (aprobar su registro)
+   * Carga la lista de usuarios desde el backend
    */
+  cargarUsuarios() {
+    this.cargando = true;
+    this.UsuarioService.getUsuarios().subscribe({
+      next: (response: any) => {
+        console.log('Usuarios cargados:', response);
+        this.arrayusuarios = response;
+        this.aplicarFiltros();
+        this.cargando = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar usuarios:', error);
+        this.cargando = false;
+        alert('Error al cargar usuarios. Verifica tu conexión y permisos.');
+      }
+    });
+  }
+
+  /**
+   * Aplica filtros de búsqueda y estado
+   */
+  aplicarFiltros() {
+    let resultado = [...this.arrayusuarios];
+
+    // Filtro por estado
+    if (this.filtroActivo === 'pendientes') {
+      resultado = resultado.filter(u => u.estado === 'pendiente' || u.estado === 'Pendiente');
+    } else if (this.filtroActivo === 'bloqueados') {
+      resultado = resultado.filter(u => u.estado === 'bloqueado' || u.estado === 'Bloqueado');
+    } else if (this.filtroActivo === 'validados') {
+      resultado = resultado.filter(u => u.estado === 'validado' || u.estado === 'Validado' || u.estado === 'activo' || u.estado === 'Activo');
+    }
+
+    // Filtro por búsqueda (nombre, email)
+    if (this.terminoBusqueda.trim()) {
+      const termino = this.terminoBusqueda.toLowerCase();
+      resultado = resultado.filter(u => 
+        u.nombre.toLowerCase().includes(termino) ||
+        u.apellidos.toLowerCase().includes(termino) ||
+        u.email.toLowerCase().includes(termino)
+      );
+    }
+
+    this.usuariosFiltrados = resultado;
+  }
+
+  /**
+   * Cambia el filtro activo
+   */
+  cambiarFiltro(filtro: string) {
+    this.filtroActivo = filtro;
+    this.aplicarFiltros();
+  }
+
   validarUsuario(usuario: any) {
     console.log('✅ Validando usuario:', usuario);
-    // Aquí harías la petición HTTP al backend
-    alert(`Usuario ${usuario.nombre} validado correctamente`);
+    
+    const confirmar = confirm(`¿Validar a ${usuario.nombre} ${usuario.apellidos}?`);
+    if (!confirmar) return;
+
+    // Actualizar estado a 'validado' o 'activo'
+    const datosActualizados = { estado: 'activo' };
+    
+    this.UsuarioService.updateUsuario(usuario.id, datosActualizados).subscribe({
+      next: (response) => {
+        console.log('Usuario validado:', response);
+        alert(`Usuario ${usuario.nombre} ${usuario.apellidos} validado correctamente`);
+        // Actualizar localmente
+        usuario.estado = 'activo';
+        this.aplicarFiltros();
+      },
+      error: (error) => {
+        console.error('Error al validar usuario:', error);
+        alert('Error al validar el usuario. Intenta nuevamente.');
+      }
+    });
   }
 
   /**
@@ -34,10 +112,25 @@ export class GDU {
    */
   bloquearUsuario(usuario: any) {
     console.log('🚫 Bloqueando usuario:', usuario);
-    // Aquí harías la petición HTTP al backend
-    const confirmar = confirm(`¿Estás seguro de bloquear a ${usuario.nombre}?`);
-    if (confirmar) {
-      alert(`Usuario ${usuario.nombre} bloqueado`);
-    }
+    
+    const confirmar = confirm(`¿Estás seguro de bloquear a ${usuario.nombre} ${usuario.apellidos}?`);
+    if (!confirmar) return;
+
+    // Actualizar estado a 'bloqueado'
+    const datosActualizados = { estado: 'bloqueado' };
+    
+    this.UsuarioService.updateUsuario(usuario.id, datosActualizados).subscribe({
+      next: (response) => {
+        console.log('Usuario bloqueado:', response);
+        alert(`Usuario ${usuario.nombre} ${usuario.apellidos} bloqueado`);
+        // Actualizar localmente
+        usuario.estado = 'bloqueado';
+        this.aplicarFiltros();
+      },
+      error: (error) => {
+        console.error('Error al bloquear usuario:', error);
+        alert('Error al bloquear el usuario. Intenta nuevamente.');
+      }
+    });
   }
 }

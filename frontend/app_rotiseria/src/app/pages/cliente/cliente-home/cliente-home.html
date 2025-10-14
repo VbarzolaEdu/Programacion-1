@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<app-header titulo="Menú"></app-header>
+<app-header titulo="Home"></app-header>
 
 <div class="container mt-3 mb-5 pb-5">
   <div class="row g-3">
@@ -12,12 +12,15 @@
         [precio]="p.precio"
         [imagen]="p.imagen">
         
-        <button class="btn btn-primary" (click)="irAHacerPedido(p.id)">
-          <i class="bi bi-bag-fill"></i> Pedir
-        </button>
-        <button class="btn btn-success" (click)="agregarAlCarrito(p.id)">
-          <i class="bi bi-cart-plus-fill"></i> Agregar
-        </button>
+        <!-- Botones exclusivos para clientes -->
+        <ng-container *ngIf="userRole === 'cliente'">
+          <button class="btn btn-primary" (click)="irAHacerPedido(p.id)">
+            <i class="bi bi-bag-fill"></i> Pedir
+          </button>
+          <button class="btn btn-success" (click)="agregarAlCarrito(p)">
+            <i class="bi bi-cart-plus-fill"></i> Agregar
+          </button>
+        </ng-container>
       </app-card-producto>
     </div>
   </div>

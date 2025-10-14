@@ -1,36 +1,114 @@
 <app-header titulo="Crear cuenta"></app-header>
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6">
-        <div class="card shadow-sm p-4">
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+      <div class="card shadow-sm p-4">
+        <form [formGroup]="registerForm" (ngSubmit)="submit()">
           <div class="row g-3">
-            <div class="col-12">
-              <label class="form-label">Nombre y apellido</label>
-              <input type="text" class="form-control" placeholder="Juan Pérez">
+            <!-- Nombre -->
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Juan"
+                formControlName="nombre"
+                [class.is-invalid]="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched">
+              <div class="invalid-feedback">
+                El nombre es requerido (mínimo 2 caracteres)
+              </div>
             </div>
+
+            <!-- Apellidos -->
+            <div class="col-md-6">
+              <label class="form-label">Apellidos</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Pérez"
+                formControlName="apellidos"
+                [class.is-invalid]="registerForm.get('apellidos')?.invalid && registerForm.get('apellidos')?.touched">
+              <div class="invalid-feedback">
+                Los apellidos son requeridos (mínimo 2 caracteres)
+              </div>
+            </div>
+
+            <!-- Email -->
             <div class="col-12">
               <label class="form-label">Email</label>
-              <input type="email" class="form-control" placeholder="tu@correo.com">
+              <input 
+                type="email" 
+                class="form-control" 
+                placeholder="tu@correo.com"
+                formControlName="email"
+                [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+              <div class="invalid-feedback">
+                Ingresa un email válido
+              </div>
             </div>
+
+            <!-- Teléfono -->
             <div class="col-12">
               <label class="form-label">Teléfono</label>
-              <input type="tel" class="form-control" placeholder="+54 9 ...">
+              <input 
+                type="tel" 
+                class="form-control" 
+                placeholder="2612345678"
+                formControlName="cellphone"
+                [class.is-invalid]="registerForm.get('cellphone')?.invalid && registerForm.get('cellphone')?.touched">
+              <div class="invalid-feedback">
+                Ingresa un teléfono válido (9-15 dígitos)
+              </div>
             </div>
+
+            <!-- Contraseña -->
             <div class="col-md-6">
               <label class="form-label">Contraseña</label>
-              <input type="password" class="form-control" placeholder="••••••">
+              <input 
+                type="password" 
+                class="form-control" 
+                placeholder="••••••"
+                formControlName="password"
+                [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+              <div class="invalid-feedback">
+                Mínimo 6 caracteres
+              </div>
             </div>
+
+            <!-- Confirmar contraseña -->
             <div class="col-md-6">
               <label class="form-label">Repetir contraseña</label>
-              <input type="password" class="form-control" placeholder="••••••">
+              <input 
+                type="password" 
+                class="form-control" 
+                placeholder="••••••"
+                formControlName="confirmPassword"
+                [class.is-invalid]="!passwordsMatch() && registerForm.get('confirmPassword')?.touched">
+              <div class="invalid-feedback">
+                Las contraseñas no coinciden
+              </div>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div class="col-12" *ngIf="mensajeError">
+              <div class="alert alert-danger" role="alert">
+                {{ mensajeError }}
+              </div>
             </div>
           </div>
-          <button type="button" class="btn btn-success w-100 mt-3" routerLink="/cliente/cliente-home">Crear cuenta</button>
-          <div class="text-center mt-3">
-            <small>¿Ya tenés cuenta? <a routerLink="/auth/login">Iniciá sesión</a></small>
-          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-success w-100 mt-3"
+            [disabled]="registerForm.invalid">
+            Crear cuenta
+          </button>
+        </form>
+
+        <div class="text-center mt-3">
+          <small>¿Ya tenés cuenta? <a routerLink="/auth/login">Iniciá sesión</a></small>
         </div>
       </div>
     </div>
   </div>
- 
+</div>

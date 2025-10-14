@@ -1,11 +1,135 @@
 <app-navbar></app-navbar>
 <app-header titulo="Mi Perfil"></app-header>
 
-<div class="container mt-3 mb-5">
-  <app-card-usuario
-    [nombre]="usuario.nombre"
-    [correo]="usuario.correo"
-    [rol]="usuario.rol">
-    <button class="btn btn-warning w-100 mt-3">Editar perfil</button>
-  </app-card-usuario>
+<div class="container mt-3 mb-5 pb-5">
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando perfil...</p>
+  </div>
+
+  <!-- Vista del perfil (modo lectura) -->
+  <div *ngIf="!cargando && usuario && !modoEdicion">
+    <app-card-usuario
+      [nombre]="usuario.nombre + ' ' + usuario.apellidos"
+      [email]="usuario.email"
+      [rol]="usuario.rol">
+      
+      <!-- Información extra del perfil -->
+      <div extra-info>
+        <p class="mb-1"><strong>Teléfono:</strong> {{ usuario.cellphone }}</p>
+        <p class="mb-1"><strong>Estado:</strong> 
+          <span 
+            class="badge"
+            [ngClass]="{
+              'bg-success': usuario.estado === 'activo' || usuario.estado === 'Activo' || usuario.estado === 'validado',
+              'bg-warning text-dark': usuario.estado === 'pendiente' || usuario.estado === 'Pendiente',
+              'bg-danger': usuario.estado === 'bloqueado' || usuario.estado === 'Bloqueado'
+            }">
+            {{ usuario.estado }}
+          </span>
+        </p>
+      </div>
+
+      <!-- Botón para activar edición -->
+      <button class="btn btn-warning w-100" (click)="activarEdicion()">
+        <i class="bi bi-pencil-fill"></i> Editar perfil
+      </button>
+    </app-card-usuario>
+  </div>
+
+  <!-- Formulario de edición (modo edición) -->
+  <div *ngIf="!cargando && usuario && modoEdicion" class="card">
+    <div class="card-body">
+      <h5 class="card-title mb-4">
+        <i class="bi bi-pencil-square"></i> Editar Perfil
+      </h5>
+
+      <form>
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="nombre"
+            [(ngModel)]="usuarioTemporal.nombre"
+            name="nombre"
+            required>
+        </div>
+
+        <!-- Apellidos -->
+        <div class="mb-3">
+          <label for="apellidos" class="form-label">Apellidos</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="apellidos"
+            [(ngModel)]="usuarioTemporal.apellidos"
+            name="apellidos"
+            required>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email"
+            [(ngModel)]="usuarioTemporal.email"
+            name="email"
+            required>
+          <div class="form-text">
+            <i class="bi bi-info-circle"></i> Asegúrate de usar un email válido
+          </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-3">
+          <label for="cellphone" class="form-label">Teléfono</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="cellphone"
+            [(ngModel)]="usuarioTemporal.cellphone"
+            name="cellphone"
+            required>
+        </div>
+
+        <!-- Información de solo lectura -->
+        <div class="alert alert-info">
+          <p class="mb-1"><strong>Rol:</strong> {{ usuario.rol }}</p>
+          <p class="mb-0"><strong>Estado:</strong> {{ usuario.estado }}</p>
+          <small class="text-muted">
+            <i class="bi bi-lock-fill"></i> Estos campos no se pueden modificar
+          </small>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex gap-2">
+          <button 
+            type="button" 
+            class="btn btn-success flex-grow-1"
+            (click)="guardarCambios()">
+            <i class="bi bi-check-circle-fill"></i> Guardar Cambios
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary flex-grow-1"
+            (click)="cancelarEdicion()">
+            <i class="bi bi-x-circle-fill"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay datos -->
+  <div *ngIf="!cargando && !usuario" class="alert alert-warning text-center">
+    <i class="bi bi-exclamation-triangle"></i> No se pudo cargar tu perfil. Por favor, intenta nuevamente.
+  </div>
 </div>

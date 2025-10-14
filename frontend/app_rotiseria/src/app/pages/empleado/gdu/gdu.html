@@ -2,46 +2,104 @@
 
 <app-header titulo="Gestión de Usuarios"></app-header>
 
-  <!-- Barra de búsqueda -->
-  <div class="container my-3">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Buscar...">
-      <button class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
-    </div>
+<div class="container my-3 mb-5 pb-5">
 
-    <!-- Filtros -->
-    <div class="mb-3">
-      <button class="btn btn-sm btn-danger">Para Validar</button>
-      <button class="btn btn-sm btn-secondary">Todos</button>
-      <button class="btn btn-sm btn-dark">Bloqueados</button>
-    </div>
+  <!-- Barra de búsqueda reutilizable -->
+  <app-search 
+    placeholder="Buscar por nombre, apellidos o email..."
+    [(terminoBusqueda)]="terminoBusqueda"
+    (busquedaRealizada)="aplicarFiltros()">
+  </app-search>
 
-    <!-- Usuario -->
-    <!-- <div class="user-card d-flex align-items-center">
-      <div class="rounded-circle bg-secondary me-3" style="width:40px; height:40px;"></div>
-      <div class="flex-grow-1">
-        <p class="mb-0 fw-bold">Gustavo Lopez</p>
-        <p class="mb-0">gustavolopez@gmail.com</p>
-        <span class="badge badge-pendiente">Pendiente</span>
-      </div>
-      <div>
-        <button class="btn btn-sm btn-success">Validar</button>
-        <button class="btn btn-sm btn-danger">Bloquear</button>
-      </div>
-    </div>
-  </div> -->
+  <!-- Filtros por estado -->
+  <div class="mb-4">
+    <button 
+      class="btn btn-sm me-2"
+      [ngClass]="filtroActivo === 'todos' ? 'btn-primary' : 'btn-outline-secondary'"
+      (click)="cambiarFiltro('todos')">
+      <i class="bi bi-people-fill"></i> Todos
+    </button>
+    <button 
+      class="btn btn-sm me-2"
+      [ngClass]="filtroActivo === 'pendientes' ? 'btn-warning' : 'btn-outline-warning'"
+      (click)="cambiarFiltro('pendientes')">
+      <i class="bi bi-clock-history"></i> Pendientes
+    </button>
+    <button 
+      class="btn btn-sm me-2"
+      [ngClass]="filtroActivo === 'validados' ? 'btn-success' : 'btn-outline-success'"
+      (click)="cambiarFiltro('validados')">
+      <i class="bi bi-check-circle-fill"></i> Validados
+    </button>
+    <button 
+      class="btn btn-sm"
+      [ngClass]="filtroActivo === 'bloqueados' ? 'btn-danger' : 'btn-outline-danger'"
+      (click)="cambiarFiltro('bloqueados')">
+      <i class="bi bi-x-circle-fill"></i> Bloqueados
+    </button>
+  </div>
 
-    <app-card-usuario
-      *ngFor="let u of usuarios"
-      [nombre]="u.nombre"
-      [correo]="u.correo"
-      [rol]="u.rol">
-      <!-- Botones específicos del empleado -->
-      <button class="btn btn-sm btn-success" (click)="validarUsuario(u)">
-        <i class="bi bi-check-circle"></i> Validar
-      </button>
-      <button class="btn btn-sm btn-danger" (click)="bloquearUsuario(u)">
-        <i class="bi bi-x-circle"></i> Bloquear
-      </button>
-    </app-card-usuario>
- 
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando usuarios...</p>
+  </div>
+
+  <!-- Lista de usuarios filtrados -->
+  <div *ngIf="!cargando && usuariosFiltrados.length > 0">
+    <div class="mb-3" *ngFor="let u of usuariosFiltrados">
+      <app-card-usuario
+        [nombre]="u.nombre + ' ' + u.apellidos"
+        [email]="u.email"
+        [rol]="u.rol">
+        
+        <!-- Información extra del estado -->
+        <div extra-info>
+          <span 
+            class="badge mb-2"
+            [ngClass]="{
+              'bg-warning text-dark': u.estado === 'pendiente' || u.estado === 'Pendiente',
+              'bg-success': u.estado === 'activo' || u.estado === 'Activo' || u.estado === 'validado' || u.estado === 'Validado',
+              'bg-danger': u.estado === 'bloqueado' || u.estado === 'Bloqueado'
+            }">
+            <i class="bi" 
+               [ngClass]="{
+                 'bi-clock-history': u.estado === 'pendiente' || u.estado === 'Pendiente',
+                 'bi-check-circle': u.estado === 'activo' || u.estado === 'Activo' || u.estado === 'validado' || u.estado === 'Validado',
+                 'bi-x-circle': u.estado === 'bloqueado' || u.estado === 'Bloqueado'
+               }">
+            </i>
+            {{ u.estado }}
+          </span>
+        </div>
+
+        <!-- Botones específicos del empleado -->
+        <button 
+          class="btn btn-sm btn-success me-2" 
+          (click)="validarUsuario(u)"
+          [disabled]="u.estado === 'activo' || u.estado === 'Activo' || u.estado === 'validado' || u.estado === 'Validado'">
+          <i class="bi bi-check-circle-fill"></i> Validar
+        </button>
+        <button 
+          class="btn btn-sm btn-danger" 
+          (click)="bloquearUsuario(u)"
+          [disabled]="u.estado === 'bloqueado' || u.estado === 'Bloqueado'">
+          <i class="bi bi-x-circle-fill"></i> Bloquear
+        </button>
+      </app-card-usuario>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay usuarios -->
+  <div *ngIf="!cargando && usuariosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    <span *ngIf="terminoBusqueda">No se encontraron usuarios con "{{ terminoBusqueda }}"</span>
+    <span *ngIf="!terminoBusqueda && filtroActivo === 'pendientes'">No hay usuarios pendientes de validación</span>
+    <span *ngIf="!terminoBusqueda && filtroActivo === 'bloqueados'">No hay usuarios bloqueados</span>
+    <span *ngIf="!terminoBusqueda && filtroActivo === 'validados'">No hay usuarios validados</span>
+    <span *ngIf="!terminoBusqueda && filtroActivo === 'todos'">No hay usuarios registrados</span>
+  </div>
+
+</div>

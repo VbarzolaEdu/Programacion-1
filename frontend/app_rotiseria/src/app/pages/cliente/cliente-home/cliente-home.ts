@@ -6,6 +6,8 @@ import { CardProducto } from '../../../components/shared/producto/card-producto'
 import { CartService } from '../../../services/cart.service';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
+import { Auth } from '../../../services/auth';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-cliente-home',
@@ -15,6 +17,9 @@ import { Header } from '../../../components/shared/header/header';
   styleUrls: ['./cliente-home.css']
 })
 export class ClienteHome {
+  private authService = inject(Auth);
+  userRole: string | null = null;
+
   productos = [
     {
       id: 1,
@@ -42,7 +47,9 @@ export class ClienteHome {
     }
   ];
 
-  constructor(private router: Router, private cart: CartService) {}
+  constructor(private router: Router, private cart: CartService) {
+    this.userRole = this.authService.getUserRole();
+  }
 
   irAHacerPedido(id: number) {
     this.router.navigate(['/cliente/hacer-pedido', id]);

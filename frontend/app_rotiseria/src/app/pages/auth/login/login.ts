@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Router,RouterLink } from '@angular/router';
 import { Header } from '../../../components/shared/header/header';
 import { Auth } from '../../../services/auth';
-import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [Router,Header,ReactiveFormsModule],
+  imports: [RouterLink,Header,ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -26,17 +26,19 @@ export class Login {
   }
 
   login() {
-    this.authservice.login({email:this.loginForm.value.email,password:this.loginForm.value.password}).subscribe({
+    this.authservice.login(this.loginForm.value).subscribe({
       next: (response: LoginResponse) => {
         alert('Login exitoso, ver consola');
         console.log('Login exitoso:', response);
         localStorage.setItem('token', response.access_token);
         localStorage.setItem('email', response.email);
-        this.router.navigateByUrl('/home');///aca deberia ser dependiendo el rol
+        this.router.navigateByUrl(`/cliente/cliente-home`);///aca deberia ser dependiendo el rol
       },
       error: (error) => {
         alert('Error en el login, ver consola');
         console.error('Error en el login:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
       }
     });
   }

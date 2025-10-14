@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmpleadoIndex } from './empleado-index';
+import { Search } from './search';
 
-describe('EmpleadoIndex', () => {
-  let component: EmpleadoIndex;
-  let fixture: ComponentFixture<EmpleadoIndex>;
+describe('Search', () => {
+  let component: Search;
+  let fixture: ComponentFixture<Search>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmpleadoIndex]
+      imports: [Search]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EmpleadoIndex);
+    fixture = TestBed.createComponent(Search);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

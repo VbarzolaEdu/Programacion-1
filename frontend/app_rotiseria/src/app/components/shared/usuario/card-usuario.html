@@ -7,8 +7,13 @@
   <!-- Información del usuario -->
   <div class="flex-grow-1">
     <p class="mb-0 fw-bold user-name">{{ nombre }}</p>
-    <p class="mb-0 user-email">{{ correo }}</p>
+    <p class="mb-0 user-email">{{ email }}</p>
     <span class="badge badge-rol" *ngIf="rol">{{ rol }}</span>
+    
+    <!-- Contenido adicional opcional (como badge de estado) -->
+    <div class="user-extra-info">
+      <ng-content select="[extra-info]"></ng-content>
+    </div>
   </div>
   
   <!-- Botones personalizados (proyectados desde la página) -->

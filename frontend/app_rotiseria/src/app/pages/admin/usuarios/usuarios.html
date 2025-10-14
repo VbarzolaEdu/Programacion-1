@@ -2,15 +2,42 @@
 
 <app-header titulo="Usuarios"></app-header>
 
-<div class="container mt-3 mb-5">
-  <app-card-usuario
-    *ngFor="let u of usuarios"
-    [nombre]="u.nombre"
-    [correo]="u.correo"
-    [rol]="u.rol">
-    <!-- Botón específico del admin -->
-    <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u)">
-      <i class="bi bi-trash"></i> Eliminar
-    </button>
-  </app-card-usuario>
+<div class="container mt-3 mb-5 pb-5">
+  
+  <!-- Barra de búsqueda -->
+  <app-search 
+    placeholder="Buscar por nombre, apellidos o email..."
+    [(terminoBusqueda)]="terminoBusqueda"
+    (busquedaRealizada)="aplicarFiltros()">
+  </app-search>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando usuarios...</p>
+  </div>
+
+  <!-- Lista de usuarios filtrados -->
+  <div *ngIf="!cargando && usuariosFiltrados.length > 0">
+    <div class="mb-3" *ngFor="let u of usuariosFiltrados">
+      <app-card-usuario
+        [nombre]="u.nombre + ' ' + u.apellidos"
+        [email]="u.email"
+        [rol]="u.rol">
+        <!-- Botón específico del admin -->
+        <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u)">
+          <i class="bi bi-trash-fill"></i> Eliminar
+        </button>
+      </app-card-usuario>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay usuarios -->
+  <div *ngIf="!cargando && usuariosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    <span *ngIf="terminoBusqueda">No se encontraron usuarios con "{{ terminoBusqueda }}"</span>
+    <span *ngIf="!terminoBusqueda">No hay usuarios registrados en el sistema.</span>
+  </div>
 </div>

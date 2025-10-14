@@ -1,9 +1,56 @@
 <div class="bottom-nav">
-  <a
-    *ngFor="let item of items"
-    [routerLink]="item.route"
-    routerLinkActive="active"
-  >
-    <i [class]="item.icon"></i>
-  </a>
+  <!-- Navbar para Admin -->
+  <ng-container *ngIf="userRole === 'admin'">
+    <a routerLink="/cliente/cliente-home" routerLinkActive="active">
+      <i class="bi bi-house-door-fill"></i>
+    </a>
+    <a routerLink="/admin/productos" routerLinkActive="active">
+      <i class="bi bi-box-seam"></i>
+    </a>
+    <a routerLink="/admin/pedidos" routerLinkActive="active">
+      <i class="bi bi-list-ul"></i>
+    </a>
+    <a routerLink="/admin/promociones" routerLinkActive="active">
+      <i class="bi bi-percent"></i>
+    </a>
+    <a routerLink="/admin/usuarios" routerLinkActive="active">
+      <i class="bi bi-person-fill"></i>
+    </a>
+  </ng-container>
+
+  <!-- Navbar para Empleado -->
+  <ng-container *ngIf="userRole === 'empleado'">
+    <a routerLink="/cliente/cliente-home" routerLinkActive="active">
+      <i class="bi bi-house-door-fill"></i>
+    </a>
+    <a routerLink="/empleado/empleado-stock" routerLinkActive="active">
+      <i class="bi bi-box-seam"></i>
+    </a>
+    <a routerLink="/empleado/estado-p" routerLinkActive="active">
+      <i class="bi bi-hourglass-split"></i>
+    </a>
+    <a routerLink="/empleado/gdu" routerLinkActive="active">
+      <i class="bi bi-person-workspace"></i>
+    </a>
+  </ng-container>
+
+  <!-- Navbar para Cliente -->
+  <ng-container *ngIf="userRole === 'cliente'">
+    <a routerLink="/cliente/cliente-home" routerLinkActive="active">
+      <i class="bi bi-house-door-fill"></i>
+    </a>
+    <a routerLink="/cliente/calificaciones" routerLinkActive="active">
+      <i class="bi bi-star-fill"></i>
+    </a>
+    <a routerLink="/cliente/pedidos" routerLinkActive="active">
+      <i class="bi bi-bag-fill"></i>
+    </a>
+    <a routerLink="/cliente/carrito" routerLinkActive="active">
+      <i class="bi bi-cart-fill"></i>
+    </a>
+    <a routerLink="/cliente/perfil" routerLinkActive="active">
+      <i class="bi bi-person-fill"></i>
+    </a>
+  </ng-container>
 </div>
+ 

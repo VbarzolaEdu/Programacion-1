@@ -1,0 +1,11 @@
+<div class="input-group mb-3">
+  <input 
+    type="text" 
+    class="form-control" 
+    [placeholder]="placeholder"
+    [(ngModel)]="terminoBusqueda"
+    (input)="onInputChange()">
+  <button class="btn btn-outline-secondary" (click)="buscar()">
+    <i class="bi bi-search"></i>
+  </button>
+</div>
