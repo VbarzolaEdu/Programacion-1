@@ -41,6 +41,8 @@ class User(db.Model):
             'apellidos': str(self.apellidos),
             'email': str(self.email),
             'cellphone': self.cellphone,
+            'rol': str(self.rol),
+            'estado': str(self.estado),
         }
         return user_json
     

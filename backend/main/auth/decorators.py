@@ -6,6 +6,7 @@ from functools import wraps
 #Decorador para restringir el acceso a usuarios/animales por rol
 def role_required(roles):
     def decorator(fn):
+        @wraps(fn)
         def wrapper(*args, **kwargs):
             #Verificar que el JWT es correcto
             verify_jwt_in_request()

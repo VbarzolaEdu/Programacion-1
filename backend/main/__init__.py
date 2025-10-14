@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail 
+from flask_cors import CORS
 
 # Iniciar
 
@@ -22,6 +23,9 @@ def create_app():
     app = Flask(__name__)
     # Cargamos variables de entorno
     load_dotenv()
+
+    CORS(app)
+
     #crear archivo bd sino existe
     if not os.path.exists(os.getenv('DATABASE_PATH') +os.getenv('DATABASE_NAME')):
         os.mknod(os.getenv('DATABASE_PATH') +os.getenv('DATABASE_NAME'))
@@ -35,7 +39,7 @@ def create_app():
 
     # Cargar los recursos
     import main.resources as resources
-    api.add_resource(resources.UserResource, '/user/<id>')
+    api.add_resource(resources.UserResource, '/user/<int:id>')
     api.add_resource(resources.UsersResource, '/users')
     api.add_resource(resources.PedidoResource, '/pedido/<id>')
     api.add_resource(resources.PedidosResource, '/pedidos')
