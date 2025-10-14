@@ -1,23 +1,167 @@
-.card-producto {
-  background-color: #fde0db;
+/* ========== Card del Producto (Componente Presentacional) ========== */
+
+.producto-card {
+  background: white;
   border-radius: 12px;
-  padding: 10px;
-  transition: transform 0.2s ease-in-out;
-  margin: 20px;
-  
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.25s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
-.card-producto:hover {
-  transform: scale(1.02);
+.producto-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 2; /* Mantiene bajo para no tapar navbar */
 }
 
-.card-producto img {
+/* ========== Imagen del Producto ========== */
+
+.producto-imagen {
+  position: relative;
   width: 100%;
-  border-radius: 10px;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card-producto p {
+.producto-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.25s ease;
+}
+
+.producto-card:hover .producto-imagen img {
+  transform: scale(1.05);
+}
+
+/* Badge de no disponible */
+.badge-no-disponible {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(220, 53, 69, 0.95);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 16px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ========== Información del Producto ========== */
+
+.producto-info {
+  padding: 0.85rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.producto-nombre {
+  color: #2c3e50;
+  font-size: 0.95rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 0.9rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4rem; /* Mantiene altura consistente */
+}
+
+.producto-categoria {
+  color: #6c757d;
+  font-size: 0.75rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.producto-categoria i {
+  color: #FFD966;
+  font-size: 0.8rem;
+}
+
+.producto-precio {
+  margin: 0.2rem 0 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.precio-label {
+  color: #6c757d;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.precio-valor {
+  color: #D9534F;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+/* ========== Acciones (Botones Proyectados desde la Página) ========== */
+
+.producto-acciones {
+  padding: 0 0.85rem 0.85rem 0.85rem;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+/* Estilos para botones proyectados */
+.producto-acciones .btn {
+  flex: 1;
+  min-width: 100px;
+  font-size: 0.8rem;
+  padding: 7px 12px;
+  margin-right: 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+}
+
+.producto-acciones .btn:last-child {
+  margin-right: 0;
+}
+
+.producto-acciones .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.producto-acciones .btn:active {
+  transform: translateY(0);
+}
+
+.producto-acciones .btn i {
+  font-size: 0.85rem;
 }
 

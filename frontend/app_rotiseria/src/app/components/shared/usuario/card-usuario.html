@@ -1,8 +1,18 @@
-<div class="card-usuario mb-3">
-  <h5>{{ nombre }}</h5>
-  <p><strong>Correo:</strong> {{ correo }}</p>
-  <p *ngIf="rol"><strong>Rol:</strong> {{ rol }}</p>
-
-  <!-- Espacio para botones u otro contenido -->
-  <ng-content></ng-content>
+<div class="user-card d-flex align-items-center">
+  <!-- Avatar/Inicial del usuario -->
+  <div class="user-avatar">
+    {{ nombre.charAt(0).toUpperCase() }}
+  </div>
+  
+  <!-- Información del usuario -->
+  <div class="flex-grow-1">
+    <p class="mb-0 fw-bold user-name">{{ nombre }}</p>
+    <p class="mb-0 user-email">{{ correo }}</p>
+    <span class="badge badge-rol" *ngIf="rol">{{ rol }}</span>
+  </div>
+  
+  <!-- Botones personalizados (proyectados desde la página) -->
+  <div class="user-actions">
+    <ng-content></ng-content>
+  </div>
 </div>

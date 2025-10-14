@@ -1,5 +1,6 @@
-<app-nav-admin></app-nav-admin>
-<div class="app-header">Usuarios</div>
+<app-navbar></app-navbar>
+
+<app-header titulo="Usuarios"></app-header>
 
 <div class="container mt-3 mb-5">
   <app-card-usuario
@@ -7,6 +8,9 @@
     [nombre]="u.nombre"
     [correo]="u.correo"
     [rol]="u.rol">
-    <button class="btn btn-danger btn-sm mt-2">Eliminar</button>
+    <!-- Botón específico del admin -->
+    <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u)">
+      <i class="bi bi-trash"></i> Eliminar
+    </button>
   </app-card-usuario>
 </div>

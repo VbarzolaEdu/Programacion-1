@@ -1,8 +1,7 @@
-<app-nav-cliente></app-nav-cliente>
+<app-navbar></app-navbar>
 
-<div class="app-header">
-  {{ producto ? 'Editar pedido' : 'Nuevo pedido' }}
-</div>
+<app-header titulo="{{ producto ? 'Editar pedido' : 'Nuevo pedido' }}"></app-header>
+
 
 <div class="container mt-3" *ngIf="producto">
   <div class="card p-3">

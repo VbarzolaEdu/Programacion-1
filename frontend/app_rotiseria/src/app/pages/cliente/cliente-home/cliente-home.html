@@ -1,22 +1,22 @@
-<app-nav-cliente></app-nav-cliente> 
+<app-navbar></app-navbar>
 
-<div class="app-header">Menú</div>
+<app-header titulo="Menú"></app-header>
 
-<div class="container mt-4 mb-5"> 
+<div class="container mt-3 mb-5 pb-5">
   <div class="row g-3">
-    <div class="col-12 col-md-6" *ngFor="let p of productos">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productos">
       <app-card-producto
+        [id]="p.id"
         [nombre]="p.nombre"
         [categoria]="p.categoria"
         [precio]="p.precio"
-        [imagen]="p.imagen"
-        [disponible]="true"
-      >
-        <button class="btn btn-sm btn-primary me-2" (click)="irAHacerPedido(p.id)">
-          📦 Pedir
+        [imagen]="p.imagen">
+        
+        <button class="btn btn-primary" (click)="irAHacerPedido(p.id)">
+          <i class="bi bi-bag-fill"></i> Pedir
         </button>
-        <button class="btn btn-sm btn-success" (click)="agregarAlCarrito(p)">
-          🛒 Agregar
+        <button class="btn btn-success" (click)="agregarAlCarrito(p.id)">
+          <i class="bi bi-cart-plus-fill"></i> Agregar
         </button>
       </app-card-producto>
     </div>

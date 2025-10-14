@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
-import { NavAdmin } from '../../../components/nav-admin/nav-admin';
+// import { NavAdmin } from '../../../components/nav-admin/nav-admin';
+import { Navbar } from '../../../components/shared/navbar/navbar';
+import { Header } from '../../../components/shared/header/header';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, CardProducto, NavAdmin],
+  imports: [CommonModule, CardProducto, Navbar,Header],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -24,14 +26,17 @@ export class Productos {
     { icon: 'bi bi-tags-fill', route: '/admin/promociones' }
   ];
 
-  editarProducto(datosEditados: any, productoOriginal: any) {
-    Object.assign(productoOriginal, datosEditados);
+  editarProducto(producto: any) {
+    console.log('Editando producto:', producto);
+    // Aquí iría la lógica para abrir un modal o navegar a una página de edición
+    alert(`Editando: ${producto.nombre}`);
   }
 
-eliminarProducto(producto: any) {
-  if (confirm(`¿Seguro que querés eliminar "${producto.nombre}"?`)) {
-    this.productos = this.productos.filter(p => p.id !== producto.id);
+  eliminarProducto(producto: any) {
+    if (confirm(`¿Seguro que querés eliminar "${producto.nombre}"?`)) {
+      this.productos = this.productos.filter(p => p.id !== producto.id);
+      console.log('Producto eliminado:', producto);
+    }
   }
-}
 
 }

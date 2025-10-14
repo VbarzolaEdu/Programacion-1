@@ -1,45 +1,29 @@
-<div class="card mb-3 card-producto">
-  <div class="row g-0 align-items-center">
-    <div class="col-4">
-      <img [src]="imagen" class="img-fluid rounded-start" [alt]="nombre">
-    </div>
+<div class="producto-card">
+  <!-- Imagen del producto -->
+  <div class="producto-imagen">
+    <img [src]="imagen || 'assets/placeholder.jpg'" [alt]="nombre">
+    <!-- Badge de disponibilidad (opcional) -->
+    <span *ngIf="!disponible" class="badge-no-disponible">
+      <i class="bi bi-x-circle"></i> No disponible
+    </span>
+  </div>
 
-    <div class="col-8 p-2">
-      <!-- Vista normal -->
-      <div *ngIf="!editMode">
-        <p><strong>Nombre:</strong> {{ nombre }}</p>
-        <p><strong>Categoría:</strong> {{ categoria }}</p>
-        <p><strong>Precio:</strong> ${{ precio }}</p>
-        <p><strong>Disponibilidad:</strong> {{ disponible ? 'Sí' : 'No' }}</p>
+  <!-- Información del producto -->
+  <div class="producto-info">
+    <h5 class="producto-nombre">{{ nombre }}</h5>
+    <p class="producto-categoria">
+      <i class="bi bi-tag-fill"></i> {{ categoria }}
+    </p>
+    <p class="producto-precio">
+      <span class="precio-label">Precio:</span>
+      <strong class="precio-valor">${{ precio | number:'1.2-2' }}</strong>
+    </p>
+  </div>
 
-        <div class="acciones mt-2">
-          <button class="btn btn-sm btn-warning me-2" (click)="habilitarEdicion()">✏️ Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="eliminar()">🗑 Eliminar</button>
-        </div>
-      </div>
-
-      <!-- Modo edición -->
-      <div *ngIf="editMode">
-        <label><strong>Nombre:</strong></label>
-        <input class="form-control mb-2" [(ngModel)]="productoTemporal.nombre" />
-
-        <label><strong>Categoría:</strong></label>
-        <input class="form-control mb-2" [(ngModel)]="productoTemporal.categoria" />
-
-        <label><strong>Precio:</strong></label>
-        <input type="number" class="form-control mb-2" [(ngModel)]="productoTemporal.precio" />
-
-        <label><strong>Disponibilidad:</strong></label>
-        <select class="form-control mb-2" [(ngModel)]="productoTemporal.disponible">
-          <option [ngValue]="true">Sí</option>
-          <option [ngValue]="false">No</option>
-        </select>
-
-        <div class="acciones mt-2">
-          <button class="btn btn-success btn-sm me-2" (click)="guardarCambios()">💾 Guardar</button>
-          <button class="btn btn-secondary btn-sm" (click)="cancelarEdicion()">❌ Cancelar</button>
-        </div>
-      </div>
-    </div>
+  <!-- Botones personalizados (proyectados desde la página) -->
+  <div class="producto-acciones">
+    <ng-content></ng-content>
   </div>
 </div>
+
+

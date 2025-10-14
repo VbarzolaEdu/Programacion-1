@@ -1,29 +1,35 @@
-<app-nav-cliente></app-nav-cliente>
-<div class="app-header">Mis pedidos</div>
+<app-navbar></app-navbar>
+<app-header titulo="Mis pedidos"></app-header>
 
-<div class="container mt-3 mb-5">
-  <div *ngFor="let p of pedidos" class="card mb-3">
-    <div class="card-body">
-      <h5 class="card-title">{{ p.nombre }}</h5>
-      <p class="card-text">
-        <strong>Fecha:</strong> {{ p.fecha }} <br>
-        <strong>Total:</strong> ${{ p.total }} <br>
-        <strong>Estado:</strong>
-        
-        <span [ngClass]="{
-          'text-success': p.estado === 'Entregado',
-          'text-warning': p.estado === 'En preparación'
-        }">{{ p.estado }}</span>
-      </p>
+<div class="container mt-3 mb-5 pb-5">
+  <div *ngFor="let p of pedidos" class="mb-3">
+    <app-card-pedido
+      [id]="p.id"
+      [fecha]="p.fecha"
+      [total]="p.total"
+      [estado]="p.estado"
+      [nombreProducto]="p.nombre"
+      [imagen]="p.imagen">
+      
+      <!-- Información extra específica del cliente -->
+      <div extra-info>
+        <h5 class="mb-2">{{ p.nombre }}</h5>
+      </div>
 
-      <!-- Botón de Valoración: Solo visible si el estado es 'Entregado' -->
+      <!-- Botón de valoración: Solo visible si el estado es 'Entregado' -->
       <button 
         *ngIf="p.estado === 'Entregado'"
-        class="btn btn-success mt-2" 
+        class="btn btn-success" 
         (click)="irAValorar(p.id)">
-        Hacer valoración
+        <i class="bi bi-star-fill"></i> Hacer valoración
       </button>
       
-    </div>
+      <!-- Mensaje si está en preparación -->
+      <span 
+        *ngIf="p.estado === 'En preparación'"
+        class="text-muted fst-italic">
+        <i class="bi bi-clock-history"></i> Tu pedido está siendo preparado...
+      </span>
+    </app-card-pedido>
   </div>
 </div>

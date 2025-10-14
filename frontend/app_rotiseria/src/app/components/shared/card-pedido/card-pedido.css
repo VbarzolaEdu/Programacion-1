@@ -1,0 +1,49 @@
+.pedido-card {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.pedido-card p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.pedido-card strong {
+  color: #495057;
+}
+
+.pedido-acciones {
+  margin-top: 0.75rem;
+}
+
+.pedido-acciones .btn {
+  font-size: 0.85rem;
+}
+
+/* Estados con colores */
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-secondary {
+  color: #6c757d !important;
+}
+
+.img {width: 100px; height: 100px; object-fit: cover; border-radius: 8px}

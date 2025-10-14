@@ -1,0 +1,24 @@
+<div class="pedido-card d-flex align-items-center">
+  <!-- Imagen del producto (si existe) -->
+  <img 
+    *ngIf="imagen" 
+    [src]="imagen" 
+    [alt]="'Pedido ' + id" 
+    class="img-fluid me-3">
+  
+  <div class="flex-grow-1">
+    <!-- Contenido adicional opcional (para info extra como #Pedido, Cliente) -->
+    <ng-content select="[extra-info]"></ng-content>
+    
+    <p class="mb-1"><strong>Fecha:</strong> {{ fecha }}</p>
+    <p class="mb-1"><strong>Total a Pagar:</strong> ${{ total | number:'1.0-0' }}</p>
+    <p class="mb-2"><strong>Estado:</strong> 
+      <span [ngClass]="getEstadoClass()" class="fw-bold">{{ estado }}</span>
+    </p>
+    
+    <!-- Botones específicos de cada página -->
+    <div class="pedido-acciones">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+/* Contenedor principal del header */
+.header-container {
+  background-color: #FFD966;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px; /* Espaciado con el contenido de abajo */
+}
+
+/* Título del header */
+.header-title {
+  color: #D9534F;
+  font-weight: bold;
+  margin: 0; /* Elimina márgenes por defecto del h2 */
+}

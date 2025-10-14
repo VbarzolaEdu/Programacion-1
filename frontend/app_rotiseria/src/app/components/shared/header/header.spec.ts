@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavAdmin } from './nav-admin';
+import { Header } from './header';
 
-describe('NavAdmin', () => {
-  let component: NavAdmin;
-  let fixture: ComponentFixture<NavAdmin>;
+describe('Header', () => {
+  let component: Header;
+  let fixture: ComponentFixture<Header>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavAdmin]
+      imports: [Header]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NavAdmin);
+    fixture = TestBed.createComponent(Header);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

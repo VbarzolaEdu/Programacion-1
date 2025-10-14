@@ -1,32 +1,63 @@
- <app-nav-admin></app-nav-admin>
- <!-- Header -->
-  <div class="header">
-    <h2>Historial de pedidos</h2>
+<app-navbar></app-navbar>
+
+<!-- Header -->
+<app-header titulo="Historial de pedidos"></app-header>
+
+<!-- Filtro -->
+<div class="container my-3 mb-5 pb-5">
+  <div class="input-group mb-4">
+    <input 
+      type="date" 
+      class="form-control" 
+      [(ngModel)]="fechaFiltro"
+      placeholder="Filtrar por fecha">
+    <button 
+      class="btn btn-outline-secondary" 
+      (click)="filtrarPorFecha()">
+      <i class="bi bi-funnel"></i> Filtrar
+    </button>
+    <button 
+      *ngIf="fechaFiltro"
+      class="btn btn-outline-danger" 
+      (click)="fechaFiltro = ''; filtrarPorFecha()">
+      <i class="bi bi-x-circle"></i>
+    </button>
   </div>
 
-  <!-- Filtro -->
-  <div class="container my-3">
-    <div class="input-group mb-3">
-      <input type="date" class="form-control">
-      <button class="btn btn-outline-secondary"><i class="bi bi-funnel"></i></button>
-    </div>
-
-    <!-- Pedido -->
-    <div class="card mb-3 card-pedido">
-      <div class="row g-0 align-items-center">
-        <div class="col-4">
-          <img src="assets/buger1.jpg" class="img-fluid rounded-start" alt="burger">
-        </div>
-        <div class="col-8">
-          <div class="p-2">
-            <p><strong>ID:</strong> 1234578</p>
-            <p><strong>Cliente:</strong> Pepe Honguito</p>
-            <p><strong>Fecha:</strong> 19/8/25 - 22:15</p>
-            <p><strong>Estado:</strong> Entregado</p>
-            <a routerLink="#" class="btn btn-sm btn-warning">Editar</a>
-            <a routerLink="#" class="btn btn-sm btn-danger">Cancelar</a>
-          </div>
-        </div>
+  <!-- Lista de Pedidos -->
+  <div *ngFor="let p of pedidosFiltrados" class="mb-3">
+    <app-card-pedido
+      [id]="p.id"
+      [fecha]="p.fecha"
+      [total]="p.total"
+      [estado]="p.estado"
+      [cliente]="p.cliente"
+      [imagen]="p.imagen">
+      
+      <!-- Información extra específica del admin -->
+      <div extra-info>
+        <p class="mb-1"><strong>ID:</strong> #{{ p.id }}</p>
+        <p class="mb-1"><strong>Cliente:</strong> {{ p.cliente }}</p>
       </div>
-    </div>
+
+      <!-- Botones de acción del admin -->
+      <button 
+        class="btn btn-warning btn-sm me-2" 
+        (click)="editarPedido(p)"
+        [disabled]="p.estado === 'Cancelado'">
+        <i class="bi bi-pencil-fill"></i> Editar
+      </button>
+      <button 
+        class="btn btn-danger btn-sm" 
+        (click)="cancelarPedido(p)"
+        [disabled]="p.estado === 'Cancelado'">
+        <i class="bi bi-x-circle-fill"></i> Cancelar
+      </button>
+    </app-card-pedido>
   </div>
+
+  <!-- Mensaje si no hay pedidos -->
+  <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> No se encontraron pedidos para la fecha seleccionada.
+  </div>
+</div>

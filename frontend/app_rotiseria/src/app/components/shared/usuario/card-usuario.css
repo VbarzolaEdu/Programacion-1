@@ -1,25 +1,68 @@
-.card-usuario {
-  background-color: #fde0db;
+/* Tarjeta del usuario */
+.user-card {
+  background-color: #fff;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 15px;
+  margin-bottom: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card-usuario:hover {
-  transform: scale(1.02);
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.card-usuario h5 {
-  color: #d62828;
-  margin-bottom: 0.5rem;
+/* Avatar circular con inicial */
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F25C2A, #D9534F);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 15px;
+  flex-shrink: 0;
 }
 
-.card-usuario p {
-  margin: 0.3rem 0;
-  font-size: 0.95rem;
+/* Información del usuario */
+.user-name {
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 2px;
 }
 
-.btn {
+.user-email {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+/* Badge del rol */
+.badge-rol {
+  background-color: #FFD966;
+  color: #D9534F;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+/* Contenedor de botones */
+.user-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Estilos para botones pequeños */
+.user-actions .btn {
   font-size: 0.85rem;
+  padding: 5px 12px;
+  white-space: nowrap;
 }

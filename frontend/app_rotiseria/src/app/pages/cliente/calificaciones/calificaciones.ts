@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
+// import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
+import { Navbar } from '../../../components/shared/navbar/navbar';
+import { Header } from '../../../components/shared/header/header';
 
 @Component({
   selector: 'app-calificaciones',
   standalone: true,
-  imports: [CommonModule, NavCliente],
+  imports: [CommonModule, Navbar, Header],
   templateUrl: './calificaciones.html',
   styleUrls: ['./calificaciones.css']
 })

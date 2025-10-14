@@ -1,9 +1,6 @@
-<app-nav-empleado></app-nav-empleado>
+<app-navbar></app-navbar>
 
-  <!-- Header -->
-  <div class="header">
-    <h2>Gestión de Clientes</h2>
-  </div>
+<app-header titulo="Gestión de Usuarios"></app-header>
 
   <!-- Barra de búsqueda -->
   <div class="container my-3">
@@ -20,7 +17,7 @@
     </div>
 
     <!-- Usuario -->
-    <div class="user-card d-flex align-items-center">
+    <!-- <div class="user-card d-flex align-items-center">
       <div class="rounded-circle bg-secondary me-3" style="width:40px; height:40px;"></div>
       <div class="flex-grow-1">
         <p class="mb-0 fw-bold">Gustavo Lopez</p>
@@ -32,4 +29,19 @@
         <button class="btn btn-sm btn-danger">Bloquear</button>
       </div>
     </div>
-  </div>
+  </div> -->
+
+    <app-card-usuario
+      *ngFor="let u of usuarios"
+      [nombre]="u.nombre"
+      [correo]="u.correo"
+      [rol]="u.rol">
+      <!-- Botones específicos del empleado -->
+      <button class="btn btn-sm btn-success" (click)="validarUsuario(u)">
+        <i class="bi bi-check-circle"></i> Validar
+      </button>
+      <button class="btn btn-sm btn-danger" (click)="bloquearUsuario(u)">
+        <i class="bi bi-x-circle"></i> Bloquear
+      </button>
+    </app-card-usuario>
+ 

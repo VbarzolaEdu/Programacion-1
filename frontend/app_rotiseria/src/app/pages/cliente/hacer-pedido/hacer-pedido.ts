@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
+// import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
 import { CartService, CartItem } from '../../../services/cart.service';
+import { Navbar } from '../../../components/shared/navbar/navbar';
+import { Header } from '../../../components/shared/header/header';
 
 @Component({
   selector: 'app-hacer-pedido',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavCliente],
+  imports: [CommonModule, FormsModule, Navbar,Header],
   templateUrl: './hacer-pedido.html',
   styleUrls: ['./hacer-pedido.css']
 })

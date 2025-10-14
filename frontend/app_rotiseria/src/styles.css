@@ -1,4 +1,16 @@
+/* ========== Estilos Globales ========== */
+
 body {
-  background-color: #fff;
-  font-family: Arial, sans-serif;
+  background-color: #f8f9fa; /* Color de fondo para toda la app (gris claro) */
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 80px; /* Espacio para el navbar inferior fijo */
+  min-height: 100vh; /* Asegura que cubra toda la pantalla */
+}
+
+/* Contenedor principal de las páginas */
+.page-container {
+  min-height: calc(100vh - 80px); /* Resta la altura del navbar */
+  padding-bottom: 80px; /* Espacio para el navbar inferior */
 }

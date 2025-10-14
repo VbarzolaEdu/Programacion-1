@@ -1,13 +1,6 @@
-body { background: #fff; font-family: 'Segoe UI', sans-serif; padding-bottom: 70px; }
-    .app-header {
-      background-color: #FFD966;
-      color: #D9534F;
-      padding: 20px 0;
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-    .app-header img { width: 35px; height: 35px; }
+/* Estilos globales de body ahora en src/styles.css */
+
+.app-header img { width: 35px; height: 35px; }
     .card { border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
     .btn-success {
       background: #F25C2A; border: none; border-radius: 10px;

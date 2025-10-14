@@ -1,27 +1,47 @@
-<app-nav-empleado></app-nav-empleado>
-  <!-- Header -->
-  <div class="header">
-    Estado De Pedidos
-  </div>
+<app-navbar></app-navbar>
 
-  <!-- Pedido -->
-  <div class="container my-4">
-    <div class="pedido-card d-flex align-items-center">
-      <img src="/assets/buger1.jpg" alt="burger" class="img-fluid me-3" style="width:100px;">
-      <div>
-        <p class="mb-1"><strong># Pedido:</strong> 001</p>
-        <p class="mb-1"><strong>Cliente:</strong> Juan Pérez</p>
-        <p class="mb-1"><strong>Hora:</strong> 20:30</p>
-        <p class="mb-1"><strong>Total A Pagar:</strong> $10.000</p>
-        <p class="mb-2"><strong>Estado:</strong></p>
-        <div class="d-flex gap-2">
-          <button class="btn btn-success btn-sm">En Preparación</button>
-          <button class="btn btn-warning btn-sm text-white">Listo Para Entregar</button>
-          <button class="btn btn-danger btn-sm">Rechazar</button>
-        </div>
+<!-- Header -->
+<app-header titulo="Estado de Pedidos"></app-header>
+
+<!-- Lista de Pedidos -->
+<div class="container my-4">
+  <div *ngFor="let p of pedidos" class="mb-3">
+    <app-card-pedido
+      [id]="p.id"
+      [fecha]="p.fecha"
+      [total]="p.total"
+      [estado]="p.estado"
+      [cliente]="p.cliente"
+      [imagen]="p.imagen">
+      
+      <!-- Información extra específica del empleado -->
+      <div extra-info>
+        <p class="mb-1"><strong># Pedido:</strong> {{ p.id }}</p>
+        <p class="mb-1"><strong>Cliente:</strong> {{ p.cliente }}</p>
+        <p class="mb-1"><strong>Hora:</strong> {{ p.fecha }}</p>
       </div>
-    </div>
+
+      <!-- Botones de acción del empleado -->
+      <div class="d-flex gap-2">
+        <button 
+          class="btn btn-success btn-sm" 
+          (click)="cambiarEstado(p, 'En Preparación')"
+          [disabled]="p.estado === 'En Preparación' || p.estado === 'Listo para Entregar' || p.estado === 'Rechazado'">
+          <i class="bi bi-clock-history"></i> En Preparación
+        </button>
+        <button 
+          class="btn btn-warning btn-sm text-white" 
+          (click)="cambiarEstado(p, 'Listo para Entregar')"
+          [disabled]="p.estado === 'Listo para Entregar' || p.estado === 'Rechazado'">
+          <i class="bi bi-check-circle"></i> Listo Para Entregar
+        </button>
+        <button 
+          class="btn btn-danger btn-sm" 
+          (click)="rechazarPedido(p)"
+          [disabled]="p.estado === 'Rechazado'">
+          <i class="bi bi-x-circle"></i> Rechazar
+        </button>
+      </div>
+    </app-card-pedido>
   </div>
-
-
- 
+</div>

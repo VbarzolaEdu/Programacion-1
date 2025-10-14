@@ -1,11 +1,6 @@
-body { background: #fff; font-family: 'Segoe UI', sans-serif; padding-bottom: 70px; }
-    .app-header {       background-color: #FFD966;
-      color: #D9534F;
-      padding: 20px 0;
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;}
-    .estrella { font-size: 2rem; cursor: pointer; }
+/* Estilos globales de body ahora en src/styles.css */
+
+.estrella { font-size: 2rem; cursor: pointer; }
 
 .rating-stars {
     font-size: 1.8rem; /* Tamaño de las estrellas */

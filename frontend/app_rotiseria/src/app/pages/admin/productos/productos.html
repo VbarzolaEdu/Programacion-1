@@ -1,19 +1,25 @@
- <app-nav-admin></app-nav-admin>
+<app-navbar></app-navbar>
 
-<div class="app-header">📦 Productos</div>
+<app-header titulo="Productos"></app-header>
 
-<div class="container mt-3 modo-admin">
-<app-card-producto
-  *ngFor="let p of productos"
-  [nombre]="p.nombre"
-  [categoria]="p.categoria"
-  [precio]="p.precio"
-  [imagen]="p.imagen"
-  [disponible]="p.disponible"
-  (productoEditado)="editarProducto($event, p)"
-  (productoEliminado)="eliminarProducto($event)">
-
-
-</app-card-producto>
-
+<div class="container mt-3 mb-5 pb-5">
+  <div class="row g-3">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productos">
+      <app-card-producto
+        [id]="p.id"
+        [nombre]="p.nombre"
+        [categoria]="p.categoria"
+        [precio]="p.precio"
+        [imagen]="p.imagen"
+        [disponible]="p.disponible">
+        <!-- Botones específicos del admin -->
+        <button class="btn btn-warning" (click)="editarProducto(p)">
+          <i class="bi bi-pencil-fill"></i> Editar
+        </button>
+        <button class="btn btn-danger" (click)="eliminarProducto(p)">
+          <i class="bi bi-trash-fill"></i> Eliminar
+        </button>
+      </app-card-producto>
+    </div>
+  </div>
 </div>
