@@ -70,10 +70,19 @@ export class Register {
       },
       error: (error) => {
         console.error('❌ Error en el registro:', error);
-        if (error.status === 400) {
-          this.mensajeError = 'El email ya está registrado o los datos son inválidos';
-          alert('El email ya está registrado o los datos son inválidos');
-        } else {
+        
+        // Verificar si es error 409 (email duplicado)
+        if (error.status === 409) {
+          this.mensajeError = 'El email ya está registrado';
+          alert('El email ya está registrado. Por favor usa otro email.');
+        } 
+        // Error 400 (datos inválidos)
+        else if (error.status === 400) {
+          this.mensajeError = 'Los datos son inválidos';
+          alert('Los datos son inválidos. Verifica el formulario.');
+        } 
+        // Otros errores
+        else {
           this.mensajeError = 'Error al crear la cuenta. Intenta nuevamente.';
           alert('Error al crear la cuenta. Intenta nuevamente.');
         }
