@@ -69,8 +69,8 @@ class User(db.Model):
         email = user_json.get('email')
         cellphone = user_json.get('cellphone')
         password = user_json.get('password')
-        rol = user_json.get('rol')
-        estado = user_json.get('estado')
+        rol = user_json.get('rol', 'cliente')  # Valor por defecto: 'cliente'
+        estado = user_json.get('estado', 'pendiente')  # Valor por defecto: 'pendiente'
         return User(id=id, 
                     nombre=nombre, 
                     apellidos=apellidos, 

@@ -1,9 +1,0 @@
-Bienvenido {{user.nombre}} {{user.apellidos}}!
-
-Gracias por registrarte en nuestro sistema.
-
-Con nuestro servicio podras:
-
-- Ver nuestros productos
-- Realizar un pedido
-- Realizar una valoración

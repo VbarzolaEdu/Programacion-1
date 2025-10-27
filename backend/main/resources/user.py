@@ -65,7 +65,7 @@ class User(Resource):
         # return 'User not found', 404
 
 class Users(Resource):
-    @role_required(roles = ["admin"])
+    @role_required(roles = ["admin", "empleado"])
     def get(self):
         # Obtener parámetros de consulta para filtrado
         args = request.args

@@ -38,15 +38,21 @@ def register():
     #Verificar si el mail ya existe en la db, scalar() para saber la cantidad de ese email
     exists = db.session.query(UserModel).filter(UserModel.email == user.email).scalar() is not None
     if exists:
-        return 'Duplicated mail', 409
+        return jsonify({'message': 'Duplicated mail'}), 409
     else:
         try:
             #Agregar usuario a DB
             db.session.add(user)
             db.session.commit()
-            #enviar mail de bienvenido/a
-            send = sendMail([user.email],"¡Bienvenido/a!",'register',user = user)
+            
+            #enviar mail de bienvenido/a (no fallar si el email falla)
+            try:
+                send = sendMail([user.email],"¡Bienvenido/a!",'register',user = user)
+            except Exception as mail_error:
+                print(f"⚠️ Error al enviar email de bienvenida: {mail_error}")
+                # Continuar aunque el email falle
+            
+            return jsonify(user.to_json()), 201
         except Exception as error:
             db.session.rollback()
-            return str(error), 409
-        return user.to_json() , 201
+            return jsonify({'message': str(error)}), 409
