@@ -1,0 +1,40 @@
+<div class="pagination-container" *ngIf="totalPages > 1">
+  <div class="pagination-info">
+    <span class="text-muted">
+      Mostrando página {{ currentPage }} de {{ totalPages }} ({{ totalItems }} items totales)
+    </span>
+  </div>
+  
+  <nav aria-label="Navegación de páginas">
+    <ul class="pagination justify-content-center mb-0">
+      <!-- Botón Anterior -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="previousPage()" [disabled]="currentPage === 1">
+          <i class="bi bi-chevron-left"></i> Anterior
+        </button>
+      </li>
+
+      <!-- Números de página -->
+      <li 
+        *ngFor="let page of getPageNumbers()" 
+        class="page-item" 
+        [class.active]="page === currentPage"
+        [class.disabled]="page === -1">
+        <button 
+          *ngIf="page !== -1" 
+          class="page-link" 
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        <span *ngIf="page === -1" class="page-link">...</span>
+      </li>
+
+      <!-- Botón Siguiente -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button class="page-link" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          Siguiente <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

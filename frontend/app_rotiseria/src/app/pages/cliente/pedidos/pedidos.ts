@@ -4,19 +4,26 @@ import { Router } from '@angular/router';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Pedidos as PedidosService } from '../../../services/pedidos';
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-pedidos',
   standalone: true,
-  imports: [CommonModule, Navbar, Header, CardPedido],
+  imports: [CommonModule, Navbar, Header, CardPedido, Pagination],
   templateUrl: './pedidos.html',
   styleUrls: ['./pedidos.css']
 })
 export class Pedidos {
   cargando: boolean = false;
   pedidosFiltrados: any[] = [];
+  
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 10;
   
   constructor(
     private pedidoService: PedidosService,
@@ -29,10 +36,11 @@ export class Pedidos {
   }
 
   /**
-   * Carga los pedidos del cliente actual
+   * Carga los pedidos del cliente actual con paginación
    */
-  cargarPedidosDelCliente() {
+  cargarPedidosDelCliente(page: number = 1) {
     this.cargando = true;
+    this.currentPage = page;
     const userId = this.authService.getCurrentUserId();
     
     if (!userId) {
@@ -41,9 +49,17 @@ export class Pedidos {
       return;
     }
 
-    // Filtrar pedidos por usuario en el backend
-    this.pedidoService.getPedidos({ id_user: userId }).subscribe({
+    // Filtrar pedidos por usuario en el backend con paginación
+    this.pedidoService.getPedidos({ 
+      id_user: userId,
+      page: page,
+      per_page: this.itemsPerPage
+    }).subscribe({
       next: (response: any) => {
+        // Extraer datos de paginación
+        this.totalPages = response.pages || 1;
+        this.totalItems = response.total || 0;
+
         // Extraer array de pedidos de la respuesta
         const todosPedidos = Array.isArray(response) 
           ? response 
@@ -68,6 +84,14 @@ export class Pedidos {
         alert('Error al cargar tus pedidos. Intenta nuevamente.');
       }
     });
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.cargarPedidosDelCliente(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**

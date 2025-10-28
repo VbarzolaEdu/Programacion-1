@@ -5,12 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Pedidos } from '../../../services/pedidos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pedidos',
-  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido],
+  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido, Pagination],
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.css'
 })
@@ -19,6 +20,12 @@ export class PedidosAdmin {
   cargando: boolean = false;
   arraypedidos: any[] = [];
   pedidosFiltrados: any[] = [];
+
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 10;
 
   constructor(
     private router: Router,
@@ -30,26 +37,35 @@ export class PedidosAdmin {
   }
 
   /**
-   * Carga la lista de pedidos desde el backend
+   * Carga la lista de pedidos desde el backend con paginación
    */
-  cargarPedidos() {
+  cargarPedidos(page: number = 1) {
     this.cargando = true;
-    this.pedidoService.getPedidos().subscribe({
+    this.currentPage = page;
+
+    const params: any = { 
+      page: page, 
+      per_page: this.itemsPerPage 
+    };
+
+    // Agregar filtro de fecha si existe
+    if (this.fechaFiltro) {
+      params.fecha = this.fechaFiltro;
+    }
+
+    this.pedidoService.getPedidos(params).subscribe({
       next: (response: any) => {
-        console.log('✅ Pedidos cargados:', response);
+        // Extraer datos de paginación
+        this.totalPages = response.pages || 1;
+        this.totalItems = response.total || 0;
+
+        // Extraer array de pedidos
+        const pedidos = Array.isArray(response) 
+          ? response 
+          : (response.pedidos || []);
         
-        // Verificar si la respuesta es un array o un objeto
-        if (Array.isArray(response)) {
-          this.arraypedidos = response;
-        } else if (response.pedidos && Array.isArray(response.pedidos)) {
-          // Si viene en formato { pedidos: [...] }
-          this.arraypedidos = response.pedidos;
-        } else {
-          console.error('Formato de respuesta inesperado:', response);
-          this.arraypedidos = [];
-        }
-        
-        this.aplicarFiltros();
+        this.arraypedidos = pedidos;
+        this.pedidosFiltrados = [...this.arraypedidos];
         this.cargando = false;
       },
       error: (error) => {
@@ -63,28 +79,19 @@ export class PedidosAdmin {
   }
 
   /**
-   * Aplica filtros de fecha
-   */
-  aplicarFiltros() {
-    let resultado = [...this.arraypedidos];
-
-    // Filtro por fecha
-    if (this.fechaFiltro) {
-      const fechaBuscada = this.fechaFiltro.split('-').reverse().join('/');
-      resultado = resultado.filter(p => 
-        p.fecha && p.fecha.includes(fechaBuscada)
-      );
-    }
-
-    this.pedidosFiltrados = resultado;
-  }
-
-  /**
    * Filtra pedidos cuando cambia la fecha
    */
   filtrarPorFecha(): void {
-    console.log('Filtrando por fecha:', this.fechaFiltro);
-    this.aplicarFiltros();
+    // Recargar desde la primera página con el filtro aplicado
+    this.cargarPedidos(1);
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.cargarPedidos(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**

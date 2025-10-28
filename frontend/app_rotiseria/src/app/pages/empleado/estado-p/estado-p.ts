@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Pedidos } from '../../../services/pedidos';
 
 @Component({
   selector: 'app-estado-p',
-  imports: [RouterModule, CommonModule, Navbar, Header, CardPedido],
+  imports: [RouterModule, CommonModule, Navbar, Header, CardPedido, Pagination],
   templateUrl: './estado-p.html',
   styleUrl: './estado-p.css'
 })
@@ -16,6 +17,12 @@ export class EstadoP {
   cargando: boolean = false;
   pedidos: any[] = [];
   pedidosFiltrados: any[] = [];
+  
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 10;
 
   constructor(private pedidosService: Pedidos) {}
 
@@ -24,13 +31,18 @@ export class EstadoP {
   }
 
   /**
-   * Carga todos los pedidos desde el backend
+   * Carga todos los pedidos desde el backend con paginación
    */
-  cargarTodosLosPedidos() {
+  cargarTodosLosPedidos(page: number = 1) {
     this.cargando = true;
+    this.currentPage = page;
     
-    this.pedidosService.getPedidos().subscribe({
+    this.pedidosService.getPedidos({ page: page, per_page: this.itemsPerPage }).subscribe({
       next: (response: any) => {
+        // Extraer datos de paginación
+        this.totalPages = response.pages || 1;
+        this.totalItems = response.total || 0;
+        
         // Extraer array de pedidos de la respuesta
         const todosPedidos = Array.isArray(response) 
           ? response 
@@ -49,17 +61,25 @@ export class EstadoP {
         }));
         
         this.pedidosFiltrados = [...this.pedidos];
-        console.log('📋 Pedidos formateados:', this.pedidos);
         this.cargando = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar pedidos:', error);
+        console.error('Error al cargar pedidos:', error);
         this.cargando = false;
         this.pedidos = [];
         this.pedidosFiltrados = [];
         alert('Error al cargar los pedidos. Intenta nuevamente.');
       }
     });
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.cargarTodosLosPedidos(page);
+    // Scroll hacia arriba para mejor UX
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   cambiarEstado(pedido: any, nuevoEstado: string): void {

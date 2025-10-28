@@ -67,6 +67,14 @@
           </button>
         </app-card-pedido>
       </div>
+
+      <!-- Componente de paginación -->
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        [totalItems]="totalItems"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
     </div>
 
     <!-- Mensaje si no hay pedidos -->
