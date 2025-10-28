@@ -3,8 +3,18 @@
 <app-header titulo="Productos"></app-header>
 
 <div class="container mt-3 mb-5 pb-5">
-  <div class="row g-3">
-    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productos">
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando productos...</p>
+  </div>
+
+  <!-- Lista de productos -->
+  <div *ngIf="!cargando && productosFiltrados.length > 0" class="row g-3">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
       <app-card-producto
         [id]="p.id"
         [nombre]="p.nombre"
@@ -13,13 +23,25 @@
         [imagen]="p.imagen"
         [disponible]="p.disponible">
         <!-- Botones específicos del admin -->
-        <button class="btn btn-warning" (click)="editarProducto(p)">
+        <button 
+          class="btn btn-warning me-2" 
+          (click)="editarProducto(p)"
+          type="button">
           <i class="bi bi-pencil-fill"></i> Editar
         </button>
-        <button class="btn btn-danger" (click)="eliminarProducto(p)">
+        <button 
+          class="btn btn-danger" 
+          (click)="eliminarProducto(p)"
+          type="button">
           <i class="bi bi-trash-fill"></i> Eliminar
         </button>
       </app-card-producto>
     </div>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div *ngIf="!cargando && productosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    No hay productos registrados en el sistema.
   </div>
 </div>

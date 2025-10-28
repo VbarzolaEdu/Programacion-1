@@ -22,9 +22,11 @@ export class CardPedido {
     switch (this.estado.toLowerCase()) {
       case 'entregado':
         return 'text-success';
+      case 'pendiente':
+        return 'text-warning';
       case 'en preparación':
       case 'listo para entregar':
-        return 'text-warning';
+        return 'text-info';
       case 'cancelado':
       case 'rechazado':
         return 'text-danger';

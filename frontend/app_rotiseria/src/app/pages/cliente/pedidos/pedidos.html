@@ -2,34 +2,59 @@
 <app-header titulo="Mis pedidos"></app-header>
 
 <div class="container mt-3 mb-5 pb-5">
-  <div *ngFor="let p of pedidos" class="mb-3">
-    <app-card-pedido
-      [id]="p.id"
-      [fecha]="p.fecha"
-      [total]="p.total"
-      [estado]="p.estado"
-      [nombreProducto]="p.nombre"
-      [imagen]="p.imagen">
-      
-      <!-- Información extra específica del cliente -->
-      <div extra-info>
-        <h5 class="mb-2">{{ p.nombre }}</h5>
-      </div>
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando tus pedidos...</p>
+  </div>
 
-      <!-- Botón de valoración: Solo visible si el estado es 'Entregado' -->
-      <button 
-        *ngIf="p.estado === 'Entregado'"
-        class="btn btn-success" 
-        (click)="irAValorar(p.id)">
-        <i class="bi bi-star-fill"></i> Hacer valoración
-      </button>
-      
-      <!-- Mensaje si está en preparación -->
-      <span 
-        *ngIf="p.estado === 'En preparación'"
-        class="text-muted fst-italic">
-        <i class="bi bi-clock-history"></i> Tu pedido está siendo preparado...
-      </span>
-    </app-card-pedido>
+  <!-- Lista de pedidos -->
+  <div *ngIf="!cargando && pedidosFiltrados.length > 0">
+    <div *ngFor="let p of pedidosFiltrados" class="mb-3">
+      <app-card-pedido
+        [id]="p.id"
+        [fecha]="p.fecha"
+        [total]="p.total"
+        [estado]="p.estado"
+        [nombreProducto]="p.nombre"
+        [imagen]="p.imagen">
+        
+        <!-- Información extra específica del cliente -->
+        <div extra-info>
+          <h5 class="mb-2">{{ p.nombre }}</h5>
+        </div>
+
+        <!-- Botón de valoración: Solo visible si el estado es 'Entregado' -->
+        <button 
+          *ngIf="p.estado === 'Entregado'"
+          class="btn btn-success" 
+          (click)="irAValorar(p.id)">
+          <i class="bi bi-star-fill"></i> Hacer valoración
+        </button>
+        
+        <!-- Mensaje si está pendiente -->
+        <span 
+          *ngIf="p.estado === 'Pendiente'"
+          class="badge bg-warning text-dark">
+          <i class="bi bi-hourglass-split"></i> Pedido pendiente de confirmación
+        </span>
+        
+        <!-- Mensaje si está en preparación -->
+        <span 
+          *ngIf="p.estado === 'En preparación'"
+          class="text-muted fst-italic">
+          <i class="bi bi-clock-history"></i> Tu pedido está siendo preparado...
+        </span>
+      </app-card-pedido>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay pedidos -->
+  <div *ngIf="!cargando && pedidosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    No tienes pedidos registrados aún.
   </div>
 </div>

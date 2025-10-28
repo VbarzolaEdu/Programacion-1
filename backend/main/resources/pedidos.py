@@ -2,6 +2,7 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import PedidoModel, ProductoModel
+from flask_jwt_extended import jwt_required
 
 class Pedido(Resource):
     def get(self, id):
@@ -62,6 +63,7 @@ class Pedidos(Resource):
             'page': pagination.page
         })
 
+    @jwt_required()
     def post(self):
         data = request.get_json()
         pedido = PedidoModel.from_json(data)

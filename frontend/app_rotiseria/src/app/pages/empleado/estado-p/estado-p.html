@@ -5,7 +5,18 @@
 
 <!-- Lista de Pedidos -->
 <div class="container my-4">
-  <div *ngFor="let p of pedidos" class="mb-3">
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando pedidos...</p>
+  </div>
+
+  <!-- Lista de pedidos -->
+  <div *ngIf="!cargando && pedidos.length > 0">
+    <div *ngFor="let p of pedidos" class="mb-3">
     <app-card-pedido
       [id]="p.id"
       [fecha]="p.fecha"
@@ -43,5 +54,12 @@
         </button>
       </div>
     </app-card-pedido>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay pedidos -->
+  <div *ngIf="!cargando && pedidos.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    No hay pedidos registrados en este momento.
   </div>
 </div>

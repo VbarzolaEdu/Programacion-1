@@ -3,6 +3,8 @@ from flask import request
 from .. import db
 from main.models import ProductoModel, PedidoModel
 from flask import jsonify
+from flask_jwt_extended import jwt_required
+from main.auth.decorators import role_required
 
 class Producto(Resource):
     def get(self,id):
@@ -10,6 +12,8 @@ class Producto(Resource):
         producto = db.session.query(ProductoModel).get_or_404(id)
         return producto.to_json(), 200
     
+    @jwt_required()
+    @role_required(roles=["admin"])
     def put(self,id): 
         producto= db.session.query(ProductoModel).get_or_404(id)
         data= request.get_json().items()
@@ -19,6 +23,8 @@ class Producto(Resource):
         db.session.commit()
         return producto.to_json(), 200
     
+    @jwt_required()
+    @role_required(roles=["admin"])
     def delete(self,id):
         producto = db.session.query(ProductoModel).get_or_404(id)
         db.session.delete(producto)

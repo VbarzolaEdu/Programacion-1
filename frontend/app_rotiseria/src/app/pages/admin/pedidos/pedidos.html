@@ -5,59 +5,75 @@
 
 <!-- Filtro -->
 <div class="container my-3 mb-5 pb-5">
-  <div class="input-group mb-4">
-    <input 
-      type="date" 
-      class="form-control" 
-      [(ngModel)]="fechaFiltro"
-      placeholder="Filtrar por fecha">
-    <button 
-      class="btn btn-outline-secondary" 
-      (click)="filtrarPorFecha()">
-      <i class="bi bi-funnel"></i> Filtrar
-    </button>
-    <button 
-      *ngIf="fechaFiltro"
-      class="btn btn-outline-danger" 
-      (click)="fechaFiltro = ''; filtrarPorFecha()">
-      <i class="bi bi-x-circle"></i>
-    </button>
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando pedidos...</p>
   </div>
 
-  <!-- Lista de Pedidos -->
-  <div *ngFor="let p of pedidosFiltrados" class="mb-3">
-    <app-card-pedido
-      [id]="p.id"
-      [fecha]="p.fecha"
-      [total]="p.total"
-      [estado]="p.estado"
-      [cliente]="p.cliente"
-      [imagen]="p.imagen">
-      
-      <!-- Información extra específica del admin -->
-      <div extra-info>
-        <p class="mb-1"><strong>ID:</strong> #{{ p.id }}</p>
-        <p class="mb-1"><strong>Cliente:</strong> {{ p.cliente }}</p>
+  <!-- Contenido cuando termina de cargar -->
+  <div *ngIf="!cargando">
+    <div class="input-group mb-4">
+      <input 
+        type="date" 
+        class="form-control" 
+        [(ngModel)]="fechaFiltro"
+        placeholder="Filtrar por fecha">
+      <button 
+        class="btn btn-outline-secondary" 
+        (click)="filtrarPorFecha()">
+        <i class="bi bi-funnel"></i> Filtrar
+      </button>
+      <button 
+        *ngIf="fechaFiltro"
+        class="btn btn-outline-danger" 
+        (click)="fechaFiltro = ''; filtrarPorFecha()">
+        <i class="bi bi-x-circle"></i>
+      </button>
+    </div>
+
+    <!-- Lista de Pedidos -->
+    <div *ngIf="pedidosFiltrados.length > 0">
+      <div *ngFor="let p of pedidosFiltrados" class="mb-3">
+        <app-card-pedido
+          [id]="p.id"
+          [fecha]="p.fecha"
+          [total]="p.total"
+          [estado]="p.estado"
+          [cliente]="p.cliente"
+          [imagen]="p.imagen">
+          
+          <!-- Información extra específica del admin -->
+          <div extra-info>
+            <p class="mb-1"><strong>ID:</strong> #{{ p.id }}</p>
+            <p class="mb-1"><strong>Cliente:</strong> {{ p.cliente }}</p>
+          </div>
+
+          <!-- Botones de acción del admin -->
+          <button 
+            class="btn btn-warning btn-sm me-2" 
+            (click)="editarPedido(p)"
+            [disabled]="p.estado === 'Cancelado'">
+            <i class="bi bi-pencil-fill"></i> Editar
+          </button>
+          <button 
+            class="btn btn-danger btn-sm" 
+            (click)="cancelarPedido(p)"
+            [disabled]="p.estado === 'Cancelado'">
+            <i class="bi bi-x-circle-fill"></i> Cancelar
+          </button>
+        </app-card-pedido>
       </div>
+    </div>
 
-      <!-- Botones de acción del admin -->
-      <button 
-        class="btn btn-warning btn-sm me-2" 
-        (click)="editarPedido(p)"
-        [disabled]="p.estado === 'Cancelado'">
-        <i class="bi bi-pencil-fill"></i> Editar
-      </button>
-      <button 
-        class="btn btn-danger btn-sm" 
-        (click)="cancelarPedido(p)"
-        [disabled]="p.estado === 'Cancelado'">
-        <i class="bi bi-x-circle-fill"></i> Cancelar
-      </button>
-    </app-card-pedido>
-  </div>
-
-  <!-- Mensaje si no hay pedidos -->
-  <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info text-center">
-    <i class="bi bi-info-circle"></i> No se encontraron pedidos para la fecha seleccionada.
+    <!-- Mensaje si no hay pedidos -->
+    <div *ngIf="pedidosFiltrados.length === 0" class="alert alert-info text-center">
+      <i class="bi bi-info-circle"></i> 
+      <span *ngIf="fechaFiltro">No se encontraron pedidos para la fecha seleccionada.</span>
+      <span *ngIf="!fechaFiltro">No hay pedidos registrados en el sistema.</span>
+    </div>
   </div>
 </div>

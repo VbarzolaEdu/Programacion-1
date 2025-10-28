@@ -23,7 +23,13 @@
     Total: ${{ total() }}
   </div>
 
-  <button class="btn btn-success w-100 mt-3" (click)="confirmar()">Confirmar pedido</button>
+  <button 
+    class="btn btn-success w-100 mt-3" 
+    (click)="confirmar()"
+    [disabled]="cargando">
+    <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+    {{ cargando ? 'Procesando...' : 'Confirmar pedido' }}
+  </button>
 </div>
 
 <ng-template #vacio>

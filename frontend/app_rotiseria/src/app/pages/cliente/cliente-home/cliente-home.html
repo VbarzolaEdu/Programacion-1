@@ -3,8 +3,18 @@
 <app-header titulo="Home"></app-header>
 
 <div class="container mt-3 mb-5 pb-5">
-  <div class="row g-3">
-    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productos">
+  
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando productos...</p>
+  </div>
+
+  <!-- Lista de productos -->
+  <div *ngIf="!cargando && productosFiltrados.length > 0" class="row g-3">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
       <app-card-producto
         [id]="p.id"
         [nombre]="p.nombre"
@@ -23,5 +33,11 @@
         </ng-container>
       </app-card-producto>
     </div>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div *ngIf="!cargando && productosFiltrados.length === 0" class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    No hay productos disponibles en este momento.
   </div>
 </div>

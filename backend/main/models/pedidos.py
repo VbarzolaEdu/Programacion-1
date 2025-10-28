@@ -26,10 +26,11 @@ class Pedido(db.Model):
     def to_json(self):
         pedido_json = {
             'id': self.id,
+            'id_user': self.id_user,
             'precio_final': self.precio_final,
             'fecha': self.fecha.isoformat(),  # Convierte a formato ISO 8601
             'estado': self.estado,
-            'user': self.user.to_json(),
+            'user': self.user.to_json() if self.user else None,
             'productos': [producto.to_json() for producto in self.productos],
         }
         return pedido_json
@@ -49,6 +50,22 @@ class Pedido(db.Model):
         id_user = pedido_json.get('id_user')
         precio_final = pedido_json.get('precio_final')
         estado = pedido_json.get('estado')
-        # Convierte la fecha de cadena a datetime
-        fecha = datetime.strptime(pedido_json.get('fecha'), '%Y-%m-%dT%H:%M:%S')
+        
+        # Manejar la fecha de forma más flexible
+        fecha_str = pedido_json.get('fecha')
+        if fecha_str:
+            try:
+                # Intentar parsear con milisegundos y zona horaria
+                if '.' in fecha_str:
+                    # Formato ISO con milisegundos: 2024-01-15T10:30:00.123Z
+                    fecha = datetime.fromisoformat(fecha_str.replace('Z', '+00:00'))
+                else:
+                    # Formato sin milisegundos: 2024-01-15T10:30:00
+                    fecha = datetime.strptime(fecha_str, '%Y-%m-%dT%H:%M:%S')
+            except:
+                # Si todo falla, usar fecha actual
+                fecha = datetime.now()
+        else:
+            fecha = datetime.now()
+            
         return Pedido(id=id, id_user=id_user, precio_final=precio_final, fecha=fecha, estado=estado)
