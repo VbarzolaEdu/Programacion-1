@@ -30,13 +30,13 @@
         <!-- Botones de acción -->
         <div class="d-flex gap-2 flex-wrap mt-2">
           
-          <!-- Botón temporal de prueba: ELIMINAR DESPUÉS DE PROBAR -->
+          <!-- Botón calificar: Solo visible cuando el pedido está listo -->
           <button 
-            *ngIf="p.estado && p.estado.toLowerCase() !== 'entregado'"
+            *ngIf="p.estado && p.estado.trim().toLowerCase() === 'listo'"
             class="btn btn-outline-success btn-sm" 
             (click)="irAValorar(p.id)"
             type="button"
-            title="Botón de prueba - aparece cuando NO está entregado">
+            title="Calificar este pedido">
             <i class="bi bi-star"></i> Calificar
           </button>
           
