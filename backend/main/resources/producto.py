@@ -69,13 +69,20 @@ class Productos(Resource):
         })
 
     
+    @jwt_required()
+    @role_required(roles=["admin"])
     def post(self):
-        pedido_ids= request.get_json().get('pedidos')
-        productos= ProductoModel.from_json(request.get_json())
+        data = request.get_json()
+        
+        # Crear el producto desde los datos JSON
+        producto = ProductoModel.from_json(data)
+        
+        # Si hay pedidos asociados (opcional)
+        pedido_ids = data.get('pedidos')
         if pedido_ids:
-            pedidos= PedidoModel.query.filter(PedidoModel.id.in_(pedido_ids)).all()
-            productos.pedidos.extend(pedidos)
+            pedidos = PedidoModel.query.filter(PedidoModel.id.in_(pedido_ids)).all()
+            producto.pedidos.extend(pedidos)
 
-        db.session.add(productos)
+        db.session.add(producto)
         db.session.commit()
-        return productos.to_json(), 201
+        return producto.to_json(), 201

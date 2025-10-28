@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, CardProducto, Navbar, Header],
+  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -17,6 +18,15 @@ export class Productos {
   cargando: boolean = false;
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
+
+  // Modo edición
+  productoEditando: any = null;
+  modoEdicion: boolean = false;
+  productoTemporal: any = {};
+
+  // Modo agregar
+  modoAgregar: boolean = false;
+  nuevoProducto: any = {};
 
   constructor(
     private router: Router,
@@ -49,10 +59,11 @@ export class Productos {
           this.arrayproductos = [];
         }
         
-        // Agregar imagen por defecto si no existe
+        // Agregar imagen por defecto si no existe y convertir disponibilidad
         this.arrayproductos = this.arrayproductos.map(p => ({
           ...p,
-          imagen: p.imagen || 'assets/buger1.jpg'
+          imagen: p.imagen || 'assets/buger1.jpg',
+          disponible: p.disponibilidad === 'disponible' // Convertir string a boolean
         }));
         
         this.productosFiltrados = [...this.arrayproductos];
@@ -69,13 +80,84 @@ export class Productos {
   }
 
   /**
-   * Edita un producto
+   * Activa el modo edición para un producto
    */
   editarProducto(producto: any) {
-    console.log('📝 MÉTODO EDITAR LLAMADO');
-    console.log('Editando producto:', producto);
-    // Aquí iría la lógica para abrir un modal o navegar a una página de edición
-    alert(`Editando: ${producto.nombre}`);
+    this.modoEdicion = true;
+    this.productoEditando = producto;
+    
+    // Clonar los datos del producto para edición
+    // Convertir disponibilidad (string del backend) a disponible (boolean del frontend)
+    this.productoTemporal = {
+      nombre: producto.nombre,
+      precio: producto.precio,
+      categoria: producto.categoria || '',
+      disponible: producto.disponibilidad === 'disponible'
+    };
+    
+    // Scroll al formulario
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }
+
+  /**
+   * Cancela la edición y vuelve a la vista de lista
+   */
+  cancelarEdicion() {
+    this.modoEdicion = false;
+    this.productoEditando = null;
+    this.productoTemporal = {};
+  }
+
+  /**
+   * Guarda los cambios del producto editado
+   */
+  guardarCambios() {
+    const confirmar = confirm(`¿Guardar los cambios en "${this.productoTemporal.nombre}"?`);
+    if (!confirmar) return;
+
+    if (!this.productoEditando) return;
+
+    // Preparar los datos en el formato que espera el backend
+    const productoData = {
+      nombre: this.productoTemporal.nombre,
+      precio: this.productoTemporal.precio,
+      categoria: this.productoTemporal.categoria || '',
+      disponibilidad: this.productoTemporal.disponible ? 'disponible' : 'no disponible'
+    };
+
+    console.log('📤 Enviando datos de actualización:', productoData);
+
+    this.productoService.updateProducto(this.productoEditando.id, productoData).subscribe({
+      next: (response) => {
+        alert(`Producto "${this.productoTemporal.nombre}" actualizado correctamente`);
+        
+        // Actualizar el producto en el array local con la respuesta del backend
+        // Convertir disponibilidad a disponible para el frontend
+        const productoActualizado = {
+          ...response,
+          disponible: response.disponibilidad === 'disponible',
+          imagen: response.imagen || 'assets/buger1.jpg'
+        };
+        
+        const index = this.arrayproductos.findIndex(p => p.id === this.productoEditando.id);
+        if (index !== -1) {
+          this.arrayproductos[index] = productoActualizado;
+        }
+        
+        const filteredIndex = this.productosFiltrados.findIndex(p => p.id === this.productoEditando.id);
+        if (filteredIndex !== -1) {
+          this.productosFiltrados[filteredIndex] = productoActualizado;
+        }
+        
+        this.cancelarEdicion();
+      },
+      error: (error) => {
+        console.error('Error al actualizar producto:', error);
+        alert('Error al actualizar el producto. Intenta nuevamente.');
+      }
+    });
   }
 
   /**
@@ -113,6 +195,74 @@ export class Productos {
       }
     });
     
-    console.log('⏳ Subscribe ejecutado');
+  }
+
+  /**
+   * Activa el modo de agregar nuevo producto
+   */
+  activarModoAgregar() {
+    this.modoAgregar = true;
+    this.modoEdicion = false;
+    this.nuevoProducto = {
+      nombre: '',
+      precio: 0,
+      categoria: '',
+      disponible: true
+    };
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+  }
+
+  /**
+   * Cancela el modo de agregar producto
+   */
+  cancelarAgregar() {
+    this.modoAgregar = false;
+    this.nuevoProducto = {};
+  }
+
+  /**
+   * Guarda el nuevo producto
+   */
+  guardarNuevoProducto() {
+    if (!this.nuevoProducto.nombre || !this.nuevoProducto.precio) {
+      alert('Por favor, completa al menos el nombre y el precio del producto.');
+      return;
+    }
+
+    if (confirm('¿Estás seguro de que deseas crear este producto?')) {
+      // Preparar los datos en el formato que espera el backend
+      const productoData = {
+        nombre: this.nuevoProducto.nombre,
+        precio: this.nuevoProducto.precio,
+        categoria: this.nuevoProducto.categoria || '',
+        disponibilidad: this.nuevoProducto.disponible ? 'disponible' : 'no disponible'
+      };
+
+      console.log('📤 Enviando datos del producto:', productoData);
+
+      this.productoService.createProducto(productoData).subscribe({
+        next: (response: any) => {
+          console.log('✅ Producto creado exitosamente:', response);
+          
+          // Agregar el nuevo producto a los arrays con conversión de disponibilidad
+          const productoCreado = response.producto || response;
+          const productoConvertido = {
+            ...productoCreado,
+            disponible: productoCreado.disponibilidad === 'disponible',
+            imagen: productoCreado.imagen || 'assets/buger1.jpg'
+          };
+          
+          this.arrayproductos.push(productoConvertido);
+          this.productosFiltrados.push(productoConvertido);
+          
+          alert('Producto creado exitosamente');
+          this.cancelarAgregar();
+        },
+        error: (error) => {
+          console.error('❌ Error al crear producto:', error);
+          alert(`Error al crear el producto: ${error.error?.message || error.message || 'Error desconocido'}`);
+        }
+      });
+    }
   }
 }

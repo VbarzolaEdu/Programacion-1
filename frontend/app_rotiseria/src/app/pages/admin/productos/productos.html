@@ -4,6 +4,13 @@
 
 <div class="container mt-3 mb-5 pb-5">
   
+  <!-- Botón Agregar Producto -->
+  <div *ngIf="!cargando && !modoEdicion && !modoAgregar" class="mb-3">
+    <button class="btn btn-primary" (click)="activarModoAgregar()">
+      <i class="bi bi-plus-circle"></i> Agregar Producto
+    </button>
+  </div>
+
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">
@@ -12,8 +19,180 @@
     <p class="mt-2">Cargando productos...</p>
   </div>
 
+  <!-- Formulario de Agregar Producto -->
+  <div *ngIf="!cargando && modoAgregar" class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-4">
+        <i class="bi bi-plus-circle"></i> Agregar Nuevo Producto
+      </h5>
+
+      <!-- Nombre -->
+      <div class="mb-3">
+        <label for="nuevoNombre" class="form-label">
+          <strong>Nombre *</strong>
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="nuevoNombre"
+          [(ngModel)]="nuevoProducto.nombre"
+          name="nuevoNombre"
+          placeholder="Nombre del producto"
+          required>
+      </div>
+
+      <!-- Precio -->
+      <div class="mb-3">
+        <label for="nuevoPrecio" class="form-label">
+          <strong>Precio *</strong>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="nuevoPrecio"
+            [(ngModel)]="nuevoProducto.precio"
+            name="nuevoPrecio"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+            required>
+        </div>
+      </div>
+
+      <!-- Categoría -->
+      <div class="mb-3">
+        <label for="nuevaCategoria" class="form-label">
+          <strong>Categoría</strong>
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="nuevaCategoria"
+          [(ngModel)]="nuevoProducto.categoria"
+          name="nuevaCategoria"
+          placeholder="Ej: Hamburguesas, Pizzas, Bebidas, etc.">
+      </div>
+
+      <!-- Disponible -->
+      <div class="mb-3 form-check">
+        <input 
+          type="checkbox" 
+          class="form-check-input" 
+          id="nuevoDisponible"
+          [(ngModel)]="nuevoProducto.disponible"
+          name="nuevoDisponible">
+        <label class="form-check-label" for="nuevoDisponible">
+          Producto disponible
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="d-flex gap-2">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cancelarAgregar()">
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-success" 
+          (click)="guardarNuevoProducto()">
+          <i class="bi bi-check-circle"></i> Crear Producto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario de Edición -->
+  <div *ngIf="!cargando && modoEdicion && productoEditando" class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-4">
+        <i class="bi bi-pencil-square"></i> Editar Producto
+      </h5>
+
+      <form>
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">
+            <strong>Nombre del Producto</strong>
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="nombre"
+            [(ngModel)]="productoTemporal.nombre"
+            name="nombre"
+            required>
+        </div>
+
+        <!-- Precio -->
+        <div class="mb-3">
+          <label for="precio" class="form-label">
+            <strong>Precio</strong>
+          </label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="precio"
+              [(ngModel)]="productoTemporal.precio"
+              name="precio"
+              min="0"
+              step="0.01"
+              required>
+          </div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+          <label for="categoria" class="form-label">
+            <strong>Categoría</strong>
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="categoria"
+            [(ngModel)]="productoTemporal.categoria"
+            name="categoria"
+            placeholder="Ej: Hamburguesas, Pizzas, Bebidas, etc.">
+        </div>
+
+        <!-- Disponibilidad -->
+        <div class="mb-3 form-check">
+          <input 
+            type="checkbox" 
+            class="form-check-input" 
+            id="disponible"
+            [(ngModel)]="productoTemporal.disponible"
+            name="disponible">
+          <label class="form-check-label" for="disponible">
+            <strong>Producto disponible</strong>
+          </label>
+        </div>        <!-- Botones -->
+        <div class="d-flex gap-2 justify-content-end">
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="cancelarEdicion()">
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-success"
+            (click)="guardarCambios()">
+            <i class="bi bi-check-circle"></i> Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Lista de productos -->
-  <div *ngIf="!cargando && productosFiltrados.length > 0" class="row g-3">
+  <div *ngIf="!cargando && !modoEdicion && productosFiltrados.length > 0" class="row g-3">
     <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
       <app-card-producto
         [id]="p.id"
@@ -40,7 +219,7 @@
   </div>
 
   <!-- Mensaje cuando no hay productos -->
-  <div *ngIf="!cargando && productosFiltrados.length === 0" class="alert alert-info text-center">
+  <div *ngIf="!cargando && !modoEdicion && productosFiltrados.length === 0" class="alert alert-info text-center">
     <i class="bi bi-info-circle"></i> 
     No hay productos registrados en el sistema.
   </div>

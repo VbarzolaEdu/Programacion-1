@@ -17,21 +17,25 @@
   <!-- Contenido cuando termina de cargar -->
   <div *ngIf="!cargando">
     <div class="input-group mb-4">
+      <span class="input-group-text">
+        <i class="bi bi-calendar3"></i>
+      </span>
       <input 
         type="date" 
         class="form-control" 
         [(ngModel)]="fechaFiltro"
         placeholder="Filtrar por fecha">
       <button 
-        class="btn btn-outline-secondary" 
+        class="btn btn-primary" 
         (click)="filtrarPorFecha()">
         <i class="bi bi-funnel"></i> Filtrar
       </button>
       <button 
         *ngIf="fechaFiltro"
         class="btn btn-outline-danger" 
-        (click)="fechaFiltro = ''; filtrarPorFecha()">
-        <i class="bi bi-x-circle"></i>
+        (click)="fechaFiltro = ''; filtrarPorFecha()"
+        title="Limpiar filtro">
+        <i class="bi bi-x-circle"></i> Limpiar
       </button>
     </div>
 
@@ -48,23 +52,24 @@
           
           <!-- Información extra específica del admin -->
           <div extra-info>
-            <p class="mb-1"><strong>ID:</strong> #{{ p.id }}</p>
-            <p class="mb-1"><strong>Cliente:</strong> {{ p.cliente }}</p>
+            <p class="mb-1"><strong># Pedido:</strong> {{ p.id }}</p>
           </div>
 
           <!-- Botones de acción del admin -->
-          <button 
-            class="btn btn-warning btn-sm me-2" 
-            (click)="editarPedido(p)"
-            [disabled]="p.estado === 'Cancelado'">
-            <i class="bi bi-pencil-fill"></i> Editar
-          </button>
-          <button 
-            class="btn btn-danger btn-sm" 
-            (click)="cancelarPedido(p)"
-            [disabled]="p.estado === 'Cancelado'">
-            <i class="bi bi-x-circle-fill"></i> Cancelar
-          </button>
+          <div class="d-flex gap-2">
+            <button 
+              class="btn btn-warning btn-sm" 
+              (click)="editarPedido(p)"
+              [disabled]="p.estado === 'Cancelado'">
+              <i class="bi bi-pencil-fill"></i> Editar
+            </button>
+            <button 
+              class="btn btn-danger btn-sm" 
+              (click)="cancelarPedido(p)"
+              [disabled]="p.estado === 'Cancelado'">
+              <i class="bi bi-x-circle-fill"></i> Cancelar
+            </button>
+          </div>
         </app-card-pedido>
       </div>
 

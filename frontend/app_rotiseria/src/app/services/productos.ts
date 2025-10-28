@@ -40,7 +40,7 @@ export class Productos {
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.post(this.url + '/producto', data, { headers });
+    return this.http.post(this.url + '/productos', data, { headers });
   }
 
   /**

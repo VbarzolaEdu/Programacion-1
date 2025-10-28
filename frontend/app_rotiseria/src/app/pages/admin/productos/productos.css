@@ -1,1 +1,46 @@
 /* Estilos movidos al componente card-producto */
+
+/* Formulario de edición */
+.card {
+  background-color: #fde0db;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  color: #333;
+  font-weight: 600;
+}
+
+.form-label {
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.form-control,
+.form-select {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #ff6b00;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 0, 0.25);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
