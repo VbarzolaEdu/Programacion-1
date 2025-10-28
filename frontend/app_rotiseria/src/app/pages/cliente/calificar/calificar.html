@@ -3,21 +3,37 @@
 
   <div class="container my-3">
     
+    <!-- Mensaje de carga -->
+    <div *ngIf="cargando" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando información del pedido...</p>
+    </div>
+
     <div *ngIf="mensajeExito" 
          class="alert mb-3" 
          [ngClass]="{'alert-success': !mensajeExito.startsWith('⚠️'), 'alert-warning': mensajeExito.startsWith('⚠️')}">
         {{ mensajeExito }}
     </div>
 
-    <div class="card p-3">
+    <div *ngIf="!cargando && pedidoData" class="card p-3">
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <div class="fw-bold">Pedido #{{ pedidoId }}</div>
-          <small class="text-muted">Entregado recientemente</small>
+          <small class="text-muted">{{ pedidoData.fecha ? (pedidoData.fecha | date:'medium') : 'Entregado recientemente' }}</small>
         </div>
-        <span class="badge text-bg-success">Entregado</span>
+        <span class="badge text-bg-success">{{ pedidoData.estado || 'Entregado' }}</span>
       </div>
       <hr>
+      
+      <!-- Mostrar productos del pedido -->
+      <div *ngIf="pedidoData.productos && pedidoData.productos.length > 0" class="mb-3">
+        <small class="text-muted">
+          Productos: {{ obtenerNombresProductos() }}
+        </small>
+      </div>
+      
       <div class="text-center mb-2">¿Cómo estuvo tu pedido?</div>
       
       <!-- estrellas-->
@@ -39,9 +55,14 @@
                   placeholder="Contanos tu experiencia..."></textarea>
       </div>
       
-      <button class="btn btn-success w-100" (click)="enviarCalificacion()">Enviar calificación</button>
+      <button 
+        class="btn btn-success w-100" 
+        (click)="enviarCalificacion()"
+        [disabled]="enviando || rating === 0">
+        <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2"></span>
+        {{ enviando ? 'Enviando...' : 'Enviar calificación' }}
+      </button>
       
     </div>
   </div>
-
 

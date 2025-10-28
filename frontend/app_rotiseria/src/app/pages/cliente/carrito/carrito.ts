@@ -53,14 +53,15 @@ export class Carrito implements OnInit {
   confirmar() {
     // Validar que haya items en el carrito
     if (this.items.length === 0) {
-      alert('⚠️ El carrito está vacío');
+      alert('El carrito está vacío');
       return;
     }
 
     // Obtener el ID del usuario actual
     const userId = this.authService.getCurrentUserId();
+    
     if (!userId) {
-      alert('❌ Error: Usuario no identificado. Por favor, inicie sesión nuevamente.');
+      alert('Error: Usuario no identificado. Por favor, inicie sesión nuevamente.');
       return;
     }
 
@@ -75,25 +76,17 @@ export class Carrito implements OnInit {
       productos: this.items.map(item => item.id) // Array de IDs de productos
     };
 
-    console.log('📦 Creando pedido:', pedidoData);
-    console.log('🔑 ID del usuario:', userId);
-
     // Enviar el pedido a la base de datos
     this.pedidosService.createPedido(pedidoData).subscribe({
       next: (response) => {
-        console.log('✅ Pedido creado exitosamente (respuesta completa):', response);
-        console.log('✅ ID del nuevo pedido:', response.id);
-        alert('✅ Pedido confirmado. ¡Gracias por tu compra!');
+        alert('Pedido confirmado. ¡Gracias por tu compra!');
         this.cart.clear();
         this.cargando = false;
-        // Redirigir a la página de pedidos con un pequeño delay para asegurar que la BD se actualice
-        setTimeout(() => {
-          this.router.navigate(['/cliente/pedidos']);
-        }, 500);
+        this.router.navigate(['/cliente/pedidos']);
       },
       error: (error) => {
-        console.error('❌ Error al crear pedido:', error);
-        alert('❌ Error al confirmar el pedido. Por favor, intente nuevamente.');
+        console.error('Error al crear pedido:', error);
+        alert('Error al confirmar el pedido. Por favor, intente nuevamente.');
         this.cargando = false;
       }
     });

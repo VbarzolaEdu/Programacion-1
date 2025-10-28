@@ -33,7 +33,9 @@ export class Auth {
     try {
       // Decodificar el JWT (payload está en la segunda parte)
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub || payload.user_id || payload.id || null;
+      const userId = payload.sub || payload.user_id || payload.id;
+      // Convertir a número para asegurar tipo correcto
+      return userId ? Number(userId) : null;
     } catch (error) {
       console.error('Error al decodificar token:', error);
       return null;

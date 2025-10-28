@@ -35,21 +35,18 @@
       <!-- Botones de acción del empleado -->
       <div class="d-flex gap-2">
         <button 
-          class="btn btn-success btn-sm" 
-          (click)="cambiarEstado(p, 'En Preparación')"
-          [disabled]="p.estado === 'En Preparación' || p.estado === 'Listo para Entregar' || p.estado === 'Rechazado'">
+          class="btn btn-warning btn-sm text-white" 
+          (click)="cambiarEstado(p, '  En Preparación')">
           <i class="bi bi-clock-history"></i> En Preparación
         </button>
         <button 
-          class="btn btn-warning btn-sm text-white" 
-          (click)="cambiarEstado(p, 'Listo para Entregar')"
-          [disabled]="p.estado === 'Listo para Entregar' || p.estado === 'Rechazado'">
-          <i class="bi bi-check-circle"></i> Listo Para Entregar
+          class="btn btn-success btn-sm" 
+          (click)="cambiarEstado(p, '  Listo')">
+          <i class="bi bi-check-circle"></i> Listo
         </button>
         <button 
           class="btn btn-danger btn-sm" 
-          (click)="rechazarPedido(p)"
-          [disabled]="p.estado === 'Rechazado'">
+          (click)="cambiarEstado(p, ' Rechazado')">
           <i class="bi bi-x-circle"></i> Rechazar
         </button>
       </div>

@@ -31,19 +31,10 @@ export class EstadoP {
     
     this.pedidosService.getPedidos().subscribe({
       next: (response: any) => {
-        console.log('✅ Pedidos cargados (empleado):', response);
-        
-        let todosPedidos = [];
-        
-        // Verificar si la respuesta es un array o un objeto
-        if (Array.isArray(response)) {
-          todosPedidos = response;
-        } else if (response.pedidos && Array.isArray(response.pedidos)) {
-          todosPedidos = response.pedidos;
-        } else {
-          console.error('Formato de respuesta inesperado:', response);
-          todosPedidos = [];
-        }
+        // Extraer array de pedidos de la respuesta
+        const todosPedidos = Array.isArray(response) 
+          ? response 
+          : (response.pedidos || []);
         
         // Mapear los datos al formato esperado por el card-pedido
         this.pedidos = todosPedidos.map((p: any) => ({
@@ -72,6 +63,13 @@ export class EstadoP {
   }
 
   cambiarEstado(pedido: any, nuevoEstado: string): void {
+    // Confirmación especial para estado Rechazado
+    if (nuevoEstado === 'Rechazado') {
+      if (!confirm(`¿Estás seguro de rechazar el pedido #${pedido.id}?`)) {
+        return; // Si cancela, no hacer nada
+      }
+    }
+    
     console.log(`🔄 Cambiando estado del pedido ${pedido.id} a: ${nuevoEstado}`);
     
     this.pedidosService.updatePedido(pedido.id, { estado: nuevoEstado }).subscribe({
@@ -87,23 +85,10 @@ export class EstadoP {
     });
   }
 
-  rechazarPedido(pedido: any): void {
-    if (confirm(`¿Estás seguro de rechazar el pedido #${pedido.id}?`)) {
-      console.log(`❌ Rechazando pedido ${pedido.id}`);
-      
-      this.pedidosService.updatePedido(pedido.id, { estado: 'Rechazado' }).subscribe({
-        next: (response) => {
-          console.log('✅ Pedido rechazado:', response);
-          pedido.estado = 'Rechazado';
-          alert(`✅ Pedido #${pedido.id} ha sido rechazado`);
-        },
-        error: (error) => {
-          console.error('❌ Error al rechazar pedido:', error);
-          alert('❌ Error al rechazar el pedido');
-        }
-      });
-    }
-  }
+  // rechazarPedido(pedido: any): void {
+  //   // Simplemente llama a cambiarEstado con 'Rechazado'
+  //   this.cambiarEstado(pedido, 'Rechazado');
+  // }
 
   /**
    * Obtiene el nombre del cliente desde el objeto user

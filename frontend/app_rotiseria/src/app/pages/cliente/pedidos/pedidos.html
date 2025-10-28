@@ -27,27 +27,21 @@
           <h5 class="mb-2">{{ p.nombre }}</h5>
         </div>
 
-        <!-- Botón de valoración: Solo visible si el estado es 'Entregado' -->
-        <button 
-          *ngIf="p.estado === 'Entregado'"
-          class="btn btn-success" 
-          (click)="irAValorar(p.id)">
-          <i class="bi bi-star-fill"></i> Hacer valoración
-        </button>
+        <!-- Botones de acción -->
+        <div class="d-flex gap-2 flex-wrap mt-2">
+          
+          <!-- Botón temporal de prueba: ELIMINAR DESPUÉS DE PROBAR -->
+          <button 
+            *ngIf="p.estado && p.estado.toLowerCase() !== 'entregado'"
+            class="btn btn-outline-success btn-sm" 
+            (click)="irAValorar(p.id)"
+            type="button"
+            title="Botón de prueba - aparece cuando NO está entregado">
+            <i class="bi bi-star"></i> Calificar
+          </button>
+          
+        </div>
         
-        <!-- Mensaje si está pendiente -->
-        <span 
-          *ngIf="p.estado === 'Pendiente'"
-          class="badge bg-warning text-dark">
-          <i class="bi bi-hourglass-split"></i> Pedido pendiente de confirmación
-        </span>
-        
-        <!-- Mensaje si está en preparación -->
-        <span 
-          *ngIf="p.estado === 'En preparación'"
-          class="text-muted fst-italic">
-          <i class="bi bi-clock-history"></i> Tu pedido está siendo preparado...
-        </span>
       </app-card-pedido>
     </div>
   </div>

@@ -11,14 +11,28 @@ export class Pedidos {
   url = 'http://localhost:5000';
   
   /**
-   * Obtiene todos los pedidos (requiere rol admin)
+   * Obtiene todos los pedidos con filtros opcionales
+   * @param params - Objeto con parámetros opcionales: id_user, estado, fecha, page, per_page
    */
-  getPedidos(): Observable<any> {
+  getPedidos(params?: any): Observable<any> {
     let headers = new HttpHeaders({
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.get(this.url + '/pedidos', { headers });
+    
+    // Construir query string con los parámetros
+    let queryString = '';
+    if (params) {
+      const queryParams = new URLSearchParams();
+      Object.keys(params).forEach(key => {
+        if (params[key] !== null && params[key] !== undefined) {
+          queryParams.append(key, params[key].toString());
+        }
+      });
+      queryString = queryParams.toString() ? '?' + queryParams.toString() : '';
+    }
+    
+    return this.http.get(this.url + '/pedidos' + queryString, { headers });
   }
 
   /**
@@ -29,7 +43,8 @@ export class Pedidos {
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.get(this.url + '/pedidos/' + id, { headers });
+    console.log(`🔍 Obteniendo pedido ID: ${id} desde: ${this.url}/pedido/${id}`);
+    return this.http.get(this.url + '/pedido/' + id, { headers });
   }
 
   /**
