@@ -24,7 +24,14 @@ def create_app():
     # Cargamos variables de entorno
     load_dotenv()
 
-    CORS(app)
+    # Configurar CORS con opciones explícitas
+    CORS(app, resources={
+        r"/*": {
+            "origins": "*",
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
 
     #crear archivo bd sino existe
     if not os.path.exists(os.getenv('DATABASE_PATH') +os.getenv('DATABASE_NAME')):

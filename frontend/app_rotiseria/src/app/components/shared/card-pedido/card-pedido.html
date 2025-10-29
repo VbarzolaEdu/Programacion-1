@@ -10,6 +10,9 @@
     <!-- Contenido adicional opcional (para info extra como #Pedido, Cliente) -->
     <ng-content select="[extra-info]"></ng-content>
     
+    <!-- Nombre del cliente (si existe) -->
+    <p *ngIf="cliente" class="mb-1"><strong>Cliente:</strong> {{ cliente }}</p>
+    
     <p class="mb-1"><strong>Fecha:</strong> {{ fecha }}</p>
     <p class="mb-1"><strong>Total a Pagar:</strong> ${{ total | number:'1.0-0' }}</p>
     <p class="mb-2"><strong>Estado:</strong> 

@@ -27,14 +27,10 @@ export class PedidosAdmin {
   totalItems: number = 0;
   itemsPerPage: number = 10;
 
-  // Modal de edición
-  mostrarModal: boolean = false;
+  // Modo edición
+  modoEdicion: boolean = false;
   pedidoEditando: any = null;
-  formularioEdicion: any = {
-    estado: '',
-    precio_final: 0,
-    fecha: ''
-  };
+  pedidoTemporal: any = {};
 
   constructor(
     private router: Router,
@@ -115,62 +111,72 @@ export class PedidosAdmin {
   }
 
   /**
-   * Abre el modal para editar un pedido
+   * Edita un pedido
    */
   editarPedido(pedido: any): void {
+    this.modoEdicion = true;
     this.pedidoEditando = pedido;
     
-    // Obtener datos originales del pedido
-    const pedidoOriginal = pedido._original;
-    
-    // Pre-llenar el formulario con los datos actuales
-    this.formularioEdicion = {
-      estado: pedidoOriginal.estado || pedido.estado,
-      precio_final: pedidoOriginal.precio_final || pedido.total,
-      fecha: this.convertirFechaParaInput(pedidoOriginal.fecha)
+    // Crear copia temporal para editar
+    this.pedidoTemporal = {
+      id: pedido.id,
+      precio_final: pedido.total,
+      estado: pedido.estado,
+      fecha: this.convertirFechaParaInput(pedido.fecha)
     };
-    
-    this.mostrarModal = true;
+
+    // Scroll hacia arriba para ver el formulario
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**
-   * Cierra el modal de edición
+   * Cancela la edición del pedido
    */
-  cerrarModal(): void {
-    this.mostrarModal = false;
+  cancelarEdicion(): void {
+    this.modoEdicion = false;
     this.pedidoEditando = null;
-    this.formularioEdicion = {
-      estado: '',
-      precio_final: 0,
-      fecha: ''
-    };
+    this.pedidoTemporal = {};
   }
 
   /**
    * Guarda los cambios del pedido editado
    */
   guardarCambios(): void {
-    if (!this.pedidoEditando) return;
-
-    const datosActualizados: any = {
-      estado: this.formularioEdicion.estado,
-      precio_final: Number(this.formularioEdicion.precio_final)
-    };
-
-    // Solo incluir fecha si se modificó
-    if (this.formularioEdicion.fecha) {
-      datosActualizados.fecha = new Date(this.formularioEdicion.fecha).toISOString();
+    if (!this.pedidoTemporal.precio_final || this.pedidoTemporal.precio_final <= 0) {
+      alert('El precio debe ser mayor a 0');
+      return;
     }
 
-    this.pedidoService.updatePedido(this.pedidoEditando.id, datosActualizados).subscribe({
+    if (!this.pedidoTemporal.estado) {
+      alert('Debes seleccionar un estado');
+      return;
+    }
+
+    if (!this.pedidoTemporal.fecha) {
+      alert('Debes seleccionar una fecha');
+      return;
+    }
+
+    const datosActualizar = {
+      precio_final: this.pedidoTemporal.precio_final,
+      estado: this.pedidoTemporal.estado,
+      fecha: this.pedidoTemporal.fecha
+    };
+
+    this.pedidoService.updatePedido(this.pedidoEditando.id, datosActualizar).subscribe({
       next: (response) => {
-        alert(`Pedido #${this.pedidoEditando.id} actualizado correctamente`);
-        this.cerrarModal();
-        // Recargar la página actual para ver los cambios
+        // Actualizar el pedido en la lista
+        this.pedidoEditando.total = this.pedidoTemporal.precio_final;
+        this.pedidoEditando.estado = this.pedidoTemporal.estado;
+        this.pedidoEditando.fecha = this.formatearFecha(this.pedidoTemporal.fecha);
+        
+        alert('✅ Pedido actualizado correctamente');
+        this.cancelarEdicion();
+        
+        // Recargar pedidos para asegurar sincronización
         this.cargarPedidos(this.currentPage);
       },
       error: (error) => {
-        console.error('Error al actualizar pedido:', error);
         alert('Error al actualizar el pedido. Intenta nuevamente.');
       }
     });
@@ -193,22 +199,23 @@ export class PedidosAdmin {
   }
 
   /**
-   * Cancela un pedido
+   * Elimina un pedido del sistema
    */
-  cancelarPedido(pedido: any): void {
-    if (confirm(`¿Está seguro de cancelar el pedido #${pedido.id}?`)) {
-      // Actualizar el estado del pedido en el backend usando el objeto original
-      const pedidoOriginal = pedido._original || pedido;
-      this.pedidoService.updatePedido(pedido.id, { estado: 'Cancelado' }).subscribe({
+  eliminarPedido(pedido: any): void {
+    if (confirm(`⚠️ ¿Está seguro de eliminar permanentemente el pedido #${pedido.id}?\n\nEsta acción no se puede deshacer.`)) {
+      this.pedidoService.deletePedido(pedido.id).subscribe({
         next: (response) => {
-          pedido.estado = 'Cancelado';
-          alert(`Pedido #${pedido.id} cancelado correctamente`);
-          // Recargar pedidos para reflejar cambios
+          alert(`✅ Pedido #${pedido.id} eliminado correctamente`);
+          
+          // Eliminar de los arrays locales
+          this.arraypedidos = this.arraypedidos.filter(p => p.id !== pedido.id);
+          this.pedidosFiltrados = this.pedidosFiltrados.filter(p => p.id !== pedido.id);
+          
+          // Recargar pedidos para reflejar cambios y actualizar paginación
           this.cargarPedidos(this.currentPage);
         },
         error: (error) => {
-          console.error('Error al cancelar pedido:', error);
-          alert('Error al cancelar el pedido. Intenta nuevamente.');
+          alert('❌ Error al eliminar el pedido. Intenta nuevamente.');
         }
       });
     }

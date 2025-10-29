@@ -16,7 +16,96 @@
 
   <!-- Contenido cuando termina de cargar -->
   <div *ngIf="!cargando">
-    <div class="input-group mb-4">
+    
+    <!-- Formulario de Edición -->
+    <div *ngIf="modoEdicion && pedidoEditando" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-4">
+          <i class="bi bi-pencil-square"></i> Editar Pedido #{{ pedidoEditando.id }}
+        </h5>
+
+        <form>
+          <!-- Precio Final -->
+          <div class="mb-3">
+            <label for="precio" class="form-label">
+              <strong>Precio Final</strong>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="precio"
+                [(ngModel)]="pedidoTemporal.precio_final"
+                name="precio"
+                min="0"
+                step="0.01"
+                required>
+            </div>
+            <small class="form-text text-muted">
+              El precio total del pedido
+            </small>
+          </div>
+
+          <!-- Estado -->
+          <div class="mb-3">
+            <label for="estado" class="form-label">
+              <strong>Estado del Pedido</strong>
+            </label>
+            <select 
+              class="form-select" 
+              id="estado"
+              [(ngModel)]="pedidoTemporal.estado"
+              name="estado"
+              required>
+              <option value="">-- Seleccionar Estado --</option>
+              <option value="En preparación">En preparación</option>
+              <option value="Listo">Listo</option>
+              <option value="Rechazado">Rechazado</option>
+            </select>
+            <small class="form-text text-muted">
+              Estado actual del pedido en el proceso
+            </small>
+          </div>
+
+          <!-- Fecha -->
+          <div class="mb-3">
+            <label for="fecha" class="form-label">
+              <strong>Fecha del Pedido</strong>
+            </label>
+            <input 
+              type="date" 
+              class="form-control" 
+              id="fecha"
+              [(ngModel)]="pedidoTemporal.fecha"
+              name="fecha"
+              required>
+            <small class="form-text text-muted">
+              Fecha en que se realizó el pedido
+            </small>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex gap-2 justify-content-end">
+            <button 
+              type="button" 
+              class="btn btn-secondary"
+              (click)="cancelarEdicion()">
+              <i class="bi bi-x-circle"></i> Cancelar
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-success"
+              (click)="guardarCambios()">
+              <i class="bi bi-check-circle"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Filtro de fecha (oculto en modo edición) -->
+    <div *ngIf="!modoEdicion" class="input-group mb-4">
       <span class="input-group-text">
         <i class="bi bi-calendar3"></i>
       </span>
@@ -39,8 +128,8 @@
       </button>
     </div>
 
-    <!-- Lista de Pedidos -->
-    <div *ngIf="pedidosFiltrados.length > 0">
+    <!-- Lista de Pedidos (oculta en modo edición) -->
+    <div *ngIf="!modoEdicion && pedidosFiltrados.length > 0">
       <div *ngFor="let p of pedidosFiltrados" class="mb-3">
         <app-card-pedido
           [id]="p.id"
@@ -59,15 +148,13 @@
           <div class="d-flex gap-2">
             <button 
               class="btn btn-warning btn-sm" 
-              (click)="editarPedido(p)"
-              [disabled]="p.estado === 'Cancelado'">
+              (click)="editarPedido(p)">
               <i class="bi bi-pencil-fill"></i> Editar
             </button>
             <button 
               class="btn btn-danger btn-sm" 
-              (click)="cancelarPedido(p)"
-              [disabled]="p.estado === 'Cancelado'">
-              <i class="bi bi-x-circle-fill"></i> Cancelar
+              (click)="eliminarPedido(p)">
+              <i class="bi bi-trash-fill"></i> Eliminar
             </button>
           </div>
         </app-card-pedido>

@@ -3,6 +3,7 @@ from flask import request, jsonify
 from .. import db
 from main.models import PedidoModel, ProductoModel
 from flask_jwt_extended import jwt_required
+from datetime import datetime
 
 class Pedido(Resource):
     def get(self, id):
@@ -16,22 +17,42 @@ class Pedido(Resource):
         return '', 204
 
     def put(self, id):
-        pedido = db.session.query(PedidoModel).get_or_404(id)
-        data = request.get_json()
+        try:
+            pedido = db.session.query(PedidoModel).get_or_404(id)
+            data = request.get_json()
 
-        for key, value in data.items():
-            if key != 'productos':  # Evitamos asignar directamente productos
-                setattr(pedido, key, value)
+            for key, value in data.items():
+                if key == 'fecha':
+                    # Convertir string de fecha a datetime
+                    if isinstance(value, str):
+                        try:
+                            # Intentar varios formatos de fecha
+                            if 'T' in value:
+                                # Formato ISO con tiempo
+                                fecha_obj = datetime.fromisoformat(value.replace('Z', '+00:00'))
+                            else:
+                                # Formato solo fecha (YYYY-MM-DD)
+                                fecha_obj = datetime.strptime(value, '%Y-%m-%d')
+                            setattr(pedido, key, fecha_obj)
+                        except ValueError as e:
+                            return {'error': f'Formato de fecha inválido: {str(e)}'}, 400
+                    else:
+                        setattr(pedido, key, value)
+                elif key != 'productos':  # Evitamos asignar directamente productos
+                    setattr(pedido, key, value)
 
-        # Si se pasan productos para actualizar la relación
-        producto_ids = data.get('productos')
-        if producto_ids is not None:
-            productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
-            pedido.productos = productos  # Reemplaza productos asociados
+            # Si se pasan productos para actualizar la relación
+            producto_ids = data.get('productos')
+            if producto_ids is not None:
+                productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
+                pedido.productos = productos  # Reemplaza productos asociados
 
-        db.session.add(pedido)
-        db.session.commit()
-        return pedido.to_json(), 200
+            db.session.add(pedido)
+            db.session.commit()
+            return pedido.to_json(), 200
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 500
 
 
 class Pedidos(Resource):
