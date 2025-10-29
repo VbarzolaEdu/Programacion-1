@@ -44,7 +44,7 @@ def paginate_query(query, page=None, per_page=None):
         'total': pagination.total,
         'pages': pagination.pages,
         'page': pagination.page,
-        'per_page': pagination.per_page,
+        'per_page': per_page,  # Use validated parameter for consistency
         'has_next': pagination.has_next,
         'has_prev': pagination.has_prev
     }

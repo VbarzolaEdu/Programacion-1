@@ -2,7 +2,7 @@
 
 Este archivo contiene ejemplos de cómo usar la paginación y el filtrado en la API.
 
-## Prerequisitos
+## Prerrequisitos
 
 ```bash
 # Instalar dependencias
