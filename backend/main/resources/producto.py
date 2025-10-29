@@ -13,7 +13,7 @@ class Producto(Resource):
         return producto.to_json(), 200
     
     @jwt_required()
-    @role_required(roles=["admin"])
+    @role_required(roles=["admin","empleado"])
     def put(self,id): 
         producto= db.session.query(ProductoModel).get_or_404(id)
         data= request.get_json().items()
