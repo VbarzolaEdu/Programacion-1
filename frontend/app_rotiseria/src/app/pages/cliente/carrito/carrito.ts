@@ -42,10 +42,6 @@ export class Carrito implements OnInit {
     this.cart.removeItem(id);
   }
 
-  editar(id: number) {
-    this.router.navigate(['/cliente/hacer-pedido', id]);
-  }
-
   total() {
     return this.cart.getTotal();
   }

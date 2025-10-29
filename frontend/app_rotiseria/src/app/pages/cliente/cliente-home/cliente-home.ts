@@ -17,7 +17,7 @@ import { inject } from '@angular/core';
   styleUrls: ['./cliente-home.css']
 })
 export class ClienteHome {
-  private authService = inject(Auth);
+ private authService = inject(Auth);
   userRole: string | null = null;
   
   cargando: boolean = false;
@@ -75,10 +75,6 @@ export class ClienteHome {
         alert('Error al cargar productos. Verifica tu conexión.');
       }
     });
-  }
-
-  irAHacerPedido(id: number) {
-    this.router.navigate(['/cliente/hacer-pedido', id]);
   }
 
   agregarAlCarrito(p: any) {

@@ -24,9 +24,6 @@
         
         <!-- Botones exclusivos para clientes -->
         <ng-container *ngIf="userRole === 'cliente'">
-          <button class="btn btn-primary" (click)="irAHacerPedido(p.id)">
-            <i class="bi bi-bag-fill"></i> Pedir
-          </button>
           <button class="btn btn-success" (click)="agregarAlCarrito(p)">
             <i class="bi bi-cart-plus-fill"></i> Agregar
           </button>
