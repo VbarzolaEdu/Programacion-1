@@ -34,13 +34,11 @@ export class GDU {
     this.cargando = true;
     this.UsuarioService.getUsuarios().subscribe({
       next: (response: any) => {
-        console.log('Usuarios cargados:', response);
         this.arrayusuarios = response;
         this.aplicarFiltros();
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar usuarios:', error);
         this.cargando = false;
         alert('Error al cargar usuarios. Verifica tu conexión y permisos.');
       }
@@ -84,24 +82,18 @@ export class GDU {
   }
 
   validarUsuario(usuario: any) {
-    console.log('✅ Validando usuario:', usuario);
-    
     const confirmar = confirm(`¿Validar a ${usuario.nombre} ${usuario.apellidos}?`);
     if (!confirmar) return;
 
-    // Actualizar estado a 'validado' o 'activo'
     const datosActualizados = { estado: 'activo' };
     
     this.UsuarioService.updateUsuario(usuario.id, datosActualizados).subscribe({
       next: (response) => {
-        console.log('Usuario validado:', response);
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} validado correctamente`);
-        // Actualizar localmente
         usuario.estado = 'activo';
         this.aplicarFiltros();
       },
       error: (error) => {
-        console.error('Error al validar usuario:', error);
         alert('Error al validar el usuario. Intenta nuevamente.');
       }
     });
@@ -111,24 +103,18 @@ export class GDU {
    * Bloquea un usuario
    */
   bloquearUsuario(usuario: any) {
-    console.log('🚫 Bloqueando usuario:', usuario);
-    
     const confirmar = confirm(`¿Estás seguro de bloquear a ${usuario.nombre} ${usuario.apellidos}?`);
     if (!confirmar) return;
 
-    // Actualizar estado a 'bloqueado'
     const datosActualizados = { estado: 'bloqueado' };
     
     this.UsuarioService.updateUsuario(usuario.id, datosActualizados).subscribe({
       next: (response) => {
-        console.log('Usuario bloqueado:', response);
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} bloqueado`);
-        // Actualizar localmente
         usuario.estado = 'bloqueado';
         this.aplicarFiltros();
       },
       error: (error) => {
-        console.error('Error al bloquear usuario:', error);
         alert('Error al bloquear el usuario. Intenta nuevamente.');
       }
     });

@@ -29,8 +29,6 @@ export class Calificaciones implements OnInit {
     
     this.valoracionesService.getValoraciones().subscribe({
       next: (response: any) => {
-        console.log('✅ Valoraciones cargadas:', response);
-        
         let todasValoraciones = [];
         
         // Verificar si la respuesta es un array o un objeto con paginación
@@ -39,7 +37,6 @@ export class Calificaciones implements OnInit {
         } else if (response.valoraciones && Array.isArray(response.valoraciones)) {
           todasValoraciones = response.valoraciones;
         } else {
-          console.error('Formato de respuesta inesperado:', response);
           todasValoraciones = [];
         }
         
@@ -52,11 +49,9 @@ export class Calificaciones implements OnInit {
           producto: this.obtenerNombreProducto(v.producto)
         }));
         
-        console.log('📋 Calificaciones formateadas:', this.calificaciones);
         this.cargando = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar valoraciones:', error);
         this.cargando = false;
         this.calificaciones = [];
       }

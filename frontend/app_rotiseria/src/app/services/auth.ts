@@ -37,7 +37,6 @@ export class Auth {
       // Convertir a número para asegurar tipo correcto
       return userId ? Number(userId) : null;
     } catch (error) {
-      console.error('Error al decodificar token:', error);
       return null;
     }
   }
@@ -55,7 +54,6 @@ export class Auth {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.rol || payload.role || null;
     } catch (error) {
-      console.error('Error al decodificar token:', error);
       return null;
     }
   }

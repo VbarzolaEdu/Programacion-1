@@ -43,16 +43,12 @@ export class ClienteHome {
     this.cargando = true;
     this.productoService.getProductos().subscribe({
       next: (response: any) => {
-        console.log('✅ Productos cargados:', response);
-        
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
           this.arrayproductos = response;
         } else if (response.productos && Array.isArray(response.productos)) {
-          // Si viene en formato { productos: [...] }
           this.arrayproductos = response.productos;
         } else {
-          console.error('Formato de respuesta inesperado:', response);
           this.arrayproductos = [];
         }
         
@@ -62,13 +58,12 @@ export class ClienteHome {
             ...p,
             imagen: p.imagen || 'assets/buger1.jpg'
           }))
-          .filter(p => p.disponible !== false); // Mostrar solo productos disponibles
+          .filter(p => p.disponible !== false);
         
         this.productosFiltrados = [...this.arrayproductos];
         this.cargando = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar productos:', error);
         this.cargando = false;
         this.arrayproductos = [];
         this.productosFiltrados = [];

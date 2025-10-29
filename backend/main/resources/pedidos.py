@@ -86,48 +86,22 @@ class Pedidos(Resource):
 
     @jwt_required()
     def post(self):
-        print("\n" + "="*50)
-        print("🚀 INICIANDO CREACIÓN DE PEDIDO")
-        print("="*50)
-        
         data = request.get_json()
-        print(f"📦 Datos recibidos: {data}")
-        print(f"🔑 id_user: {data.get('id_user')}")
-        print(f"💰 precio_final: {data.get('precio_final')}")
-        print(f"📅 fecha: {data.get('fecha')}")
-        print(f"📊 estado: {data.get('estado')}")
-        print(f"🛒 productos: {data.get('productos')}")
         
         try:
             pedido = PedidoModel.from_json(data)
-            print(f"✅ Pedido creado en memoria: {pedido}")
-            print(f"   - ID Usuario: {pedido.id_user}")
-            print(f"   - Precio: {pedido.precio_final}")
-            print(f"   - Estado: {pedido.estado}")
 
             # Asociar productos si se mandan
             producto_ids = data.get('productos')
             if producto_ids:
-                print(f"🔍 Buscando productos con IDs: {producto_ids}")
                 productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
-                print(f"✅ Productos encontrados: {len(productos)}")
-                for p in productos:
-                    print(f"   - {p.id}: {p.nombre}")
                 pedido.productos.extend(productos)
 
-            print("💾 Guardando en base de datos...")
             db.session.add(pedido)
             db.session.commit()
-            print(f"✅ PEDIDO GUARDADO EXITOSAMENTE! ID: {pedido.id}")
-            print("="*50 + "\n")
             
             return pedido.to_json(), 201
             
         except Exception as e:
-            print(f"❌ ERROR AL CREAR PEDIDO: {str(e)}")
-            print(f"❌ Tipo de error: {type(e)}")
-            import traceback
-            traceback.print_exc()
-            print("="*50 + "\n")
             db.session.rollback()
             return {'error': str(e)}, 500

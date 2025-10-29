@@ -64,13 +64,10 @@ export class Register {
     // Llamar al servicio de registro
     this.authService.register(registerData).subscribe({
       next: (response) => {
-        console.log('✅ Registro exitoso:', response);
         alert('¡Cuenta creada exitosamente! Por favor, inicia sesión.');
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {
-        console.error('❌ Error en el registro:', error);
-        
         // Verificar si es error 409 (email duplicado)
         if (error.status === 409) {
           this.mensajeError = 'El email ya está registrado';

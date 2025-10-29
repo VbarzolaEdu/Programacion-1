@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-// import { NavCliente } from '../../../components/nav-cliente/nav-cliente';
 import { CartService, CartItem } from '../../../services/cart.service';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
@@ -81,7 +80,6 @@ export class Carrito implements OnInit {
         this.router.navigate(['/cliente/pedidos']);
       },
       error: (error) => {
-        console.error('Error al crear pedido:', error);
         alert('Error al confirmar el pedido. Por favor, intente nuevamente.');
         this.cargando = false;
       }

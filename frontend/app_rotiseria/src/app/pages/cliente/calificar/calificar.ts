@@ -41,8 +41,7 @@ export class Calificar implements OnInit {
     this.route.paramMap.subscribe(params => {
       const idString = params.get('idPedido');
       if (idString) {
-        this.pedidoId = +idString; 
-        console.log(`📋 Página de Calificación. ID del Pedido: ${this.pedidoId}`);
+        this.pedidoId = +idString;
         this.cargarDatosPedido();
       }
     });
@@ -57,12 +56,10 @@ export class Calificar implements OnInit {
     this.cargando = true;
     this.pedidosService.getPedido(this.pedidoId).subscribe({
       next: (response: any) => {
-        console.log('✅ Datos del pedido cargados:', response);
         this.pedidoData = response;
         this.cargando = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar pedido:', error);
         this.cargando = false;
         this.mensajeExito = '⚠️ No se pudo cargar la información del pedido';
       }
@@ -134,11 +131,8 @@ export class Calificar implements OnInit {
       comentario: this.comentario || ''
     };
 
-    console.log(`📝 Enviando calificación para Pedido ID: ${this.pedidoId}`, valoracionData);
-
     this.valoracionesService.createValoracion(valoracionData).subscribe({
       next: (response) => {
-        console.log('✅ Valoración creada exitosamente:', response);
         this.mensajeExito = "✅ Su valoración ha sido enviada con éxito.";
         
         // Limpiar formulario
@@ -152,7 +146,6 @@ export class Calificar implements OnInit {
         }, 2000); 
       },
       error: (error) => {
-        console.error('❌ Error al crear valoración:', error);
         this.mensajeExito = "⚠️ Error al enviar la calificación. Intenta nuevamente.";
         this.enviando = false;
       }

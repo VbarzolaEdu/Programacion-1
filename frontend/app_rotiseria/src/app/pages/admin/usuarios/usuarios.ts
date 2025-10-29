@@ -37,14 +37,11 @@ export class Usuarios {
     this.cargando = true;
     this.UsuarioService.getUsuarios().subscribe({
       next: (response: any) => {
-        console.log('Usuarios cargados:', response);
-        // El backend retorna un array directo, no { users: [...] }
         this.arrayusuarios = response;
         this.aplicarFiltros();
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar usuarios:', error);
         this.cargando = false;
         alert('Error al cargar usuarios. Verifica tu conexión y permisos.');
       }
@@ -74,25 +71,17 @@ export class Usuarios {
    * Elimina un usuario de la base de datos
    */
   eliminarUsuario(usuario: any) {
-    console.log('🗑️ Eliminando usuario:', usuario);
-    
     this.UsuarioService.deleteUsuario(usuario.id).subscribe({
       next: (response) => {
-        console.log('✅ Usuario eliminado correctamente:', response);
-        // Remover el usuario del array local para actualizar la UI
         this.arrayusuarios = this.arrayusuarios.filter(u => u.id !== usuario.id);
         this.aplicarFiltros();
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} eliminado correctamente`);
       },
       error: (error) => {
-        console.error('❌ Error al eliminar usuario:', error);
-        console.error('❌ Status:', error.status);
-        console.error('❌ URL:', error.url);
-        
         if (error.status === 403) {
           alert('No tienes permisos para eliminar este usuario');
         } else if (error.status === 404) {
-          alert('Usuario no encontrado. URL intentada: ' + error.url);
+          alert('Usuario no encontrado');
         } else {
           alert('Error al eliminar el usuario. Intenta nuevamente.');
         }

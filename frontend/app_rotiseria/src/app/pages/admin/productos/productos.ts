@@ -48,10 +48,8 @@ export class Productos {
         if (Array.isArray(response)) {
           this.arrayproductos = response;
         } else if (response.productos && Array.isArray(response.productos)) {
-          // Si viene en formato { productos: [...] }
           this.arrayproductos = response.productos;
         } else {
-          console.error('Formato de respuesta inesperado:', response);
           this.arrayproductos = [];
         }
         
@@ -59,14 +57,13 @@ export class Productos {
         this.arrayproductos = this.arrayproductos.map(p => ({
           ...p,
           imagen: p.imagen || 'assets/buger1.jpg',
-          disponible: p.disponibilidad === 'disponible' // Convertir string a boolean
+          disponible: p.disponibilidad === 'disponible'
         }));
         
         this.productosFiltrados = [...this.arrayproductos];
         this.cargando = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar productos:', error);
         this.cargando = false;
         this.arrayproductos = [];
         this.productosFiltrados = [];
@@ -145,7 +142,6 @@ export class Productos {
         this.cancelarEdicion();
       },
       error: (error) => {
-        console.error('Error al actualizar producto:', error);
         alert('Error al actualizar el producto. Intenta nuevamente.');
       }
     });

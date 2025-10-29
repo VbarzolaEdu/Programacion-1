@@ -46,12 +46,10 @@ export class Perfil {
 
     this.UsuarioService.getUsuario(userId).subscribe({
       next: (response: any) => {
-        console.log('Perfil cargado:', response);
         this.usuario = response;
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar perfil:', error);
         this.cargando = false;
         alert('Error al cargar tu perfil. Verifica tu conexión.');
       }
@@ -84,8 +82,6 @@ export class Perfil {
    * Guarda los cambios del perfil
    */
   guardarCambios() {
-    console.log('Guardando cambios:', this.usuarioTemporal);
-    
     const confirmar = confirm('¿Guardar los cambios en tu perfil?');
     if (!confirmar) return;
 
@@ -98,7 +94,6 @@ export class Perfil {
     
     this.UsuarioService.updateUsuario(userId, this.usuarioTemporal).subscribe({
       next: (response) => {
-        console.log('Perfil actualizado:', response);
         alert('Perfil actualizado correctamente');
         
         // Actualizar los datos locales
@@ -111,7 +106,6 @@ export class Perfil {
         this.usuarioTemporal = {};
       },
       error: (error) => {
-        console.error('Error al actualizar perfil:', error);
         if (error.status === 400) {
           alert('Datos inválidos. Verifica la información ingresada.');
         } else if (error.status === 409) {

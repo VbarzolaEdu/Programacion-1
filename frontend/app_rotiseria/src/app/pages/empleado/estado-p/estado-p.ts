@@ -64,7 +64,6 @@ export class EstadoP {
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar pedidos:', error);
         this.cargando = false;
         this.pedidos = [];
         this.pedidosFiltrados = [];

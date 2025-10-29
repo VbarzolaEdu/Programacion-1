@@ -45,12 +45,12 @@ def register():
             db.session.add(user)
             db.session.commit()
             
-            #enviar mail de bienvenido/a (no fallar si el email falla)
+            # Enviar mail de bienvenida (no fallar si el email falla)
             try:
                 send = sendMail([user.email],"¡Bienvenido/a!",'register',user = user)
             except Exception as mail_error:
-                print(f"⚠️ Error al enviar email de bienvenida: {mail_error}")
                 # Continuar aunque el email falle
+                pass
             
             return jsonify(user.to_json()), 201
         except Exception as error:
