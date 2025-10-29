@@ -5,7 +5,7 @@ from main.models import UserModel
 from sqlalchemy import func, desc
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from main.auth.decorators import role_required
-from main.utils.pagination import paginate_query, get_sort_params
+from main.utils.pagination import paginate_query, get_sort_params, apply_sorting
 
 # USERS = {
 #     1:{'name': 'Valentin' ,'apellido' : 'Barzola' , 'mail':'vlnbar@gmail.com' , 'cellphone':'123456789'}, 
@@ -82,11 +82,10 @@ class Users(Resource):
         if 'estado' in args:
             query = query.filter(UserModel.estado == args['estado'])
 
-        # Ordenamiento
+        # Ordenamiento con whitelist de campos permitidos
         sort_by, order = get_sort_params(default_sort='id', default_order='asc')
-        if sort_by and hasattr(UserModel, sort_by):
-            sort_column = getattr(UserModel, sort_by)
-            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+        allowed_sort_fields = ['id', 'nombre', 'email', 'rol', 'estado', 'apellidos', 'cellphone']
+        query = apply_sorting(query, UserModel, sort_by, order, allowed_sort_fields)
 
         # Paginación
         result = paginate_query(query)

@@ -2,6 +2,7 @@
 Utilidades para paginación y filtrado estandarizado
 """
 from flask import request
+from sqlalchemy import desc
 
 
 def get_pagination_params():
@@ -43,7 +44,7 @@ def paginate_query(query, page=None, per_page=None):
         'total': pagination.total,
         'pages': pagination.pages,
         'page': pagination.page,
-        'per_page': per_page,
+        'per_page': pagination.per_page,
         'has_next': pagination.has_next,
         'has_prev': pagination.has_prev
     }
@@ -68,3 +69,39 @@ def get_sort_params(default_sort=None, default_order='asc'):
         order = default_order
     
     return sort_by, order
+
+
+def apply_sorting(query, model, sort_by, order='asc', allowed_fields=None):
+    """
+    Aplica ordenamiento seguro a una query de SQLAlchemy usando whitelist.
+    
+    Args:
+        query: Query de SQLAlchemy
+        model: Modelo de SQLAlchemy
+        sort_by: Campo por el cual ordenar
+        order: Orden ('asc' o 'desc')
+        allowed_fields: Lista de campos permitidos para ordenar. Si es None, se permiten todos.
+    
+    Returns:
+        Query con ordenamiento aplicado
+    """
+    if not sort_by:
+        return query
+    
+    # Si hay whitelist, validar que el campo esté permitido
+    if allowed_fields is not None and sort_by not in allowed_fields:
+        return query
+    
+    # Verificar que el campo existe en el modelo
+    if not hasattr(model, sort_by):
+        return query
+    
+    sort_column = getattr(model, sort_by)
+    
+    if order == 'desc':
+        query = query.order_by(desc(sort_column))
+    else:
+        query = query.order_by(sort_column)
+    
+    return query
+

@@ -5,8 +5,7 @@ from main.models import ProductoModel, PedidoModel
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from main.auth.decorators import role_required
-from main.utils.pagination import paginate_query, get_sort_params
-from sqlalchemy import desc
+from main.utils.pagination import paginate_query, get_sort_params, apply_sorting
 
 class Producto(Resource):
     def get(self,id):
@@ -58,11 +57,10 @@ class Productos(Resource):
         if disponibilidad:
             query = query.filter(ProductoModel.disponibilidad == disponibilidad)
 
-        # Ordenamiento
+        # Ordenamiento con whitelist de campos permitidos
         sort_by, order = get_sort_params(default_sort='id', default_order='asc')
-        if sort_by and hasattr(ProductoModel, sort_by):
-            sort_column = getattr(ProductoModel, sort_by)
-            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+        allowed_sort_fields = ['id', 'nombre', 'precio', 'categoria', 'disponibilidad']
+        query = apply_sorting(query, ProductoModel, sort_by, order, allowed_sort_fields)
 
         # Paginación
         result = paginate_query(query)

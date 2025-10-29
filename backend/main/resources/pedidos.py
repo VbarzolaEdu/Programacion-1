@@ -4,8 +4,7 @@ from .. import db
 from main.models import PedidoModel, ProductoModel
 from flask_jwt_extended import jwt_required
 from datetime import datetime
-from main.utils.pagination import paginate_query, get_sort_params
-from sqlalchemy import desc
+from main.utils.pagination import paginate_query, get_sort_params, apply_sorting
 
 class Pedido(Resource):
     def get(self, id):
@@ -74,11 +73,10 @@ class Pedidos(Resource):
         if fecha:
             query = query.filter(db.func.date(PedidoModel.fecha) == fecha)
 
-        # Ordenamiento
+        # Ordenamiento con whitelist de campos permitidos
         sort_by, order = get_sort_params(default_sort='fecha', default_order='desc')
-        if sort_by and hasattr(PedidoModel, sort_by):
-            sort_column = getattr(PedidoModel, sort_by)
-            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+        allowed_sort_fields = ['id', 'fecha', 'estado', 'id_user']
+        query = apply_sorting(query, PedidoModel, sort_by, order, allowed_sort_fields)
 
         # Paginación
         result = paginate_query(query)

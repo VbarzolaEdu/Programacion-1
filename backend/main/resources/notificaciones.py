@@ -3,8 +3,7 @@ from flask import request
 from .. import db
 from main.models.notificaciones import Notificacion
 from flask import jsonify
-from main.utils.pagination import paginate_query, get_sort_params
-from sqlalchemy import desc
+from main.utils.pagination import paginate_query, get_sort_params, apply_sorting
 
 
 
@@ -61,11 +60,10 @@ class Notificaciones(Resource):
         if 'mensaje' in args:
             query = query.filter(Notificacion.mensaje.like(f"%{args['mensaje']}%"))
 
-        # Ordenamiento
+        # Ordenamiento con whitelist de campos permitidos
         sort_by, order = get_sort_params(default_sort='id', default_order='desc')
-        if sort_by and hasattr(Notificacion, sort_by):
-            sort_column = getattr(Notificacion, sort_by)
-            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+        allowed_sort_fields = ['id', 'id_usuario', 'id_pedido', 'mensaje']
+        query = apply_sorting(query, Notificacion, sort_by, order, allowed_sort_fields)
 
         # Paginación
         result = paginate_query(query)
