@@ -75,19 +75,6 @@
           placeholder="Ej: Hamburguesas, Pizzas, Bebidas, etc.">
       </div>
 
-      <!-- Disponible -->
-      <div class="mb-3 form-check">
-        <input 
-          type="checkbox" 
-          class="form-check-input" 
-          id="nuevoDisponible"
-          [(ngModel)]="nuevoProducto.disponible"
-          name="nuevoDisponible">
-        <label class="form-check-label" for="nuevoDisponible">
-          Producto disponible
-        </label>
-      </div>
-
       <!-- Botones -->
       <div class="d-flex gap-2">
         <button 
@@ -161,18 +148,7 @@
             placeholder="Ej: Hamburguesas, Pizzas, Bebidas, etc.">
         </div>
 
-        <!-- Disponibilidad -->
-        <div class="mb-3 form-check">
-          <input 
-            type="checkbox" 
-            class="form-check-input" 
-            id="disponible"
-            [(ngModel)]="productoTemporal.disponible"
-            name="disponible">
-          <label class="form-check-label" for="disponible">
-            <strong>Producto disponible</strong>
-          </label>
-        </div>        <!-- Botones -->
+        <!-- Botones -->
         <div class="d-flex gap-2 justify-content-end">
           <button 
             type="button" 

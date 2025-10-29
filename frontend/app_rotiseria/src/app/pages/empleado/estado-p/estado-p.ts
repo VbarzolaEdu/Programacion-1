@@ -90,16 +90,12 @@ export class EstadoP {
       }
     }
     
-    console.log(`🔄 Cambiando estado del pedido ${pedido.id} a: ${nuevoEstado}`);
-    
     this.pedidosService.updatePedido(pedido.id, { estado: nuevoEstado }).subscribe({
       next: (response) => {
-        console.log('✅ Estado actualizado:', response);
         pedido.estado = nuevoEstado;
         alert(`✅ Pedido #${pedido.id} cambiado a: ${nuevoEstado}`);
       },
       error: (error) => {
-        console.error('❌ Error al actualizar estado:', error);
         alert('❌ Error al cambiar el estado del pedido');
       }
     });

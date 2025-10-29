@@ -98,8 +98,6 @@ export class Pedidos {
    * Navega a la página de valoración del pedido
    */
   irAValorar(pedidoId: number): void {
-    console.log(`⭐ Navegando a calificaciones para el pedido ID: ${pedidoId}`);
-    console.log(`📍 Ruta destino: /cliente/calificar/${pedidoId}`);
     this.router.navigate(['/cliente/calificar', pedidoId]);
   }
 
@@ -107,7 +105,6 @@ export class Pedidos {
    * Navega a la página de ver todas las calificaciones
    */
   verCalificaciones(): void {
-    console.log('Navegando a ver calificaciones');
     this.router.navigate(['/cliente/calificaciones']);
   }
 

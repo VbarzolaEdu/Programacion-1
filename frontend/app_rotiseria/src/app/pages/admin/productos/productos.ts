@@ -34,7 +34,6 @@ export class Productos {
   ) {}
 
   ngOnInit() {
-    console.log('🚀 Componente admin/productos iniciado');
     this.cargarProductos();
   }
 
@@ -42,12 +41,9 @@ export class Productos {
    * Carga la lista de productos desde el backend
    */
   cargarProductos() {
-    console.log('📦 Iniciando carga de productos...');
     this.cargando = true;
     this.productoService.getProductos().subscribe({
       next: (response: any) => {
-        console.log('✅ Productos cargados:', response);
-        
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
           this.arrayproductos = response;
@@ -87,12 +83,10 @@ export class Productos {
     this.productoEditando = producto;
     
     // Clonar los datos del producto para edición
-    // Convertir disponibilidad (string del backend) a disponible (boolean del frontend)
     this.productoTemporal = {
       nombre: producto.nombre,
       precio: producto.precio,
-      categoria: producto.categoria || '',
-      disponible: producto.disponibilidad === 'disponible'
+      categoria: producto.categoria || ''
     };
     
     // Scroll al formulario
@@ -124,17 +118,14 @@ export class Productos {
       nombre: this.productoTemporal.nombre,
       precio: this.productoTemporal.precio,
       categoria: this.productoTemporal.categoria || '',
-      disponibilidad: this.productoTemporal.disponible ? 'disponible' : 'no disponible'
+      disponibilidad: 'disponible' // Siempre disponible por defecto
     };
-
-    console.log('📤 Enviando datos de actualización:', productoData);
 
     this.productoService.updateProducto(this.productoEditando.id, productoData).subscribe({
       next: (response) => {
         alert(`Producto "${this.productoTemporal.nombre}" actualizado correctamente`);
         
         // Actualizar el producto en el array local con la respuesta del backend
-        // Convertir disponibilidad a disponible para el frontend
         const productoActualizado = {
           ...response,
           disponible: response.disponibilidad === 'disponible',
@@ -166,23 +157,15 @@ export class Productos {
   eliminarProducto(producto: any) {
     
     const deleteObservable = this.productoService.deleteProducto(producto.id);
-    console.log('⏳ Observable creado:', deleteObservable);
     
     deleteObservable.subscribe({
       next: (response) => {
-        console.log('✅ Producto eliminado correctamente:', response);
         // Remover el producto del array local para actualizar la UI
         this.arrayproductos = this.arrayproductos.filter(p => p.id !== producto.id);
         this.productosFiltrados = this.productosFiltrados.filter(p => p.id !== producto.id);
         alert(`Producto "${producto.nombre}" eliminado correctamente`);
       },
       error: (error) => {
-        console.error('❌ Error al eliminar producto:', error);
-        console.error('❌ Status:', error.status);
-        console.error('❌ Message:', error.message);
-        console.error('❌ Error completo:', error);
-        console.error('❌ URL intentada:', error.url);
-        
         if (error.status === 403) {
           alert('No tienes permisos para eliminar este producto');
         } else if (error.status === 404) {
@@ -206,8 +189,7 @@ export class Productos {
     this.nuevoProducto = {
       nombre: '',
       precio: 0,
-      categoria: '',
-      disponible: true
+      categoria: ''
     };
     setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
   }
@@ -235,15 +217,11 @@ export class Productos {
         nombre: this.nuevoProducto.nombre,
         precio: this.nuevoProducto.precio,
         categoria: this.nuevoProducto.categoria || '',
-        disponibilidad: this.nuevoProducto.disponible ? 'disponible' : 'no disponible'
+        disponibilidad: 'disponible' // Siempre disponible por defecto
       };
-
-      console.log('📤 Enviando datos del producto:', productoData);
 
       this.productoService.createProducto(productoData).subscribe({
         next: (response: any) => {
-          console.log('✅ Producto creado exitosamente:', response);
-          
           // Agregar el nuevo producto a los arrays con conversión de disponibilidad
           const productoCreado = response.producto || response;
           const productoConvertido = {
@@ -259,7 +237,6 @@ export class Productos {
           this.cancelarAgregar();
         },
         error: (error) => {
-          console.error('❌ Error al crear producto:', error);
           alert(`Error al crear el producto: ${error.error?.message || error.message || 'Error desconocido'}`);
         }
       });

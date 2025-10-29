@@ -2,10 +2,6 @@
   <!-- Imagen del producto -->
   <div class="producto-imagen">
     <img [src]="imagen || 'assets/placeholder.jpg'" [alt]="nombre">
-    <!-- Badge de disponibilidad (opcional) -->
-    <span *ngIf="!disponible" class="badge-no-disponible">
-      <i class="bi bi-x-circle"></i> No disponible
-    </span>
   </div>
 
   <!-- Información del producto -->

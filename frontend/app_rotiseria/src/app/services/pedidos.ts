@@ -43,7 +43,6 @@ export class Pedidos {
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    console.log(`🔍 Obteniendo pedido ID: ${id} desde: ${this.url}/pedido/${id}`);
     return this.http.get(this.url + '/pedido/' + id, { headers });
   }
 

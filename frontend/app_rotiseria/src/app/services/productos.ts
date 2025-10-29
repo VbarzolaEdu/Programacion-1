@@ -58,10 +58,7 @@ export class Productos {
    * Elimina un producto por ID (requiere rol admin)
    */
   deleteProducto(id: number): Observable<any> {
-    console.log('🔧 SERVICE: deleteProducto llamado con ID:', id);
     const token = localStorage.getItem('token');
-    console.log('🔧 SERVICE: Token existe?', !!token);
-    console.log('🔧 SERVICE: Token (primeros 20 chars):', token?.substring(0, 20));
     
     let headers = new HttpHeaders({
       'content-type': 'application/json',
@@ -69,8 +66,6 @@ export class Productos {
     });
     
     const url = this.url + '/producto/' + id;
-    console.log('🔧 SERVICE: URL completa:', url);
-    console.log('🔧 SERVICE: Headers:', headers.keys());
     
     return this.http.delete(url, { headers });
   }

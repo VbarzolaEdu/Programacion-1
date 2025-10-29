@@ -40,7 +40,6 @@ export class Valoraciones {
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    console.log('📝 Creando valoración:', data);
     return this.http.post(this.url + '/valoraciones', data, { headers });
   }
 }
