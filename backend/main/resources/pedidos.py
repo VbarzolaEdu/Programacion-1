@@ -4,6 +4,8 @@ from .. import db
 from main.models import PedidoModel, ProductoModel
 from flask_jwt_extended import jwt_required
 from datetime import datetime
+from main.utils.pagination import paginate_query, get_sort_params
+from sqlalchemy import desc
 
 class Pedido(Resource):
     def get(self, id):
@@ -72,16 +74,23 @@ class Pedidos(Resource):
         if fecha:
             query = query.filter(db.func.date(PedidoModel.fecha) == fecha)
 
+        # Ordenamiento
+        sort_by, order = get_sort_params(default_sort='fecha', default_order='desc')
+        if sort_by and hasattr(PedidoModel, sort_by):
+            sort_column = getattr(PedidoModel, sort_by)
+            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+
         # Paginación
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 10))
-        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        result = paginate_query(query)
 
         return jsonify({
-            'pedidos': [pedido.to_json() for pedido in pagination.items],
-            'total': pagination.total,
-            'pages': pagination.pages,
-            'page': pagination.page
+            'pedidos': [pedido.to_json() for pedido in result['items']],
+            'total': result['total'],
+            'pages': result['pages'],
+            'page': result['page'],
+            'per_page': result['per_page'],
+            'has_next': result['has_next'],
+            'has_prev': result['has_prev']
         })
 
     @jwt_required()

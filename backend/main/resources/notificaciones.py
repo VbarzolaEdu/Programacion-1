@@ -3,6 +3,8 @@ from flask import request
 from .. import db
 from main.models.notificaciones import Notificacion
 from flask import jsonify
+from main.utils.pagination import paginate_query, get_sort_params
+from sqlalchemy import desc
 
 
 
@@ -59,16 +61,25 @@ class Notificaciones(Resource):
         if 'mensaje' in args:
             query = query.filter(Notificacion.mensaje.like(f"%{args['mensaje']}%"))
 
+        # Ordenamiento
+        sort_by, order = get_sort_params(default_sort='id', default_order='desc')
+        if sort_by and hasattr(Notificacion, sort_by):
+            sort_column = getattr(Notificacion, sort_by)
+            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+
         # Paginación
-        limit = int(args.get('limit', 10))  # Límite de resultados (por defecto 10)
-        page = int(args.get('page', 1))  # Número de página (por defecto 1)
-        offset = (page - 1) * limit  # Desplazamiento
+        result = paginate_query(query)
 
-        # Aplicar paginación
-        notificaciones = query.offset(offset).limit(limit).all()
-
-        # Devolver resultados
-        return jsonify([notificacion.to_json() for notificacion in notificaciones])
+        # Devolver resultados con metadatos de paginación
+        return jsonify({
+            'notificaciones': [notificacion.to_json() for notificacion in result['items']],
+            'total': result['total'],
+            'pages': result['pages'],
+            'page': result['page'],
+            'per_page': result['per_page'],
+            'has_next': result['has_next'],
+            'has_prev': result['has_prev']
+        })
 
     def post(self):
         notificaciones = Notificacion.from_json(request.get_json())

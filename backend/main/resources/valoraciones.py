@@ -2,6 +2,8 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import ValoracionModel
+from main.utils.pagination import paginate_query, get_sort_params
+from sqlalchemy import desc
 
 class Valoracion(Resource):
     def get(self, id):
@@ -11,8 +13,6 @@ class Valoracion(Resource):
 class Valoraciones(Resource):
     def get(self):
         # Obtener parámetros de consulta
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 10))
         id_usuario = request.args.get('id_usuario')
         id_producto = request.args.get('id_producto')
         puntuacion = request.args.get('puntuacion')
@@ -27,15 +27,24 @@ class Valoraciones(Resource):
         if puntuacion:
             query = query.filter(ValoracionModel.puntuacion == int(puntuacion))
 
-        # Aplicar paginación
-        valoraciones_paginadas = query.paginate(page=page, per_page=per_page, error_out=False)
+        # Ordenamiento
+        sort_by, order = get_sort_params(default_sort='id', default_order='desc')
+        if sort_by and hasattr(ValoracionModel, sort_by):
+            sort_column = getattr(ValoracionModel, sort_by)
+            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
 
-        return {
-            'valoraciones': [v.to_json() for v in valoraciones_paginadas.items],
-            'total': valoraciones_paginadas.total,
-            'pages': valoraciones_paginadas.pages,
-            'page': valoraciones_paginadas.page
-        }
+        # Aplicar paginación
+        result = paginate_query(query)
+
+        return jsonify({
+            'valoraciones': [v.to_json() for v in result['items']],
+            'total': result['total'],
+            'pages': result['pages'],
+            'page': result['page'],
+            'per_page': result['per_page'],
+            'has_next': result['has_next'],
+            'has_prev': result['has_prev']
+        })
 
     def post(self):
         valoracion = ValoracionModel.from_json(request.get_json())

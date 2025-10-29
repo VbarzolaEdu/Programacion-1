@@ -5,6 +5,8 @@ from main.models import ProductoModel, PedidoModel
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from main.auth.decorators import role_required
+from main.utils.pagination import paginate_query, get_sort_params
+from sqlalchemy import desc
 
 class Producto(Resource):
     def get(self,id):
@@ -56,16 +58,23 @@ class Productos(Resource):
         if disponibilidad:
             query = query.filter(ProductoModel.disponibilidad == disponibilidad)
 
+        # Ordenamiento
+        sort_by, order = get_sort_params(default_sort='id', default_order='asc')
+        if sort_by and hasattr(ProductoModel, sort_by):
+            sort_column = getattr(ProductoModel, sort_by)
+            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
+
         # Paginación
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 10))
-        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        result = paginate_query(query)
 
         return jsonify({
-            'productos': [producto.to_json() for producto in pagination.items],
-            'total': pagination.total,
-            'pages': pagination.pages,
-            'page': pagination.page
+            'productos': [producto.to_json() for producto in result['items']],
+            'total': result['total'],
+            'pages': result['pages'],
+            'page': result['page'],
+            'per_page': result['per_page'],
+            'has_next': result['has_next'],
+            'has_prev': result['has_prev']
         })
 
     

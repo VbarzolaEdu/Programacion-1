@@ -5,6 +5,7 @@ from main.models import UserModel
 from sqlalchemy import func, desc
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from main.auth.decorators import role_required
+from main.utils.pagination import paginate_query, get_sort_params
 
 # USERS = {
 #     1:{'name': 'Valentin' ,'apellido' : 'Barzola' , 'mail':'vlnbar@gmail.com' , 'cellphone':'123456789'}, 
@@ -78,17 +79,28 @@ class Users(Resource):
             query = query.filter(UserModel.email.like(f"%{args['email']}%"))
         if 'rol' in args:
             query = query.filter(UserModel.rol == args['rol'])
+        if 'estado' in args:
+            query = query.filter(UserModel.estado == args['estado'])
+
+        # Ordenamiento
+        sort_by, order = get_sort_params(default_sort='id', default_order='asc')
+        if sort_by and hasattr(UserModel, sort_by):
+            sort_column = getattr(UserModel, sort_by)
+            query = query.order_by(desc(sort_column) if order == 'desc' else sort_column)
 
         # Paginación
-        limit = int(args.get('limit', 10))  # Límite de resultados (por defecto 10)
-        page = int(args.get('page', 1))  # Número de página (por defecto 1)
-        offset = (page - 1) * limit  # Desplazamiento
+        result = paginate_query(query)
 
-        # Aplicar paginación
-        users = query.offset(offset).limit(limit).all()
-
-        # Devolver resultados
-        return jsonify([user.to_json() for user in users])
+        # Devolver resultados con metadatos de paginación
+        return jsonify({
+            'users': [user.to_json() for user in result['items']],
+            'total': result['total'],
+            'pages': result['pages'],
+            'page': result['page'],
+            'per_page': result['per_page'],
+            'has_next': result['has_next'],
+            'has_prev': result['has_prev']
+        })
     
     @role_required(roles = ["admin"])
     def post(self):
