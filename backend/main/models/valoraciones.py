@@ -11,8 +11,6 @@ class Valoracion(db.Model):
     id_producto = db.Column(db.Integer, db.ForeignKey('producto.id'))
     user= db.relationship('User', back_populates='valoraciones') #relacion con la tabla User
     producto = db.relationship('Producto', back_populates='valoracion') #relacion con la tabla Producto
-    #nombre de la relacion
-    # user = db.relationship('User', back_populates='valoraciones')
 
     
     def to_json(self):

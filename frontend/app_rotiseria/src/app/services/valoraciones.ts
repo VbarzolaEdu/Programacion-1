@@ -11,14 +11,26 @@ export class Valoraciones {
   url = 'http://localhost:5000';
   
   /**
-   * Obtiene todas las valoraciones
+   * Obtiene todas las valoraciones con paginación
    */
-  getValoraciones(): Observable<any> {
+  getValoraciones(params?: { page?: number; per_page?: number }): Observable<any> {
     let headers = new HttpHeaders({
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.get(this.url + '/valoraciones', { headers });
+    
+    // Construir query string
+    let queryString = '';
+    if (params) {
+      const queryParams = [];
+      if (params.page) queryParams.push(`page=${params.page}`);
+      if (params.per_page) queryParams.push(`per_page=${params.per_page}`);
+      if (queryParams.length > 0) {
+        queryString = '?' + queryParams.join('&');
+      }
+    }
+    
+    return this.http.get(this.url + '/valoraciones' + queryString, { headers });
   }
 
   /**
