@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import UserModel
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, or_
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from main.auth.decorators import role_required
 
@@ -71,11 +71,31 @@ class Users(Resource):
         args = request.args
         query = db.session.query(UserModel)
 
-        # Filtrado (por nombre, email, etc.)
+        # Filtrado por nombre y/o apellidos (usa OR si ambos están presentes)
+        nombre_filter = None
+        apellidos_filter = None
+        
         if 'nombre' in args:
-            query = query.filter(UserModel.nombre.like(f"%{args['nombre']}%"))
+            nombre_filter = UserModel.nombre.like(f"%{args['nombre']}%")
+        if 'apellidos' in args:
+            apellidos_filter = UserModel.apellidos.like(f"%{args['apellidos']}%")
+        
+        # Si ambos filtros existen y son el mismo valor, usar OR
+        if nombre_filter is not None and apellidos_filter is not None:
+            if args.get('nombre') == args.get('apellidos'):
+                query = query.filter(or_(nombre_filter, apellidos_filter))
+            else:
+                query = query.filter(nombre_filter).filter(apellidos_filter)
+        elif nombre_filter is not None:
+            query = query.filter(nombre_filter)
+        elif apellidos_filter is not None:
+            query = query.filter(apellidos_filter)
+        
+        # Filtrado por email
         if 'email' in args:
             query = query.filter(UserModel.email.like(f"%{args['email']}%"))
+        
+        # Filtrado por rol
         if 'rol' in args:
             query = query.filter(UserModel.rol == args['rol'])
 

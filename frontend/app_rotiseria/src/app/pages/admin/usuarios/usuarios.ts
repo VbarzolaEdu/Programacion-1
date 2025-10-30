@@ -21,6 +21,10 @@ export class Usuarios {
   cargando: boolean = false;
   terminoBusqueda: string = '';
   
+  // Configuración de paginación
+  paginaActual: number = 1;
+  limite: number = 100; // Cargar muchos usuarios a la vez
+  
   constructor(
     private router: Router,
     private UsuarioService: User)
@@ -31,14 +35,36 @@ export class Usuarios {
   }
 
   /**
-   * Carga la lista de usuarios desde el backend
+   * Carga la lista de usuarios desde el backend con filtros
    */
   cargarUsuarios() {
     this.cargando = true;
-    this.UsuarioService.getUsuarios().subscribe({
+    
+    // Preparar parámetros de filtrado
+    const params: any = {
+      page: this.paginaActual,
+      limit: this.limite
+    };
+    
+    // Si hay término de búsqueda, intentar filtrar por nombre, apellidos o email
+    if (this.terminoBusqueda.trim()) {
+      const termino = this.terminoBusqueda.trim();
+      
+      // Si el término parece un email (contiene @), filtrar por email
+      if (termino.includes('@')) {
+        params.email = termino;
+      } else {
+        // Si no, filtrar por nombre Y apellidos simultáneamente
+        // El backend usa LIKE, así que busca en ambos campos
+        params.nombre = termino;
+        params.apellidos = termino;
+      }
+    }
+    
+    this.UsuarioService.getUsuarios(params).subscribe({
       next: (response: any) => {
         this.arrayusuarios = response;
-        this.aplicarFiltros();
+        this.usuariosFiltrados = response;
         this.cargando = false;
       },
       error: (error) => {
@@ -49,22 +75,12 @@ export class Usuarios {
   }
 
   /**
-   * Aplica filtros de búsqueda
+   * Aplica filtros llamando al backend
    */
   aplicarFiltros() {
-    let resultado = [...this.arrayusuarios];
-
-    // Filtro por búsqueda (nombre, apellidos, email)
-    if (this.terminoBusqueda.trim()) {
-      const termino = this.terminoBusqueda.toLowerCase();
-      resultado = resultado.filter(u => 
-        u.nombre.toLowerCase().includes(termino) ||
-        u.apellidos.toLowerCase().includes(termino) ||
-        u.email.toLowerCase().includes(termino)
-      );
-    }
-
-    this.usuariosFiltrados = resultado;
+    // Reiniciar a la primera página cuando se busca
+    this.paginaActual = 1;
+    this.cargarUsuarios();
   }
 
   /**
@@ -73,9 +89,9 @@ export class Usuarios {
   eliminarUsuario(usuario: any) {
     this.UsuarioService.deleteUsuario(usuario.id).subscribe({
       next: (response) => {
-        this.arrayusuarios = this.arrayusuarios.filter(u => u.id !== usuario.id);
-        this.aplicarFiltros();
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} eliminado correctamente`);
+        // Recargar la lista después de eliminar
+        this.cargarUsuarios();
       },
       error: (error) => {
         if (error.status === 403) {
