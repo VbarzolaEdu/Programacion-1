@@ -1,0 +1,10 @@
+¡Bienvenido/a {{ user.nombre }}!
+
+Gracias por registrarte en nuestra Rotisería.
+
+Tu cuenta ha sido creada exitosamente con el email: {{ user.email }}
+
+¡Esperamos que disfrutes de nuestros productos!
+
+Saludos,
+El equipo de Rotisería

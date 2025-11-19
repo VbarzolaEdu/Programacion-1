@@ -19,8 +19,8 @@ jwt = JWTManager()
 mailsender=Mail()
 
 def create_app():
-    # Inicializar flask
-    app = Flask(__name__)
+    # Inicializar flask con la carpeta de templates
+    app = Flask(__name__, template_folder='templates')
     # Cargamos variables de entorno
     load_dotenv()
 
@@ -71,8 +71,9 @@ def create_app():
     #Configuracion del mail
     app.config['MAIL_HOSTNAME'] = os.getenv('MAIL_HOSTNAME')
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
-    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
-    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
+    app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+    app.config['MAIL_USE_SSL'] = False
     app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
     app.config['FLASKY_MAIL_SENDER'] = os.getenv('FLASKY_MAIL_SENDER')

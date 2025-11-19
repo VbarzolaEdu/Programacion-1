@@ -47,9 +47,14 @@ def register():
             
             # Enviar mail de bienvenida (no fallar si el email falla)
             try:
+                print(f"Intentando enviar email a: {user.email}")
                 send = sendMail([user.email],"¡Bienvenido/a!",'register',user = user)
+                print(f"Email enviado correctamente: {send}")
             except Exception as mail_error:
                 # Continuar aunque el email falle
+                print(f"Error al enviar email: {str(mail_error)}")
+                import traceback
+                traceback.print_exc()
                 pass
             
             return jsonify(user.to_json()), 201
