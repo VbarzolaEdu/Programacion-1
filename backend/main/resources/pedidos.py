@@ -4,6 +4,7 @@ from .. import db
 from main.models import PedidoModel, ProductoModel
 from flask_jwt_extended import jwt_required
 from datetime import datetime
+from main.mail.functions import sendMail
 
 class Pedido(Resource):
     def get(self, id):
@@ -49,6 +50,25 @@ class Pedido(Resource):
 
             db.session.add(pedido)
             db.session.commit()
+            
+            # Enviar email de actualización de pedido
+            try:
+                if pedido.user and pedido.user.email:
+                    print(f"Enviando email de actualización de pedido a: {pedido.user.email}")
+                    sendMail(
+                        [pedido.user.email],
+                        f"Pedido #{pedido.id} actualizado",
+                        'pedido',
+                        user=pedido.user,
+                        pedido=pedido,
+                        es_nuevo=False
+                    )
+                    print("Email de actualización enviado correctamente")
+            except Exception as mail_error:
+                print(f"Error al enviar email: {str(mail_error)}")
+                import traceback
+                traceback.print_exc()
+            
             return pedido.to_json(), 200
         except Exception as e:
             db.session.rollback()
@@ -99,6 +119,24 @@ class Pedidos(Resource):
 
             db.session.add(pedido)
             db.session.commit()
+            
+            # Enviar email de confirmación de pedido
+            try:
+                if pedido.user and pedido.user.email:
+                    print(f"Enviando email de confirmación de pedido a: {pedido.user.email}")
+                    sendMail(
+                        [pedido.user.email],
+                        f"¡Pedido #{pedido.id} confirmado!",
+                        'pedido',
+                        user=pedido.user,
+                        pedido=pedido,
+                        es_nuevo=True
+                    )
+                    print("Email de confirmación enviado correctamente")
+            except Exception as mail_error:
+                print(f"Error al enviar email: {str(mail_error)}")
+                import traceback
+                traceback.print_exc()
             
             return pedido.to_json(), 201
             

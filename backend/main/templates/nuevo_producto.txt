@@ -1,0 +1,12 @@
+Hola {{ user.nombre }},
+
+¡Tenemos un nuevo producto disponible!
+
+{{ producto.nombre }}
+Precio: ${{ producto.precio }}
+{% if producto.descripcion %}Descripción: {{ producto.descripcion }}{% endif %}
+
+¡No te lo pierdas!
+
+Saludos,
+El equipo de Rotisería

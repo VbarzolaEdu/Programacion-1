@@ -1,10 +1,11 @@
 from flask_restful import Resource
 from flask import request
 from .. import db
-from main.models import ProductoModel, PedidoModel
+from main.models import ProductoModel, PedidoModel, UserModel
 from flask import jsonify
 from flask_jwt_extended import jwt_required
 from main.auth.decorators import role_required
+from main.mail.functions import sendMail
 
 class Producto(Resource):
     def get(self,id):
@@ -85,4 +86,30 @@ class Productos(Resource):
 
         db.session.add(producto)
         db.session.commit()
+        
+        # Enviar email a todos los usuarios notificando el nuevo producto
+        try:
+            usuarios = db.session.query(UserModel).all()
+            enviados = 0
+            
+            for usuario in usuarios:
+                try:
+                    print(f"Enviando email de nuevo producto a: {usuario.email}")
+                    sendMail(
+                        [usuario.email],
+                        f"¡Nuevo producto: {producto.nombre}!",
+                        'nuevo_producto',
+                        user=usuario,
+                        producto=producto
+                    )
+                    enviados += 1
+                except Exception as e:
+                    print(f"Error enviando a {usuario.email}: {str(e)}")
+            
+            print(f"Emails enviados: {enviados}/{len(usuarios)}")
+        except Exception as mail_error:
+            print(f"Error general al enviar emails: {str(mail_error)}")
+            import traceback
+            traceback.print_exc()
+        
         return producto.to_json(), 201

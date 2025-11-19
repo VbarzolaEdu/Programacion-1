@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #28a745;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content p {
+            margin: 15px 0;
+        }
+        .pedido-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        .pedido-info h2 {
+            margin-top: 0;
+            color: #28a745;
+            font-size: 20px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .info-value {
+            color: #333;
+        }
+        .estado-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .estado-pendiente {
+            background-color: #ffc107;
+            color: #856404;
+        }
+        .estado-en-preparacion {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .estado-listo {
+            background-color: #28a745;
+            color: white;
+        }
+        .estado-entregado {
+            background-color: #6c757d;
+            color: white;
+        }
+        .productos-list {
+            margin: 20px 0;
+        }
+        .producto-item {
+            padding: 12px;
+            margin: 8px 0;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .producto-nombre {
+            font-weight: 500;
+        }
+        .producto-precio {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .total {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {% if es_nuevo %}
+            <h1>¡Pedido Confirmado!</h1>
+            {% else %}
+            <h1>Pedido Actualizado</h1>
+            {% endif %}
+        </div>
+        <div class="content">
+            <p>Hola <strong>{{ user.nombre }}</strong>,</p>
+            {% if es_nuevo %}
+            <p>¡Tu pedido ha sido registrado exitosamente!</p>
+            {% else %}
+            <p>Tu pedido ha sido actualizado y queremos mantenerte informado.</p>
+            {% endif %}
+            
+            <div class="pedido-info">
+                <h2>Detalles del Pedido</h2>
+                <div class="info-row">
+                    <span class="info-label">Número de Pedido:</span>
+                    <span class="info-value">#{{ pedido.id }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estado:</span>
+                    <span class="info-value">
+                        <span class="estado-badge estado-{{ pedido.estado.lower().replace(' ', '-') }}">
+                            {{ pedido.estado }}
+                        </span>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Fecha:</span>
+                    <span class="info-value">{{ pedido.fecha.strftime('%d/%m/%Y %H:%M') }}</span>
+                </div>
+            </div>
+
+            {% if pedido.productos %}
+            <div class="productos-list">
+                <h3 style="color: #333;">Productos:</h3>
+                {% for producto in pedido.productos %}
+                <div class="producto-item">
+                    <span class="producto-nombre">{{ producto.nombre }}</span>
+                    <span class="producto-precio">${{ producto.precio }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="total">
+                Total: ${{ pedido.precio_final }}
+            </div>
+
+            <p style="margin-top: 30px;">Gracias por tu compra. ¡Esperamos que disfrutes de nuestros productos!</p>
+            <p>Saludos,<br>
+            <strong>El equipo de Rotisería</strong></p>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático, por favor no responder.</p>
+            <p>Si tienes alguna consulta, contáctanos directamente.</p>
+        </div>
+    </div>
+</body>
+</html>

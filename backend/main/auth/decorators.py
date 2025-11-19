@@ -3,7 +3,7 @@ from flask import jsonify
 from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from functools import wraps
 
-#Decorador para restringir el acceso a usuarios/animales por rol
+#Decorador para restringir el acceso a usuarios por rol
 def role_required(roles):
     def decorator(fn):
         @wraps(fn)

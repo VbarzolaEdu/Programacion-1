@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #ff6b35;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content p {
+            margin: 15px 0;
+        }
+        .email-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #ff6b35;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¡Nueva Notificación!</h1>
+        </div>
+        <div class="content">
+            <p>Hola <strong>{{ user.nombre }}</strong>,</p>
+            <p>Tienes una nueva notificación:</p>
+            <div class="email-box">
+                <strong>{{ notificacion.mensaje }}</strong>
+            </div>
+            <p>¡Esperamos que disfrutes de nuestros productos!</p>
+            <p>Saludos,<br>
+            <strong>El equipo de Rotisería</strong></p>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático, por favor no responder.</p>
+        </div>
+    </div>
+</body>
+</html>

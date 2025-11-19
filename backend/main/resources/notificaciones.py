@@ -2,46 +2,11 @@ from flask_restful import Resource
 from flask import request
 from .. import db
 from main.models.notificaciones import Notificacion
+from main.models import UserModel
 from flask import jsonify
+from main.mail.functions import sendMail
 
 
-
-# NOTIFICACIONES = {
-#     1:{'mensaje':'El pedido esta listo para ser retirado', 'Destinatario':'cliente@gmail.com'},
-#     2:{"mensaje":"El pedido esta en camino", "Destinatario":"cliente@gmail.com"},
-#     3:{'mensaje':'Nuevo pedido recibido', 'Destinatario':'admin@gmail.com'},
-#     4:{"mensaje":"Pago recibido","Destinatario":"admin@gmail.com"}
-
-# }
-    # def post(self):
-
-    #     notificaciones=NotificacionModel.from_json(request.get_json())
-    #     db.session.add(notificaciones)
-    #     db.session.commit()
-    #     return notificaciones.to_json(), 201
-
-
-
-        # data = request.get_json()
-        
-        # #verificacion de rol
-        # rol_emisor = data.get('rol_emisor')
-        # if rol_emisor not in ['ADMIN', 'ENCARGADO']:
-        #     return {'error': 'Rol no autorizado para enviar notificaciones'}, 403  
-
-        # #verifico los campos
-        # if not all(key in data for key in ['mensaje', 'destinatario']):
-        #     return {'error': 'Faltan campos obligatorios (mensaje, destinatario)'}, 400
-
-        # #agrego
-        # id = int(max(NOTIFICACIONES.keys())) + 1 if NOTIFICACIONES else 1
-        # NOTIFICACIONES[id] = {
-        #     'mensaje': data['mensaje'],
-        #     'destinatario': data['destinatario'],
-        #     'rol_emisor': rol_emisor
-        # }
-        # return NOTIFICACIONES[id], 201  
-# resources/notifiaciones.py
 
 
 class Notificaciones(Resource):
@@ -54,8 +19,8 @@ class Notificaciones(Resource):
         # Filtrado (por id_usuario, id_pedido, mensaje)
         if 'id_usuario' in args:
             query = query.filter(Notificacion.id_usuario == int(args['id_usuario']))
-        if 'id_pedido' in args:
-            query = query.filter(Notificacion.id_pedido == int(args['id_pedido']))
+        # if 'id_pedido' in args:
+        #     query = query.filter(Notificacion.id_pedido == int(args['id_pedido']))
         if 'mensaje' in args:
             query = query.filter(Notificacion.mensaje.like(f"%{args['mensaje']}%"))
 
@@ -71,7 +36,61 @@ class Notificaciones(Resource):
         return jsonify([notificacion.to_json() for notificacion in notificaciones])
 
     def post(self):
-        notificaciones = Notificacion.from_json(request.get_json())
-        db.session.add(notificaciones)
-        db.session.commit()
-        return notificaciones.to_json(), 201
+        data = request.get_json()
+        mensaje = data.get('mensaje')
+        
+        if not mensaje:
+            return {'error': 'El mensaje es obligatorio'}, 400
+        
+        # Obtener todos los usuarios
+        usuarios = db.session.query(UserModel).all()
+        
+        if not usuarios:
+            return {'error': 'No hay usuarios registrados'}, 404
+        
+        enviados = 0
+        errores = 0
+        notificaciones_creadas = []
+        
+        # Crear notificación y enviar email a cada usuario
+        for usuario in usuarios:
+            try:
+                # Crear notificación para este usuario
+                notif = Notificacion(
+                    id_usuario=usuario.id,
+                    mensaje=mensaje
+                )
+                db.session.add(notif)
+                notificaciones_creadas.append(notif)
+                
+                # Enviar email
+                print(f"Enviando email a: {usuario.email}")
+                sendMail(
+                    [usuario.email],
+                    "Nueva Notificación!",
+                    'notification',
+                    user=usuario,
+                    notificacion=notif
+                )
+                enviados += 1
+                
+            except Exception as e:
+                errores += 1
+                print(f"Error con usuario {usuario.email}: {str(e)}")
+                import traceback
+                traceback.print_exc()
+        
+        # Guardar todas las notificaciones
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return {'error': f'Error al guardar notificaciones: {str(e)}'}, 500
+        
+        return {
+            'mensaje': 'Notificación enviada a todos los usuarios',
+            'total_usuarios': len(usuarios),
+            'emails_enviados': enviados,
+            'emails_fallidos': errores,
+            'notificaciones_creadas': len(notificaciones_creadas)
+        }, 201

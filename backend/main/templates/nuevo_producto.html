@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .producto-card {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .producto-nombre {
+            font-size: 24px;
+            color: #4CAF50;
+            margin: 0 0 15px 0;
+            font-weight: bold;
+        }
+        .producto-precio {
+            font-size: 32px;
+            color: #2c3e50;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .producto-descripcion {
+            color: #666;
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 ¡Nuevo Producto!</h1>
+        </div>
+        <div class="content">
+            <p>Hola <strong>{{ user.nombre }}</strong>,</p>
+            <p>¡Tenemos excelentes noticias! Acabamos de agregar un nuevo producto a nuestro menú:</p>
+            
+            <div class="producto-card">
+                <h2 class="producto-nombre">{{ producto.nombre }}</h2>
+                <div class="producto-precio">${{ producto.precio }}</div>
+                {% if producto.categoria %}
+                <span class="badge">{{ producto.categoria }}</span>
+                {% endif %}
+                {% if producto.descripcion %}
+                <p class="producto-descripcion">{{ producto.descripcion }}</p>
+                {% endif %}
+            </div>
+
+            <p>¡No te lo pierdas! Haz tu pedido ahora.</p>
+            <p>Saludos,<br>
+            <strong>El equipo de Rotisería</strong></p>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático, por favor no responder.</p>
+        </div>
+    </div>
+</body>
+</html>

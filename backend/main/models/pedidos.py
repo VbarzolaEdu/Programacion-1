@@ -16,7 +16,6 @@ class Pedido(db.Model):
     estado = db.Column(db.String(50), nullable=False)  # Cambiado a String para almacenar el estado del pedido
 
     user = db.relationship('User', back_populates='pedidos')
-    notificaciones = db.relationship('Notificacion', back_populates='pedido')
     productos = db.relationship('Producto', secondary=pedido_producto,backref=db.backref('pedidos', lazy='dynamic'))  # Cambiado a 'productos' para evitar confusión
     # back_populates='pedidos'
 

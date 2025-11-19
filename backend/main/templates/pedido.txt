@@ -1,0 +1,25 @@
+Hola {{ user.nombre }},
+
+{% if es_nuevo %}
+¡Tu pedido ha sido registrado exitosamente!
+{% else %}
+Tu pedido ha sido actualizado.
+{% endif %}
+
+Detalles del Pedido:
+- Número de Pedido: #{{ pedido.id }}
+- Estado: {{ pedido.estado }}
+- Fecha: {{ pedido.fecha.strftime('%d/%m/%Y %H:%M') }}
+- Precio Total: ${{ pedido.precio_final }}
+
+{% if pedido.productos %}
+Productos:
+{% for producto in pedido.productos %}
+- {{ producto.nombre }} - ${{ producto.precio }}
+{% endfor %}
+{% endif %}
+
+Gracias por tu compra.
+
+Saludos,
+El equipo de Rotisería

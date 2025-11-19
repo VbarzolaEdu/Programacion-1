@@ -1,0 +1,6 @@
+Hola {{ user.nombre }},
+
+{{ notificacion.mensaje }}
+
+Saludos,
+El equipo de Rotisería
