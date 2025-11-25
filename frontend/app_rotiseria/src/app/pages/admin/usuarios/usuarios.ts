@@ -99,10 +99,31 @@ export class Usuarios {
         } else if (error.status === 404) {
           alert('Usuario no encontrado');
         } else {
-          alert('Error al eliminar el usuario. Intenta nuevamente.');
+          alert('Error al eliminar el usuario');
         }
       }
     });
   }
 
+  /**
+   * Cambia el rol de un usuario
+   */
+  cambiarRol(usuario: any, nuevoRol: string) {
+    if (confirm(`¿Estás seguro de cambiar el rol de ${usuario.nombre} ${usuario.apellidos} a "${nuevoRol}"?`)) {
+      this.UsuarioService.updateUsuario(usuario.id, { rol: nuevoRol }).subscribe({
+        next: (response) => {
+          alert(`✅ Rol actualizado correctamente a "${nuevoRol}"`);
+          // Recargar la lista después de actualizar
+          this.cargarUsuarios();
+        },
+        error: (error) => {
+          if (error.status === 403) {
+            alert('No tienes permisos para cambiar el rol de este usuario');
+          } else {
+            alert('Error al cambiar el rol del usuario');
+          }
+        }
+      });
+    }
+  }
 }

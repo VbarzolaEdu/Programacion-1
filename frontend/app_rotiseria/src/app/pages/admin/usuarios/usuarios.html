@@ -26,10 +26,44 @@
         [nombre]="u.nombre + ' ' + u.apellidos"
         [email]="u.email"
         [rol]="u.rol">
-        <!-- Botón específico del admin -->
-        <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u)">
-          <i class="bi bi-trash-fill"></i> Eliminar
-        </button>
+        <!-- Botones específicos del admin -->
+        <div class="d-flex gap-2 flex-wrap">
+          <!-- Botones para cambiar rol -->
+          <div class="btn-group btn-group-sm" role="group">
+            <button 
+              type="button" 
+              class="btn btn-sm"
+              [class.btn-primary]="u.rol === 'cliente'"
+              [class.btn-outline-primary]="u.rol !== 'cliente'"
+              (click)="cambiarRol(u, 'cliente')"
+              title="Cambiar a Cliente">
+              <i class="bi bi-person"></i> Cliente
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-sm"
+              [class.btn-warning]="u.rol === 'empleado'"
+              [class.btn-outline-warning]="u.rol !== 'empleado'"
+              (click)="cambiarRol(u, 'empleado')"
+              title="Cambiar a Empleado">
+              <i class="bi bi-person-workspace"></i> Empleado
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-sm"
+              [class.btn-success]="u.rol === 'admin'"
+              [class.btn-outline-success]="u.rol !== 'admin'"
+              (click)="cambiarRol(u, 'admin')"
+              title="Cambiar a Admin">
+              <i class="bi bi-person-fill-gear"></i> Admin
+            </button>
+          </div>
+          
+          <!-- Botón eliminar -->
+          <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u)">
+            <i class="bi bi-trash-fill"></i> Eliminar
+          </button>
+        </div>
       </app-card-usuario>
     </div>
   </div>
