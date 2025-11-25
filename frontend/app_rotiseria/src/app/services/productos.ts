@@ -13,12 +13,12 @@ export class Productos {
   /**
    * Obtiene todos los productos
    */
-  getProductos(): Observable<any> {
+  getProductos(params?: any): Observable<any> {
     let headers = new HttpHeaders({
       'content-type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     });
-    return this.http.get(this.url + '/productos', { headers });
+    return this.http.get(this.url + '/productos', { headers, params });
   }
 
   /**

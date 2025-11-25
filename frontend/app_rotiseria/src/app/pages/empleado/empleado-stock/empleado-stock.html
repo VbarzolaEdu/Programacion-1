@@ -4,6 +4,35 @@
 
 <div class="container mt-3 mb-5 pb-5">
   
+  <!-- Barra de búsqueda -->
+  <app-search 
+    placeholder="Buscar productos por nombre o categoría..."
+    [(terminoBusqueda)]="terminoBusqueda"
+    (busquedaRealizada)="onBusqueda($event)">
+  </app-search>
+
+  <!-- Filtros por disponibilidad -->
+  <div class="mb-4">
+    <button 
+      class="btn btn-sm me-2"
+      [ngClass]="filtroDisponibilidad === 'todos' ? 'btn-primary' : 'btn-outline-secondary'"
+      (click)="cambiarFiltroDisponibilidad('todos')">
+      <i class="bi bi-list-ul"></i> Todos
+    </button>
+    <button 
+      class="btn btn-sm me-2"
+      [ngClass]="filtroDisponibilidad === 'disponible' ? 'btn-success' : 'btn-outline-success'"
+      (click)="cambiarFiltroDisponibilidad('disponible')">
+      <i class="bi bi-check-circle"></i> Disponible
+    </button>
+    <button 
+      class="btn btn-sm"
+      [ngClass]="filtroDisponibilidad === 'no disponible' ? 'btn-danger' : 'btn-outline-danger'"
+      (click)="cambiarFiltroDisponibilidad('no disponible')">
+      <i class="bi bi-x-circle"></i> No disponible
+    </button>
+  </div>
+
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">

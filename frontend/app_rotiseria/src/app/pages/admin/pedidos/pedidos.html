@@ -105,28 +105,16 @@
     </div>
 
     <!-- Filtro de fecha (oculto en modo edición) -->
-    <div *ngIf="!modoEdicion" class="input-group mb-4">
-      <span class="input-group-text">
-        <i class="bi bi-calendar3"></i>
-      </span>
-      <input 
-        type="date" 
-        class="form-control" 
-        [(ngModel)]="fechaFiltro"
-        placeholder="Filtrar por fecha">
-      <button 
-        class="btn btn-primary" 
-        (click)="filtrarPorFecha()">
-        <i class="bi bi-funnel"></i> Filtrar
-      </button>
-      <button 
-        *ngIf="fechaFiltro"
-        class="btn btn-outline-danger" 
-        (click)="fechaFiltro = ''; filtrarPorFecha()"
-        title="Limpiar filtro">
-        <i class="bi bi-x-circle"></i> Limpiar
-      </button>
-    </div>
+    <app-date-search 
+      [ocultarFiltro]="modoEdicion"
+      (fechaSeleccionada)="filtrarPorFecha($event)">
+    </app-date-search>
+
+    <!-- Filtro de estado (oculto en modo edición) -->
+    <app-estado-filter
+      [ocultarFiltro]="modoEdicion"
+      (estadoSeleccionado)="filtrarPorEstado($event)">
+    </app-estado-filter>
 
     <!-- Lista de Pedidos (oculta en modo edición) -->
     <div *ngIf="!modoEdicion && pedidosFiltrados.length > 0">

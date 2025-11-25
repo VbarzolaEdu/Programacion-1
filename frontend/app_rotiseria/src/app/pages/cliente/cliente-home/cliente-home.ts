@@ -5,43 +5,87 @@ import { CardProducto } from '../../../components/shared/producto/card-producto'
 import { CartService } from '../../../services/cart.service';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
+import { Search } from '../../../components/shared/search/search';
 import { Auth } from '../../../services/auth';
+import { User } from '../../../services/user';
 import { Productos } from '../../../services/productos';
 import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-cliente-home',
   standalone: true,
-  imports: [CommonModule, Navbar, CardProducto, Header], 
+  imports: [CommonModule, Navbar, CardProducto, Header, Search], 
   templateUrl: './cliente-home.html',
   styleUrls: ['./cliente-home.css']
 })
 export class ClienteHome {
  private authService = inject(Auth);
   userRole: string | null = null;
+  userEstado: string | null = null;
   
   cargando: boolean = false;
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
+  terminoBusqueda: string = '';
 
   constructor(
     private router: Router, 
     private cart: CartService,
-    private productoService: Productos
+    private productoService: Productos,
+    private userService: User
   ) {
     this.userRole = this.authService.getUserRole();
   }
 
   ngOnInit() {
+    this.cargarEstadoUsuario();
     this.cargarProductos();
+  }
+
+  /**
+   * Carga el estado actual del usuario desde el backend
+   */
+  cargarEstadoUsuario(): void {
+    const userId = this.authService.getCurrentUserId();
+    if (userId) {
+      this.userService.getUsuario(userId).subscribe({
+        next: (response: any) => {
+          this.userEstado = response.estado || null;
+        },
+        error: (error) => {
+          // Si hay error, usar el estado del token como fallback
+          this.userEstado = this.authService.getUserEstado();
+        }
+      });
+    } else {
+      // Si no hay userId, usar el estado del token
+      this.userEstado = this.authService.getUserEstado();
+    }
+  }
+
+  /**
+   * Verifica si el usuario puede agregar productos al carrito
+   * Solo pueden agregar usuarios con estado 'activo'
+   */
+  puedeAgregar(): boolean {
+    // Si el estado es bloqueado o pendiente, no puede agregar
+    return this.userEstado === 'activo';
   }
 
   /**
    * Carga la lista de productos desde el backend
    */
-  cargarProductos() {
+  cargarProductos(nombre?: string) {
     this.cargando = true;
-    this.productoService.getProductos().subscribe({
+    
+    const params: any = {};
+    
+    // Agregar filtro de nombre si existe
+    if (nombre && nombre.trim()) {
+      params.nombre = nombre.trim();
+    }
+    
+    this.productoService.getProductos(params).subscribe({
       next: (response: any) => {
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
@@ -70,6 +114,14 @@ export class ClienteHome {
         alert('Error al cargar productos. Verifica tu conexión.');
       }
     });
+  }
+
+  /**
+   * Maneja la búsqueda desde el componente search
+   */
+  onBusqueda(termino: string): void {
+    this.terminoBusqueda = termino;
+    this.cargarProductos(termino);
   }
 
   agregarAlCarrito(p: any) {

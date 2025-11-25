@@ -6,6 +6,15 @@
 <!-- Lista de Pedidos -->
 <div class="container my-4">
   
+  <!-- Filtros de búsqueda -->
+  <app-date-search 
+    (fechaSeleccionada)="filtrarPorFecha($event)">
+  </app-date-search>
+
+  <app-estado-filter
+    (estadoSeleccionado)="filtrarPorEstado($event)">
+  </app-estado-filter>
+  
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">

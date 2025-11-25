@@ -5,17 +5,19 @@ import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
 import { Pagination } from '../../../components/shared/pagination/pagination';
+import { DateSearch } from '../../../components/shared/date-search/date-search';
 import { Pedidos as PedidosService } from '../../../services/pedidos';
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-pedidos',
   standalone: true,
-  imports: [CommonModule, Navbar, Header, CardPedido, Pagination],
+  imports: [CommonModule, Navbar, Header, CardPedido, Pagination, DateSearch],
   templateUrl: './pedidos.html',
   styleUrls: ['./pedidos.css']
 })
 export class Pedidos {
+  fechaFiltro: string = '';
   cargando: boolean = false;
   pedidosFiltrados: any[] = [];
   
@@ -38,7 +40,7 @@ export class Pedidos {
   /**
    * Carga los pedidos del cliente actual con paginación
    */
-  cargarPedidosDelCliente(page: number = 1) {
+  cargarPedidosDelCliente(page: number = 1, fecha?: string) {
     this.cargando = true;
     this.currentPage = page;
     const userId = this.authService.getCurrentUserId();
@@ -49,12 +51,19 @@ export class Pedidos {
       return;
     }
 
-    // Filtrar pedidos por usuario en el backend con paginación
-    this.pedidoService.getPedidos({ 
+    const params: any = { 
       id_user: userId,
       page: page,
       per_page: this.itemsPerPage
-    }).subscribe({
+    };
+
+    // Agregar filtro de fecha si existe
+    if (fecha) {
+      params.fecha = fecha;
+    }
+
+    // Filtrar pedidos por usuario en el backend con paginación
+    this.pedidoService.getPedidos(params).subscribe({
       next: (response: any) => {
         // Extraer datos de paginación
         this.totalPages = response.pages || 1;
@@ -89,8 +98,16 @@ export class Pedidos {
    * Maneja el cambio de página
    */
   onPageChange(page: number) {
-    this.cargarPedidosDelCliente(page);
+    this.cargarPedidosDelCliente(page, this.fechaFiltro);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * Filtra pedidos cuando cambia la fecha
+   */
+  filtrarPorFecha(fecha: string): void {
+    this.fechaFiltro = fecha;
+    this.cargarPedidosDelCliente(1, fecha);
   }
 
   /**

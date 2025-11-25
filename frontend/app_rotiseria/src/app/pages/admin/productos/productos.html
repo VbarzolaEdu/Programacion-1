@@ -4,6 +4,15 @@
 
 <div class="container mt-3 mb-5 pb-5">
   
+  <!-- Barra de búsqueda (oculta en modo edición y agregar) -->
+  <div *ngIf="!cargando && !modoEdicion && !modoAgregar">
+    <app-search 
+      placeholder="Buscar productos por nombre o categoría..."
+      [(terminoBusqueda)]="terminoBusqueda"
+      (busquedaRealizada)="onBusqueda($event)">
+    </app-search>
+  </div>
+
   <!-- Botón Agregar Producto -->
   <div *ngIf="!cargando && !modoEdicion && !modoAgregar" class="mb-3">
     <button class="btn btn-primary" (click)="activarModoAgregar()">

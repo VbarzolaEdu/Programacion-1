@@ -35,7 +35,6 @@ export class Search {
    */
   onInputChange() {
     this.terminoBusquedaChange.emit(this.terminoBusqueda);
-    this.busquedaRealizada.emit(this.terminoBusqueda);
   }
   
   /**

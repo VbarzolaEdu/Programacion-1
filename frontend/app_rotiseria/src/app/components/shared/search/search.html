@@ -4,7 +4,8 @@
     class="form-control" 
     [placeholder]="placeholder"
     [(ngModel)]="terminoBusqueda"
-    (input)="onInputChange()">
+    (input)="onInputChange()"
+    (keyup.enter)="buscar()">
   <button class="btn btn-outline-secondary" (click)="buscar()">
     <i class="bi bi-search"></i>
   </button>

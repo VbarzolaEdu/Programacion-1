@@ -98,6 +98,9 @@ class Users(Resource):
         # Filtrado por rol
         if 'rol' in args:
             query = query.filter(UserModel.rol == args['rol'])
+        
+        if 'estado' in args:
+            query = query.filter(UserModel.estado == args['estado'])
 
         # Paginación
         limit = int(args.get('limit', 10))  # Límite de resultados (por defecto 10)

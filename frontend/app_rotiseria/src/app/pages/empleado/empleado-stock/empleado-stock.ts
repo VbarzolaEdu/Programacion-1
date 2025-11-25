@@ -5,12 +5,13 @@ import { Router } from '@angular/router';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
+import { Search } from '../../../components/shared/search/search';
 import { Productos as ProductosService } from '../../../services/productos';
 
 @Component({
   selector: 'app-empleado-stock',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, Header, CardProducto],
+  imports: [CommonModule, FormsModule, Navbar, Header, CardProducto, Search],
   templateUrl: './empleado-stock.html',
   styleUrls: ['./empleado-stock.css']
 })
@@ -19,6 +20,8 @@ export class EmpleadoStock {
   cargando: boolean = false;
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
+  terminoBusqueda: string = '';
+  filtroDisponibilidad: string = 'todos'; // 'todos', 'disponible', 'no disponible'
 
   constructor(
     private router: Router,
@@ -32,9 +35,22 @@ export class EmpleadoStock {
   /**
    * Carga la lista de productos desde el backend
    */
-  cargarProductos() {
+  cargarProductos(nombre?: string, disponibilidad?: string) {
     this.cargando = true;
-    this.productoService.getProductos().subscribe({
+
+    const params: any = {};
+
+    // Agregar filtro de nombre si existe (buscará en nombre y categoría)
+    if (nombre && nombre.trim()) {
+      params.nombre = nombre.trim();
+    }
+
+    // Agregar filtro de disponibilidad si existe
+    if (disponibilidad && disponibilidad !== 'todos') {
+      params.disponibilidad = disponibilidad;
+    }
+
+    this.productoService.getProductos(params).subscribe({
       next: (response: any) => {
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
@@ -63,6 +79,22 @@ export class EmpleadoStock {
         alert('Error al cargar productos. Verifica tu conexión.');
       }
     });
+  }
+
+  /**
+   * Maneja la búsqueda desde el componente search
+   */
+  onBusqueda(termino: string): void {
+    this.terminoBusqueda = termino;
+    this.cargarProductos(termino, this.filtroDisponibilidad);
+  }
+
+  /**
+   * Cambia el filtro de disponibilidad
+   */
+  cambiarFiltroDisponibilidad(filtro: string): void {
+    this.filtroDisponibilidad = filtro;
+    this.cargarProductos(this.terminoBusqueda, filtro);
   }
 
   /**

@@ -5,15 +5,19 @@ import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
 import { Pagination } from '../../../components/shared/pagination/pagination';
+import { DateSearch } from '../../../components/shared/date-search/date-search';
+import { EstadoFilter } from '../../../components/shared/estado-filter/estado-filter';
 import { Pedidos } from '../../../services/pedidos';
 
 @Component({
   selector: 'app-estado-p',
-  imports: [RouterModule, CommonModule, Navbar, Header, CardPedido, Pagination],
+  imports: [RouterModule, CommonModule, Navbar, Header, CardPedido, Pagination, DateSearch, EstadoFilter],
   templateUrl: './estado-p.html',
   styleUrl: './estado-p.css'
 })
 export class EstadoP {
+  fechaFiltro: string = '';
+  estadoFiltro: string = 'todos';
   cargando: boolean = false;
   pedidos: any[] = [];
   pedidosFiltrados: any[] = [];
@@ -33,11 +37,26 @@ export class EstadoP {
   /**
    * Carga todos los pedidos desde el backend con paginación
    */
-  cargarTodosLosPedidos(page: number = 1) {
+  cargarTodosLosPedidos(page: number = 1, fecha?: string, estado?: string) {
     this.cargando = true;
     this.currentPage = page;
     
-    this.pedidosService.getPedidos({ page: page, per_page: this.itemsPerPage }).subscribe({
+    const params: any = { 
+      page: page, 
+      per_page: this.itemsPerPage 
+    };
+
+    // Agregar filtro de fecha si existe
+    if (fecha) {
+      params.fecha = fecha;
+    }
+
+    // Agregar filtro de estado si existe y no es 'todos'
+    if (estado && estado !== 'todos') {
+      params.estado = estado;
+    }
+    
+    this.pedidosService.getPedidos(params).subscribe({
       next: (response: any) => {
         // Extraer datos de paginación
         this.totalPages = response.pages || 1;
@@ -76,9 +95,25 @@ export class EstadoP {
    * Maneja el cambio de página
    */
   onPageChange(page: number) {
-    this.cargarTodosLosPedidos(page);
+    this.cargarTodosLosPedidos(page, this.fechaFiltro, this.estadoFiltro);
     // Scroll hacia arriba para mejor UX
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * Filtra pedidos cuando cambia la fecha
+   */
+  filtrarPorFecha(fecha: string): void {
+    this.fechaFiltro = fecha;
+    this.cargarTodosLosPedidos(1, fecha, this.estadoFiltro);
+  }
+
+  /**
+   * Filtra pedidos cuando cambia el estado
+   */
+  filtrarPorEstado(estado: string): void {
+    this.estadoFiltro = estado;
+    this.cargarTodosLosPedidos(1, this.fechaFiltro, estado);
   }
 
   cambiarEstado(pedido: any, nuevoEstado: string): void {

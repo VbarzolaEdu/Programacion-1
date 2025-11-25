@@ -20,6 +20,10 @@ export class GDU {
   cargando: boolean = false;
   terminoBusqueda: string = '';
   filtroActivo: string = 'todos'; // 'todos', 'pendientes', 'bloqueados', 'validados'
+  
+  // Configuración de paginación
+  paginaActual: number = 1;
+  limite: number = 100;
 
   constructor(private UsuarioService: User) {}
 
@@ -28,14 +32,36 @@ export class GDU {
   }
 
   /**
-   * Carga la lista de usuarios desde el backend
+   * Carga la lista de usuarios desde el backend con filtros
    */
   cargarUsuarios() {
     this.cargando = true;
-    this.UsuarioService.getUsuarios().subscribe({
+    
+    // Preparar parámetros de filtrado
+    const params: any = {
+      page: this.paginaActual,
+      limit: this.limite
+    };
+    
+    // Si hay término de búsqueda, intentar filtrar por nombre, apellidos o email
+    if (this.terminoBusqueda.trim()) {
+      const termino = this.terminoBusqueda.trim();
+      
+      // Si el término parece un email (contiene @), filtrar por email
+      if (termino.includes('@')) {
+        params.email = termino;
+      } else {
+        // Si no, filtrar por nombre Y apellidos simultáneamente
+        // El backend usa LIKE, así que busca en ambos campos
+        params.nombre = termino;
+        params.apellidos = termino;
+      }
+    }
+    
+    this.UsuarioService.getUsuarios(params).subscribe({
       next: (response: any) => {
         this.arrayusuarios = response;
-        this.aplicarFiltros();
+        this.aplicarFiltroEstado();
         this.cargando = false;
       },
       error: (error) => {
@@ -46,9 +72,9 @@ export class GDU {
   }
 
   /**
-   * Aplica filtros de búsqueda y estado
+   * Aplica filtro por estado (local, después de obtener del backend)
    */
-  aplicarFiltros() {
+  aplicarFiltroEstado() {
     let resultado = [...this.arrayusuarios];
 
     // Filtro por estado
@@ -60,17 +86,16 @@ export class GDU {
       resultado = resultado.filter(u => u.estado === 'validado' || u.estado === 'Validado' || u.estado === 'activo' || u.estado === 'Activo');
     }
 
-    // Filtro por búsqueda (nombre, email)
-    if (this.terminoBusqueda.trim()) {
-      const termino = this.terminoBusqueda.toLowerCase();
-      resultado = resultado.filter(u => 
-        u.nombre.toLowerCase().includes(termino) ||
-        u.apellidos.toLowerCase().includes(termino) ||
-        u.email.toLowerCase().includes(termino)
-      );
-    }
-
     this.usuariosFiltrados = resultado;
+  }
+
+  /**
+   * Aplica filtros de búsqueda (llamando al backend)
+   */
+  aplicarFiltros() {
+    // Reiniciar a la primera página cuando se busca
+    this.paginaActual = 1;
+    this.cargarUsuarios();
   }
 
   /**
@@ -78,7 +103,7 @@ export class GDU {
    */
   cambiarFiltro(filtro: string) {
     this.filtroActivo = filtro;
-    this.aplicarFiltros();
+    this.aplicarFiltroEstado();
   }
 
   validarUsuario(usuario: any) {
@@ -91,7 +116,7 @@ export class GDU {
       next: (response) => {
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} validado correctamente`);
         usuario.estado = 'activo';
-        this.aplicarFiltros();
+        this.aplicarFiltroEstado();
       },
       error: (error) => {
         alert('Error al validar el usuario. Intenta nuevamente.');
@@ -112,7 +137,7 @@ export class GDU {
       next: (response) => {
         alert(`Usuario ${usuario.nombre} ${usuario.apellidos} bloqueado`);
         usuario.estado = 'bloqueado';
-        this.aplicarFiltros();
+        this.aplicarFiltroEstado();
       },
       error: (error) => {
         alert('Error al bloquear el usuario. Intenta nuevamente.');

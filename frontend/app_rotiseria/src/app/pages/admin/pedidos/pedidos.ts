@@ -6,17 +6,20 @@ import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
 import { Pagination } from '../../../components/shared/pagination/pagination';
+import { DateSearch } from '../../../components/shared/date-search/date-search';
+import { EstadoFilter } from '../../../components/shared/estado-filter/estado-filter';
 import { Pedidos } from '../../../services/pedidos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pedidos',
-  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido, Pagination],
+  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido, Pagination, DateSearch, EstadoFilter],
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.css'
 })
 export class PedidosAdmin {
   fechaFiltro: string = '';
+  estadoFiltro: string = 'todos';
   cargando: boolean = false;
   arraypedidos: any[] = [];
   pedidosFiltrados: any[] = [];
@@ -44,7 +47,7 @@ export class PedidosAdmin {
   /**
    * Carga la lista de pedidos desde el backend con paginación
    */
-  cargarPedidos(page: number = 1) {
+  cargarPedidos(page: number = 1, fecha?: string, estado?: string) {
     this.cargando = true;
     this.currentPage = page;
 
@@ -54,8 +57,13 @@ export class PedidosAdmin {
     };
 
     // Agregar filtro de fecha si existe
-    if (this.fechaFiltro) {
-      params.fecha = this.fechaFiltro;
+    if (fecha) {
+      params.fecha = fecha;
+    }
+
+    // Agregar filtro de estado si existe y no es 'todos'
+    if (estado && estado !== 'todos') {
+      params.estado = estado;
     }
 
     this.pedidoService.getPedidos(params).subscribe({
@@ -96,16 +104,26 @@ export class PedidosAdmin {
   /**
    * Filtra pedidos cuando cambia la fecha
    */
-  filtrarPorFecha(): void {
+  filtrarPorFecha(fecha: string): void {
+    this.fechaFiltro = fecha;
     // Recargar desde la primera página con el filtro aplicado
-    this.cargarPedidos(1);
+    this.cargarPedidos(1, fecha, this.estadoFiltro);
+  }
+
+  /**
+   * Filtra pedidos cuando cambia el estado
+   */
+  filtrarPorEstado(estado: string): void {
+    this.estadoFiltro = estado;
+    // Recargar desde la primera página con el filtro aplicado
+    this.cargarPedidos(1, this.fechaFiltro, estado);
   }
 
   /**
    * Maneja el cambio de página
    */
   onPageChange(page: number) {
-    this.cargarPedidos(page);
+    this.cargarPedidos(page, this.fechaFiltro, this.estadoFiltro);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { CardProducto } from '../../../components/shared/producto/card-producto';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
+import { Search } from '../../../components/shared/search/search';
 import { Productos as ProductosService } from '../../../services/productos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header],
+  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header, Search],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -18,6 +19,7 @@ export class Productos {
   cargando: boolean = false;
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
+  terminoBusqueda: string = '';
 
   // Modo edición
   productoEditando: any = null;
@@ -40,9 +42,17 @@ export class Productos {
   /**
    * Carga la lista de productos desde el backend
    */
-  cargarProductos() {
+  cargarProductos(nombre?: string) {
     this.cargando = true;
-    this.productoService.getProductos().subscribe({
+
+    const params: any = {};
+
+    // Agregar filtro de nombre si existe
+    if (nombre && nombre.trim()) {
+      params.nombre = nombre.trim();
+    }
+
+    this.productoService.getProductos(params).subscribe({
       next: (response: any) => {
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
@@ -70,6 +80,14 @@ export class Productos {
         alert('Error al cargar productos. Verifica tu conexión.');
       }
     });
+  }
+
+  /**
+   * Maneja la búsqueda desde el componente search
+   */
+  onBusqueda(termino: string): void {
+    this.terminoBusqueda = termino;
+    this.cargarProductos(termino);
   }
 
   /**

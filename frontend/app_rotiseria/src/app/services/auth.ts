@@ -59,6 +59,23 @@ export class Auth {
   }
 
   /**
+   * Obtiene el estado del usuario actual desde el token
+   */
+  getUserEstado(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.estado || null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
    * Verifica si el usuario está autenticado
    */
   isAuthenticated(): boolean {

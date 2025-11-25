@@ -1,0 +1,35 @@
+<!-- Botones de filtro por estado -->
+<div *ngIf="!ocultarFiltro" class="btn-group mb-4 w-100" role="group">
+  <button 
+    type="button" 
+    class="btn"
+    [class.btn-primary]="estadoActivo === 'todos'"
+    [class.btn-outline-primary]="estadoActivo !== 'todos'"
+    (click)="filtrarPorEstado('todos')">
+    <i class="bi bi-list-ul"></i> Todos
+  </button>
+  <button 
+    type="button" 
+    class="btn"
+    [class.btn-warning]="estadoActivo === 'En preparación'"
+    [class.btn-outline-warning]="estadoActivo !== 'En preparación'"
+    (click)="filtrarPorEstado('En preparación')">
+    <i class="bi bi-hourglass-split"></i> En preparación
+  </button>
+  <button 
+    type="button" 
+    class="btn"
+    [class.btn-success]="estadoActivo === 'Listo'"
+    [class.btn-outline-success]="estadoActivo !== 'Listo'"
+    (click)="filtrarPorEstado('Listo')">
+    <i class="bi bi-check-circle"></i> Listo
+  </button>
+  <button 
+    type="button" 
+    class="btn"
+    [class.btn-danger]="estadoActivo === 'Rechazado'"
+    [class.btn-outline-danger]="estadoActivo !== 'Rechazado'"
+    (click)="filtrarPorEstado('Rechazado')">
+    <i class="bi bi-x-circle"></i> Rechazado
+  </button>
+</div>

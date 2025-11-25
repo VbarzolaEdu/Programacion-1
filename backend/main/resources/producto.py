@@ -39,19 +39,13 @@ class Productos(Resource):
         # Filtros
         nombre = request.args.get('nombre')
         if nombre:
-            query = query.filter(ProductoModel.nombre.ilike(f'%{nombre}%'))
-
-        precio_min = request.args.get('precio_min')
-        if precio_min:
-            query = query.filter(ProductoModel.precio >= float(precio_min))
-
-        precio_max = request.args.get('precio_max')
-        if precio_max:
-            query = query.filter(ProductoModel.precio <= float(precio_max))
-
-        categoria = request.args.get('categoria')
-        if categoria:
-            query = query.filter(ProductoModel.categoria.ilike(f'%{categoria}%'))
+            # Buscar en nombre O categoría
+            query = query.filter(
+                db.or_(
+                    ProductoModel.nombre.ilike(f'%{nombre}%'),
+                    ProductoModel.categoria.ilike(f'%{nombre}%')
+                )
+            )
 
         disponibilidad = request.args.get('disponibilidad')
         if disponibilidad:

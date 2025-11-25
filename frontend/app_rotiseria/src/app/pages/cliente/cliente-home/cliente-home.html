@@ -4,6 +4,13 @@
 
 <div class="container mt-3 mb-5 pb-5">
   
+  <!-- Barra de búsqueda -->
+  <app-search 
+    placeholder="Buscar productos por nombre o categoria..."
+    [(terminoBusqueda)]="terminoBusqueda"
+    (busquedaRealizada)="onBusqueda($event)">
+  </app-search>
+
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">
@@ -24,9 +31,20 @@
         
         <!-- Botones exclusivos para clientes -->
         <ng-container *ngIf="userRole === 'cliente'">
-          <button class="btn btn-success" (click)="agregarAlCarrito(p)">
+          <!-- Solo mostrar botón si el usuario está activo -->
+          <button 
+            *ngIf="puedeAgregar()" 
+            class="btn btn-success" 
+            (click)="agregarAlCarrito(p)">
             <i class="bi bi-cart-plus-fill"></i> Agregar
           </button>
+          
+          <!-- Mensaje si el usuario no puede agregar -->
+          <div *ngIf="!puedeAgregar()" class="alert alert-warning p-2 mb-0 small">
+            <i class="bi bi-exclamation-triangle"></i> 
+            <span *ngIf="userEstado === 'pendiente'">Tu cuenta está pendiente de validación</span>
+            <span *ngIf="userEstado === 'bloqueado'">Tu cuenta ha sido bloqueada</span>
+          </div>
         </ng-container>
       </app-card-producto>
     </div>
@@ -35,6 +53,7 @@
   <!-- Mensaje cuando no hay productos -->
   <div *ngIf="!cargando && productosFiltrados.length === 0" class="alert alert-info text-center">
     <i class="bi bi-info-circle"></i> 
-    No hay productos disponibles en este momento.
+    <span *ngIf="terminoBusqueda">No se encontraron productos con "{{ terminoBusqueda }}"</span>
+    <span *ngIf="!terminoBusqueda">No hay productos disponibles en este momento.</span>
   </div>
 </div>
