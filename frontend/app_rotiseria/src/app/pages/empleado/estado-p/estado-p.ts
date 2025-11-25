@@ -75,6 +75,8 @@ export class EstadoP {
           total: p.precio_final || p.total || 0,
           estado: p.estado || 'Pendiente',
           imagen: this.obtenerImagenPrincipal(p.productos),
+          comentario: p.comentario,
+          productos: p.productos || [],
           // Guardar el objeto completo para actualizaciones
           _original: p
         }));

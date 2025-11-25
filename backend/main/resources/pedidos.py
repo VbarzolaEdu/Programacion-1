@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import PedidoModel, ProductoModel
+from main.models import PedidoModel, ProductoModel, PedidosProductosModel
 from flask_jwt_extended import jwt_required
 from datetime import datetime
 from main.mail.functions import sendMail
@@ -42,11 +42,26 @@ class Pedido(Resource):
                 elif key != 'productos':  # Evitamos asignar directamente productos
                     setattr(pedido, key, value)
 
-            # Si se pasan productos para actualizar la relación
-            producto_ids = data.get('productos')
-            if producto_ids is not None:
-                productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
-                pedido.productos = productos  # Reemplaza productos asociados
+            # Si se pasan productos para actualizar la relación con cantidades
+            productos_data = data.get('productos')
+            if productos_data is not None:
+                # Limpiar asociaciones existentes
+                pedido.productos_asociaciones = []
+                
+                # Agregar nuevas asociaciones con cantidades
+                for item in productos_data:
+                    if isinstance(item, dict):
+                        producto_id = item.get('id')
+                        cantidad = item.get('cantidad', 1)
+                    else:
+                        producto_id = item
+                        cantidad = 1
+                    
+                    asociacion = PedidosProductosModel(
+                        producto_id=producto_id,
+                        cantidad=cantidad
+                    )
+                    pedido.productos_asociaciones.append(asociacion)
 
             db.session.add(pedido)
             db.session.commit()
@@ -111,11 +126,25 @@ class Pedidos(Resource):
         try:
             pedido = PedidoModel.from_json(data)
 
-            # Asociar productos si se mandan
-            producto_ids = data.get('productos')
-            if producto_ids:
-                productos = ProductoModel.query.filter(ProductoModel.id.in_(producto_ids)).all()
-                pedido.productos.extend(productos)
+            # Asociar productos con cantidades si se mandan
+            productos_data = data.get('productos')
+            if productos_data:
+                # productos_data puede ser un array de objetos con {id, cantidad} o solo IDs
+                for item in productos_data:
+                    if isinstance(item, dict):
+                        producto_id = item.get('id')
+                        cantidad = item.get('cantidad', 1)
+                    else:
+                        # Si solo es un ID, cantidad por defecto es 1
+                        producto_id = item
+                        cantidad = 1
+                    
+                    # Crear la asociación con cantidad
+                    asociacion = PedidosProductosModel(
+                        producto_id=producto_id,
+                        cantidad=cantidad
+                    )
+                    pedido.productos_asociaciones.append(asociacion)
 
             db.session.add(pedido)
             db.session.commit()

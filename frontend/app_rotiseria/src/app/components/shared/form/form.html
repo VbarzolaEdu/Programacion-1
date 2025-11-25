@@ -1,0 +1,196 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title mb-4">
+      <i class="bi bi-pencil-square"></i> {{ titulo }}
+    </h5>
+
+    <form>
+      <!-- Nombre -->
+      <div class="mb-3" *ngIf="debeMostrar('nombre')">
+        <label for="nombre" class="form-label">{{ getLabel('nombre') }}</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="nombre"
+          [(ngModel)]="datosTemporal.nombre"
+          name="nombre"
+          required>
+      </div>
+
+      <!-- Apellidos -->
+      <div class="mb-3" *ngIf="debeMostrar('apellidos')">
+        <label for="apellidos" class="form-label">{{ getLabel('apellidos') }}</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="apellidos"
+          [(ngModel)]="datosTemporal.apellidos"
+          name="apellidos"
+          required>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3" *ngIf="debeMostrar('email')">
+        <label for="email" class="form-label">{{ getLabel('email') }}</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email"
+          [(ngModel)]="datosTemporal.email"
+          name="email"
+          required>
+        <div class="form-text">
+          <i class="bi bi-info-circle"></i> Asegúrate de usar un email válido
+        </div>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="mb-3" *ngIf="debeMostrar('cellphone')">
+        <label for="cellphone" class="form-label">{{ getLabel('cellphone') }}</label>
+        <input 
+          type="number" 
+          class="form-control" 
+          id="cellphone"
+          [(ngModel)]="datosTemporal.cellphone"
+          name="cellphone"
+          required>
+      </div>
+
+      <!-- Precio -->
+      <div class="mb-3" *ngIf="debeMostrar('precio')">
+        <label for="precio" class="form-label">
+          <strong>{{ getLabel('precio') }} *</strong>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="precio"
+            [(ngModel)]="datosTemporal.precio"
+            name="precio"
+            min="0"
+            step="0.01"
+            [placeholder]="getPlaceholder('precio')"
+            required>
+        </div>
+      </div>
+
+      <!-- Categoría -->
+      <div class="mb-3" *ngIf="debeMostrar('categoria')">
+        <label for="categoria" class="form-label">
+          <strong>{{ getLabel('categoria') }}</strong>
+        </label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="categoria"
+          [(ngModel)]="datosTemporal.categoria"
+          name="categoria"
+          [placeholder]="getPlaceholder('categoria')">
+      </div>
+
+      <!-- Descripción (textarea) -->
+      <div class="mb-3" *ngIf="debeMostrar('descripcion')">
+        <label for="descripcion" class="form-label">
+          {{ getLabel('descripcion') }}
+        </label>
+        <textarea 
+          class="form-control" 
+          id="descripcion"
+          [(ngModel)]="datosTemporal.descripcion"
+          name="descripcion"
+          rows="3"
+          maxlength="255"
+          [placeholder]="getPlaceholder('descripcion')">
+        </textarea>
+        <div class="form-text">
+          <span class="text-muted">{{ datosTemporal.descripcion?.length || 0 }}/255 caracteres</span>
+        </div>
+      </div>
+
+      <!-- Precio Final (para pedidos) -->
+      <div class="mb-3" *ngIf="debeMostrar('precio_final')">
+        <label for="precio_final" class="form-label">
+          <strong>{{ getLabel('precio_final') }}</strong>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="precio_final"
+            [(ngModel)]="datosTemporal.precio_final"
+            name="precio_final"
+            min="0"
+            step="0.01"
+            required>
+        </div>
+        <small class="form-text text-muted" *ngIf="getHelperText('precio_final')">
+          {{ getHelperText('precio_final') }}
+        </small>
+      </div>
+
+      <!-- Estado (select para pedidos) -->
+      <div class="mb-3" *ngIf="debeMostrar('estado') && getTipoInput('estado') === 'select'">
+        <label for="estado" class="form-label">
+          <strong>{{ getLabel('estado') }}</strong>
+        </label>
+        <select 
+          class="form-select" 
+          id="estado"
+          [(ngModel)]="datosTemporal.estado"
+          name="estado"
+          required>
+          <option value="">-- Seleccionar Estado --</option>
+          <option *ngFor="let opcion of estadoOpciones" [value]="opcion">{{ opcion }}</option>
+        </select>
+        <small class="form-text text-muted" *ngIf="getHelperText('estado')">
+          {{ getHelperText('estado') }}
+        </small>
+      </div>
+
+      <!-- Fecha -->
+      <div class="mb-3" *ngIf="debeMostrar('fecha')">
+        <label for="fecha" class="form-label">
+          <strong>{{ getLabel('fecha') }}</strong>
+        </label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fecha"
+          [(ngModel)]="datosTemporal.fecha"
+          name="fecha"
+          required>
+        <small class="form-text text-muted" *ngIf="getHelperText('fecha')">
+          {{ getHelperText('fecha') }}
+        </small>
+      </div>
+
+      <!-- Información de solo lectura -->
+      <div class="alert alert-info" *ngIf="camposReadOnly && (camposReadOnly.rol || camposReadOnly.estado)">
+        <p class="mb-1" *ngIf="camposReadOnly.rol"><strong>Rol:</strong> {{ camposReadOnly.rol }}</p>
+        <p class="mb-0" *ngIf="camposReadOnly.estado"><strong>Estado:</strong> {{ camposReadOnly.estado }}</p>
+        <small class="text-muted">
+          <i class="bi bi-lock-fill"></i> Estos campos no se pueden modificar
+        </small>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="d-flex gap-2">
+        <button 
+          type="button" 
+          class="btn btn-success flex-grow-1"
+          (click)="onGuardar()">
+          <i class="bi bi-check-circle-fill"></i> Guardar Cambios
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-secondary flex-grow-1"
+          (click)="onCancelar()">
+          <i class="bi bi-x-circle-fill"></i> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

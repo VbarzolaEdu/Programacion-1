@@ -6,13 +6,14 @@ import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { Search } from '../../../components/shared/search/search';
 import { Pagination } from '../../../components/shared/pagination/pagination';
+import { Form } from '../../../components/shared/form/form';
 import { Productos as ProductosService } from '../../../services/productos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header, Search, Pagination],
+  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header, Search, Pagination, Form],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -129,7 +130,8 @@ export class Productos {
     this.productoTemporal = {
       nombre: producto.nombre,
       precio: producto.precio,
-      categoria: producto.categoria || ''
+      categoria: producto.categoria || '',
+      descripcion: producto.descripcion || ''
     };
     
     // Scroll al formulario
@@ -150,23 +152,24 @@ export class Productos {
   /**
    * Guarda los cambios del producto editado
    */
-  guardarCambios() {
-    const confirmar = confirm(`¿Guardar los cambios en "${this.productoTemporal.nombre}"?`);
+  guardarCambios(datosActualizados: any) {
+    const confirmar = confirm(`¿Guardar los cambios en "${datosActualizados.nombre}"?`);
     if (!confirmar) return;
 
     if (!this.productoEditando) return;
 
     // Preparar los datos en el formato que espera el backend
     const productoData = {
-      nombre: this.productoTemporal.nombre,
-      precio: this.productoTemporal.precio,
-      categoria: this.productoTemporal.categoria || '',
+      nombre: datosActualizados.nombre,
+      precio: datosActualizados.precio,
+      categoria: datosActualizados.categoria || '',
+      descripcion: datosActualizados.descripcion || '',
       disponibilidad: 'disponible' // Siempre disponible por defecto
     };
 
     this.productoService.updateProducto(this.productoEditando.id, productoData).subscribe({
       next: (response) => {
-        alert(`Producto "${this.productoTemporal.nombre}" actualizado correctamente`);
+        alert(`Producto "${datosActualizados.nombre}" actualizado correctamente`);
         
         // Actualizar el producto en el array local con la respuesta del backend
         const productoActualizado = {
@@ -231,7 +234,8 @@ export class Productos {
     this.nuevoProducto = {
       nombre: '',
       precio: 0,
-      categoria: ''
+      categoria: '',
+      descripcion: ''
     };
     setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
   }
@@ -247,8 +251,8 @@ export class Productos {
   /**
    * Guarda el nuevo producto
    */
-  guardarNuevoProducto() {
-    if (!this.nuevoProducto.nombre || !this.nuevoProducto.precio) {
+  guardarNuevoProducto(datosProducto: any) {
+    if (!datosProducto.nombre || !datosProducto.precio) {
       alert('Por favor, completa al menos el nombre y el precio del producto.');
       return;
     }
@@ -256,9 +260,10 @@ export class Productos {
     if (confirm('¿Estás seguro de que deseas crear este producto?')) {
       // Preparar los datos en el formato que espera el backend
       const productoData = {
-        nombre: this.nuevoProducto.nombre,
-        precio: this.nuevoProducto.precio,
-        categoria: this.nuevoProducto.categoria || '',
+        nombre: datosProducto.nombre,
+        precio: datosProducto.precio,
+        categoria: datosProducto.categoria || '',
+        descripcion: datosProducto.descripcion || '',
         disponibilidad: 'disponible' // Siempre disponible por defecto
       };
 

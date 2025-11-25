@@ -81,7 +81,9 @@ export class Pedidos {
           total: p.precio_final || p.total || 0,
           estado: p.estado || 'Pendiente',
           nombre: this.obtenerNombreProductos(p.productos),
-          imagen: this.obtenerImagenPrincipal(p.productos)
+          imagen: this.obtenerImagenPrincipal(p.productos),
+          comentario: p.comentario,
+          productos: p.productos || []
         }));
         
         this.cargando = false;

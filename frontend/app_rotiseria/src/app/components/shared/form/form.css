@@ -1,0 +1,29 @@
+.card {
+  background-color: #fde0db;
+  border-radius: 10px;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.form-control:focus {
+  border-color: #F25C2A;
+  box-shadow: 0 0 0 0.2rem rgba(242, 92, 42, 0.25);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+}

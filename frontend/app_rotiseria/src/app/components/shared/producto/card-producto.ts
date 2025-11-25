@@ -21,6 +21,9 @@ export class CardProducto {
   /** Precio del producto */
   @Input() precio!: number;
   
+  /** Descripción del producto */
+  @Input() descripcion?: string;
+  
   /** URL de la imagen del producto */
   @Input() imagen?: string;
   

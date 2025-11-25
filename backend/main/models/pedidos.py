@@ -2,11 +2,15 @@ from datetime import datetime
 from .. import db
 from . import UserModel
 
-pedido_producto = db.Table(
-    'pedido_producto',
-    db.Column('pedido_id', db.Integer, db.ForeignKey('pedido.id'), primary_key=True),
-    db.Column('producto_id', db.Integer, db.ForeignKey('producto.id'), primary_key=True)
-)
+# Tabla de asociación con cantidad
+class PedidoProducto(db.Model):
+    __tablename__ = 'pedido_producto'
+    pedido_id = db.Column(db.Integer, db.ForeignKey('pedido.id'), primary_key=True)
+    producto_id = db.Column(db.Integer, db.ForeignKey('producto.id'), primary_key=True)
+    cantidad = db.Column(db.Integer, nullable=False, default=1)
+    
+    # Relaciones
+    producto = db.relationship('Producto', backref='pedido_asociaciones')
 
 class Pedido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,15 +18,24 @@ class Pedido(db.Model):
     precio_final = db.Column(db.Integer, nullable=False)
     fecha = db.Column(db.DateTime, nullable=False)  # Cambiado a db.DateTime
     estado = db.Column(db.String(50), nullable=False)  # Cambiado a String para almacenar el estado del pedido
+    comentario = db.Column(db.String(255), nullable=True)
 
     user = db.relationship('User', back_populates='pedidos')
-    productos = db.relationship('Producto', secondary=pedido_producto,backref=db.backref('pedidos', lazy='dynamic'))  # Cambiado a 'productos' para evitar confusión
+    # Cambiar la relación para usar la clase intermedia
+    productos_asociaciones = db.relationship('PedidoProducto', backref='pedido', cascade='all, delete-orphan')
     # back_populates='pedidos'
 
     def __repr__(self):
         return '<Pedido: %r %r>' % (self.id_user, self.precio_final)
 
     def to_json(self):
+        # Construir lista de productos con cantidades
+        productos_con_cantidad = []
+        for asociacion in self.productos_asociaciones:
+            producto_json = asociacion.producto.to_json()
+            producto_json['cantidad'] = asociacion.cantidad
+            productos_con_cantidad.append(producto_json)
+        
         pedido_json = {
             'id': self.id,
             'id_user': self.id_user,
@@ -30,7 +43,8 @@ class Pedido(db.Model):
             'fecha': self.fecha.isoformat(),  # Convierte a formato ISO 8601
             'estado': self.estado,
             'user': self.user.to_json() if self.user else None,
-            'productos': [producto.to_json() for producto in self.productos],
+            'productos': productos_con_cantidad,
+            'comentario': self.comentario
         }
         return pedido_json
 
@@ -49,6 +63,7 @@ class Pedido(db.Model):
         id_user = pedido_json.get('id_user')
         precio_final = pedido_json.get('precio_final')
         estado = pedido_json.get('estado')
+        comentario = pedido_json.get('comentario')
         
         # Manejar la fecha de forma más flexible
         fecha_str = pedido_json.get('fecha')
@@ -67,4 +82,4 @@ class Pedido(db.Model):
         else:
             fecha = datetime.now()
             
-        return Pedido(id=id, id_user=id_user, precio_final=precio_final, fecha=fecha, estado=estado)
+        return Pedido(id=id, id_user=id_user, precio_final=precio_final, fecha=fecha, estado=estado, comentario=comentario)

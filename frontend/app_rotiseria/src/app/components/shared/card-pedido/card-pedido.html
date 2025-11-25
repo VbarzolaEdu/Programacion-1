@@ -19,6 +19,56 @@
       <span [ngClass]="getEstadoClass()" class="fw-bold">{{ estado }}</span>
     </p>
     
+    <!-- Comentario (si existe) -->
+    <p *ngIf="comentario" class="mb-2">
+      <strong>Comentario:</strong> <em class="text-muted">{{ comentario }}</em>
+    </p>
+    
+    <!-- Botón para ver productos -->
+    <div *ngIf="productos && productos.length > 0" class="mb-2">
+      <button 
+        class="btn btn-sm btn-outline-info" 
+        (click)="toggleProductos()">
+        <i class="bi" [ngClass]="mostrarProductos ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        {{ mostrarProductos ? 'Ocultar' : 'Ver' }} productos ({{ contarProductos() }})
+      </button>
+      
+      <!-- Lista de productos -->
+      <div *ngIf="mostrarProductos" class="mt-2 p-2 border rounded bg-light">
+        <h6 class="mb-2">Productos del pedido:</h6>
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let producto of productos" class="mb-2 pb-2 border-bottom">
+            <div class="d-flex align-items-start">
+              <img 
+                *ngIf="producto.imagen" 
+                [src]="producto.imagen" 
+                [alt]="producto.nombre"
+                class="img-thumbnail me-2"
+                style="width: 50px; height: 50px; object-fit: cover;">
+              <div class="flex-grow-1">
+                <strong>{{ producto.nombre }}</strong>
+                <span *ngIf="producto.cantidad > 1" class="badge bg-primary ms-2">
+                  x{{ producto.cantidad }}
+                </span>
+                <br>
+                <small class="text-muted">
+                  Precio unitario: ${{ producto.precio | number:'1.0-0' }}
+                </small>
+                <span *ngIf="producto.cantidad > 1">
+                  <br>
+                  <small class="text-muted">
+                    Subtotal: ${{ (producto.precio * producto.cantidad) | number:'1.0-0' }}
+                  </small>
+                </span>
+                <br>
+                <small *ngIf="producto.descripcion" class="text-muted">{{ producto.descripcion }}</small>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
     <!-- Botones específicos de cada página -->
     <div class="pedido-acciones">
       <ng-content></ng-content>

@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { CardUsuario } from '../../../components/shared/usuario/card-usuario';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
+import { Form } from '../../../components/shared/form/form';
 import { User } from '../../../services/user';
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, CardUsuario, Header],
+  imports: [CommonModule, FormsModule, Navbar, CardUsuario, Header, Form],
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.css']
 })
@@ -81,7 +82,7 @@ export class Perfil {
   /**
    * Guarda los cambios del perfil
    */
-  guardarCambios() {
+  guardarCambios(datosActualizados: any) {
     const confirmar = confirm('¿Guardar los cambios en tu perfil?');
     if (!confirmar) return;
 
@@ -92,15 +93,15 @@ export class Perfil {
       return;
     }
     
-    this.UsuarioService.updateUsuario(userId, this.usuarioTemporal).subscribe({
+    this.UsuarioService.updateUsuario(userId, datosActualizados).subscribe({
       next: (response) => {
         alert('Perfil actualizado correctamente');
         
         // Actualizar los datos locales
-        this.usuario.nombre = this.usuarioTemporal.nombre;
-        this.usuario.apellidos = this.usuarioTemporal.apellidos;
-        this.usuario.email = this.usuarioTemporal.email;
-        this.usuario.cellphone = this.usuarioTemporal.cellphone;
+        this.usuario.nombre = datosActualizados.nombre;
+        this.usuario.apellidos = datosActualizados.apellidos;
+        this.usuario.email = datosActualizados.email;
+        this.usuario.cellphone = datosActualizados.cellphone;
         
         this.modoEdicion = false;
         this.usuarioTemporal = {};

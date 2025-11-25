@@ -7,6 +7,7 @@ class Producto(db.Model):
     precio= db.Column(db.Float, nullable=False)
     categoria= db.Column(db.String(50), nullable=False)
     disponibilidad= db.Column(db.String(50), nullable=False)
+    descripcion= db.Column(db.String(255), nullable=True)
 
     valoracion=db.relationship('Valoracion', back_populates='producto', lazy=True)
     # pedidos = db.relationship('Pedido', secondary=pedido_producto, back_populates='productos')
@@ -20,7 +21,8 @@ class Producto(db.Model):
             'nombre': self.nombre,
             'precio': self.precio,
             'categoria': self.categoria,
-            'disponibilidad': self.disponibilidad
+            'disponibilidad': self.disponibilidad,
+            'descripcion': self.descripcion
         }
         return producto_json
     
@@ -39,4 +41,5 @@ class Producto(db.Model):
         precio = producto_json.get('precio')
         categoria = producto_json.get('categoria')
         disponibilidad = producto_json.get('disponibilidad')
-        return Producto(id=id, nombre=nombre, precio=precio, categoria=categoria, disponibilidad=disponibilidad)
+        descripcion = producto_json.get('descripcion')
+        return Producto(id=id, nombre=nombre, precio=precio, categoria=categoria, disponibilidad=disponibilidad, descripcion=descripcion)

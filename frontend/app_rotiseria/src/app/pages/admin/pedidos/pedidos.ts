@@ -8,12 +8,13 @@ import { CardPedido } from '../../../components/shared/card-pedido/card-pedido';
 import { Pagination } from '../../../components/shared/pagination/pagination';
 import { DateSearch } from '../../../components/shared/date-search/date-search';
 import { EstadoFilter } from '../../../components/shared/estado-filter/estado-filter';
+import { Form } from '../../../components/shared/form/form';
 import { Pedidos } from '../../../services/pedidos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pedidos',
-  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido, Pagination, DateSearch, EstadoFilter],
+  imports: [RouterModule, CommonModule, FormsModule, Navbar, Header, CardPedido, Pagination, DateSearch, EstadoFilter, Form],
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.css'
 })
@@ -85,6 +86,8 @@ export class PedidosAdmin {
           total: p.precio_final || p.total || 0,
           estado: p.estado || 'Pendiente',
           imagen: this.obtenerImagenPrincipal(p.productos),
+          comentario: p.comentario,
+          productos: p.productos || [],
           // Guardar el objeto completo para actualizaciones
           _original: p
         }));
@@ -158,34 +161,34 @@ export class PedidosAdmin {
   /**
    * Guarda los cambios del pedido editado
    */
-  guardarCambios(): void {
-    if (!this.pedidoTemporal.precio_final || this.pedidoTemporal.precio_final <= 0) {
+  guardarCambios(datosActualizados: any): void {
+    if (!datosActualizados.precio_final || datosActualizados.precio_final <= 0) {
       alert('El precio debe ser mayor a 0');
       return;
     }
 
-    if (!this.pedidoTemporal.estado) {
+    if (!datosActualizados.estado) {
       alert('Debes seleccionar un estado');
       return;
     }
 
-    if (!this.pedidoTemporal.fecha) {
+    if (!datosActualizados.fecha) {
       alert('Debes seleccionar una fecha');
       return;
     }
 
     const datosActualizar = {
-      precio_final: this.pedidoTemporal.precio_final,
-      estado: this.pedidoTemporal.estado,
-      fecha: this.pedidoTemporal.fecha
+      precio_final: datosActualizados.precio_final,
+      estado: datosActualizados.estado,
+      fecha: datosActualizados.fecha
     };
 
     this.pedidoService.updatePedido(this.pedidoEditando.id, datosActualizar).subscribe({
       next: (response) => {
         // Actualizar el pedido en la lista
-        this.pedidoEditando.total = this.pedidoTemporal.precio_final;
-        this.pedidoEditando.estado = this.pedidoTemporal.estado;
-        this.pedidoEditando.fecha = this.formatearFecha(this.pedidoTemporal.fecha);
+        this.pedidoEditando.total = datosActualizados.precio_final;
+        this.pedidoEditando.estado = datosActualizados.estado;
+        this.pedidoEditando.fecha = this.formatearFecha(datosActualizados.fecha);
         
         alert('✅ Pedido actualizado correctamente');
         this.cancelarEdicion();

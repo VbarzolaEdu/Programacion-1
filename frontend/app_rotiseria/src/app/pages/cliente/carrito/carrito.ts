@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CartService, CartItem } from '../../../services/cart.service';
 import { Navbar } from '../../../components/shared/navbar/navbar';
@@ -10,13 +11,14 @@ import { Auth } from '../../../services/auth';
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, Navbar, Header],
+  imports: [CommonModule, FormsModule, Navbar, Header],
   templateUrl: './carrito.html',
   styleUrls: ['./carrito.css']
 })
 export class Carrito implements OnInit {
   items: CartItem[] = [];
   cargando: boolean = false;
+  comentario: string = '';
 
   constructor(
     private cart: CartService, 
@@ -68,7 +70,11 @@ export class Carrito implements OnInit {
       precio_final: this.total(),
       fecha: new Date().toISOString(),
       estado: 'Pendiente',
-      productos: this.items.map(item => item.id) // Array de IDs de productos
+      productos: this.items.map(item => ({ 
+        id: item.id, 
+        cantidad: item.cantidad 
+      })), // Array de objetos con id y cantidad
+      comentario: this.comentario.trim() || null
     };
 
     // Enviar el pedido a la base de datos
@@ -76,6 +82,7 @@ export class Carrito implements OnInit {
       next: (response) => {
         alert('Pedido confirmado. ¡Gracias por tu compra!');
         this.cart.clear();
+        this.comentario = '';
         this.cargando = false;
         this.router.navigate(['/cliente/pedidos']);
       },

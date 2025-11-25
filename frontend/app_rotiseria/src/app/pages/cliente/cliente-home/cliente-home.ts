@@ -107,13 +107,13 @@ export class ClienteHome {
           ? response 
           : (response.productos || []);
         
-        // Agregar imagen por defecto si no existe y filtrar solo disponibles
+        // Agregar imagen por defecto si no existe y filtrar solo productos disponibles
         this.arrayproductos = productos
+          .filter((p: any) => p.disponibilidad === 'disponible')
           .map((p: any) => ({
             ...p,
             imagen: p.imagen || 'assets/buger1.jpg'
-          }))
-          .filter((p: any) => p.disponible !== false);
+          }));
         
         this.productosFiltrados = [...this.arrayproductos];
         this.cargando = false;

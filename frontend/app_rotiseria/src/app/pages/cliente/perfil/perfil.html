@@ -42,90 +42,15 @@
   </div>
 
   <!-- Formulario de edición (modo edición) -->
-  <div *ngIf="!cargando && usuario && modoEdicion" class="card">
-    <div class="card-body">
-      <h5 class="card-title mb-4">
-        <i class="bi bi-pencil-square"></i> Editar Perfil
-      </h5>
-
-      <form>
-        <!-- Nombre -->
-        <div class="mb-3">
-          <label for="nombre" class="form-label">Nombre</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="nombre"
-            [(ngModel)]="usuarioTemporal.nombre"
-            name="nombre"
-            required>
-        </div>
-
-        <!-- Apellidos -->
-        <div class="mb-3">
-          <label for="apellidos" class="form-label">Apellidos</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="apellidos"
-            [(ngModel)]="usuarioTemporal.apellidos"
-            name="apellidos"
-            required>
-        </div>
-
-        <!-- Email -->
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input 
-            type="email" 
-            class="form-control" 
-            id="email"
-            [(ngModel)]="usuarioTemporal.email"
-            name="email"
-            required>
-          <div class="form-text">
-            <i class="bi bi-info-circle"></i> Asegúrate de usar un email válido
-          </div>
-        </div>
-
-        <!-- Teléfono -->
-        <div class="mb-3">
-          <label for="cellphone" class="form-label">Teléfono</label>
-          <input 
-            type="number" 
-            class="form-control" 
-            id="cellphone"
-            [(ngModel)]="usuarioTemporal.cellphone"
-            name="cellphone"
-            required>
-        </div>
-
-        <!-- Información de solo lectura -->
-        <div class="alert alert-info">
-          <p class="mb-1"><strong>Rol:</strong> {{ usuario.rol }}</p>
-          <p class="mb-0"><strong>Estado:</strong> {{ usuario.estado }}</p>
-          <small class="text-muted">
-            <i class="bi bi-lock-fill"></i> Estos campos no se pueden modificar
-          </small>
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="d-flex gap-2">
-          <button 
-            type="button" 
-            class="btn btn-success flex-grow-1"
-            (click)="guardarCambios()">
-            <i class="bi bi-check-circle-fill"></i> Guardar Cambios
-          </button>
-          <button 
-            type="button" 
-            class="btn btn-secondary flex-grow-1"
-            (click)="cancelarEdicion()">
-            <i class="bi bi-x-circle-fill"></i> Cancelar
-          </button>
-        </div>
-      </form>
-    </div>
+  <div *ngIf="!cargando && usuario && modoEdicion">
+    <app-form
+      [titulo]="'Editar Perfil'"
+      [datos]="usuario"
+      [camposReadOnly]="{ rol: usuario.rol, estado: usuario.estado }"
+      [mostrarCampos]="['nombre', 'apellidos', 'email', 'cellphone']"
+      (guardar)="guardarCambios($event)"
+      (cancelar)="cancelarEdicion()">
+    </app-form>
   </div>
 
   <!-- Mensaje si no hay datos -->

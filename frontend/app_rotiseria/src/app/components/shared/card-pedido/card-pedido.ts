@@ -17,9 +17,21 @@ export class CardPedido {
   @Input() cliente?: string;
   @Input() nombreProducto?: string;
   @Input() imagen?: string;
+  @Input() comentario?: string;
+  @Input() productos?: any[]; // Array de productos del pedido
+
+  mostrarProductos: boolean = false;
 
   getEstadoClass(): string {
     // Siempre devolver color neutral (gris oscuro)
     return 'text-secondary';
+  }
+
+  toggleProductos(): void {
+    this.mostrarProductos = !this.mostrarProductos;
+  }
+
+  contarProductos(): number {
+    return this.productos?.length || 0;
   }
 }

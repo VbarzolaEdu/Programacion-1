@@ -10,6 +10,9 @@
     <p class="producto-categoria">
       <i class="bi bi-tag-fill"></i> {{ categoria }}
     </p>
+    <p class="producto-descripcion" *ngIf="descripcion">
+      <small class="text-muted">{{ descripcion }}</small>
+    </p>
     <p class="producto-precio">
       <span class="precio-label">Precio:</span>
       <strong class="precio-valor">${{ precio | number:'1.2-2' }}</strong>

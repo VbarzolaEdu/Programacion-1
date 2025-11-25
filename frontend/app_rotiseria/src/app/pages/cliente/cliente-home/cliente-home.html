@@ -28,7 +28,8 @@
           [nombre]="p.nombre"
           [categoria]="p.categoria"
           [precio]="p.precio"
-          [imagen]="p.imagen">
+          [imagen]="p.imagen"
+          [descripcion]="p.descripcion">
           
           <!-- Botones exclusivos para clientes -->
           <ng-container *ngIf="userRole === 'cliente'">
