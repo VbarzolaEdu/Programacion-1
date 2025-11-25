@@ -4,11 +4,6 @@
 
 <div class="container mt-3 mb-5 pb-5">
   
-  <!-- Mensaje de error -->
-  <div *ngIf="error" class="alert alert-danger" role="alert">
-    <i class="bi bi-exclamation-triangle"></i> {{ error }}
-  </div>
-  
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">
@@ -22,6 +17,10 @@
     <div *ngFor="let c of calificaciones" class="card mb-3 p-3 shadow-sm">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <strong>{{ c.usuario }}</strong>
+        <div>
+          <small class="text-muted me-2">{{ c.fecha | date:'short' }}</small>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminarCalificacion(c.id)">Eliminar</button>
+        </div>
       </div>
       
       <!-- Mostrar producto si existe -->
@@ -39,17 +38,10 @@
         </i>
       </div>
     </div>
-
-    <!-- Componente de paginación -->
-    <app-pagination 
-      [currentPage]="currentPage"
-      [totalPages]="totalPages"
-      (pageChange)="cargarCalificaciones($event)">
-    </app-pagination>
   </div>
 
   <!-- Mensaje cuando no hay calificaciones -->
-  <div *ngIf="!cargando && calificaciones.length === 0 && !error" class="alert alert-info text-center">
+  <div *ngIf="!cargando && calificaciones.length === 0" class="alert alert-info text-center">
     <i class="bi bi-info-circle"></i> 
     No hay calificaciones registradas aún.
   </div>

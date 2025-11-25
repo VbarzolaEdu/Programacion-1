@@ -7,6 +7,18 @@ class Valoracion(Resource):
     def get(self, id):
         valoracion = db.session.query(ValoracionModel).get_or_404(id)
         return valoracion.to_json()
+    
+    def delete(self, id):
+        """Elimina una valoracion por id."""
+        valoracion = db.session.query(ValoracionModel).get_or_404(id)
+        try:
+            db.session.delete(valoracion)
+            db.session.commit()
+            # 204 No Content - eliminado correctamente
+            return '', 204
+        except Exception as e:
+            db.session.rollback()
+            return {'message': 'Error al eliminar la valoracion', 'detail': str(e)}, 500
 
 class Valoraciones(Resource):
     def get(self):

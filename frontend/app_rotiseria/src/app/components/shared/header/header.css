@@ -98,3 +98,20 @@
     right: 12px;
   }
 }
+
+/* Responsive extra para pantallas muy pequeñas */
+@media(max-width: 360px) {
+  .header-title {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    padding: 0 10px;
+  }
+
+  .logout-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    top: 10px;
+    right: 10px;
+  }
+}

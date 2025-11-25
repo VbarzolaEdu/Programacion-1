@@ -11,18 +11,51 @@ class Valoracion(db.Model):
     id_producto = db.Column(db.Integer, db.ForeignKey('producto.id'))
     user= db.relationship('User', back_populates='valoraciones') #relacion con la tabla User
     producto = db.relationship('Producto', back_populates='valoracion') #relacion con la tabla Producto
+    #nombre de la relacion
+    # user = db.relationship('User', back_populates='valoraciones')
 
     
     def to_json(self):
+        # Normalizar la salida para evitar romper el contrato esperado por el frontend
+        user_json = None
+        if self.user:
+            try:
+                u = self.user.to_json()
+            except Exception:
+                u = None
+
+            if u:
+                # El frontend busca campos como 'nombre' y 'apellido' (no 'apellidos')
+                user_json = {
+                    'id': u.get('id'),
+                    'nombre': u.get('nombre') or u.get('name'),
+                    'apellido': u.get('apellidos') or u.get('apellido') or u.get('lastname') or u.get('lastname'),
+                    'email': u.get('email')
+                }
+
+        producto_json = None
+        if self.producto:
+            try:
+                p = self.producto.to_json()
+            except Exception:
+                p = None
+
+            if p:
+                producto_json = {
+                    'id': p.get('id'),
+                    'nombre': p.get('nombre') or p.get('name'),
+                    'precio': p.get('precio')
+                }
+
         return {
-        'id': self.id,
-        'id_usuario': self.id_usuario,
-        'id_producto': self.id_producto,
-        'puntuacion': self.puntuacion,
-        'comentario': self.comentario,
-        'user': self.user.to_json() if self.user else None,
-        'producto': self.producto.to_json() if self.producto else None
-    }
+            'id': self.id,
+            'id_usuario': self.id_usuario,
+            'id_producto': self.id_producto,
+            'puntuacion': self.puntuacion,
+            'comentario': self.comentario,
+            'user': user_json,
+            'producto': producto_json
+        }
 
     # def to_json_complete(self):
         

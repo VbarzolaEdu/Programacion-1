@@ -21,3 +21,32 @@
 .bottom-nav a.active {
   color: #ffe082;
 }
+
+/* Ajustes responsive */
+@media(max-width: 768px) {
+  .bottom-nav {
+    padding: 8px 0;
+  }
+  
+  .bottom-nav a {
+    font-size: 1.4rem;
+  }
+}
+
+@media(max-width: 480px) {
+  .bottom-nav {
+    padding: 6px 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .bottom-nav a {
+    font-size: 1.25rem;
+  }
+}
+
+@media(max-width: 360px) {
+  .bottom-nav a {
+    font-size: 1.15rem; 
+  }
+}
