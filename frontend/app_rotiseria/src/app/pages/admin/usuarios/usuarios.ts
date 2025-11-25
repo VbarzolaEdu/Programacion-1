@@ -4,13 +4,14 @@ import { CardUsuario } from '../../../components/shared/usuario/card-usuario';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { Search } from '../../../components/shared/search/search';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Router } from '@angular/router';
 import { User } from '../../../services/user';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, Navbar, CardUsuario, Header, Search],
+  imports: [CommonModule, Navbar, CardUsuario, Header, Search, Pagination],
   templateUrl: './usuarios.html',
   styleUrls: ['./usuarios.css']
 })
@@ -21,9 +22,11 @@ export class Usuarios {
   cargando: boolean = false;
   terminoBusqueda: string = '';
   
-  // Configuración de paginación
-  paginaActual: number = 1;
-  limite: number = 100; // Cargar muchos usuarios a la vez
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 10;
   
   constructor(
     private router: Router,
@@ -42,8 +45,8 @@ export class Usuarios {
     
     // Preparar parámetros de filtrado
     const params: any = {
-      page: this.paginaActual,
-      limit: this.limite
+      page: this.currentPage,
+      limit: this.itemsPerPage
     };
     
     // Si hay término de búsqueda, intentar filtrar por nombre, apellidos o email
@@ -65,6 +68,9 @@ export class Usuarios {
       next: (response: any) => {
         this.arrayusuarios = response;
         this.usuariosFiltrados = response;
+        // Estimar total de items y páginas (backend no envía esta info)
+        this.totalItems = response.length;
+        this.totalPages = Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage));
         this.cargando = false;
       },
       error: (error) => {
@@ -79,8 +85,17 @@ export class Usuarios {
    */
   aplicarFiltros() {
     // Reiniciar a la primera página cuando se busca
-    this.paginaActual = 1;
+    this.currentPage = 1;
     this.cargarUsuarios();
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.cargarUsuarios();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**

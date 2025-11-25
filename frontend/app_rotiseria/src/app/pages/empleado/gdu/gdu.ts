@@ -7,10 +7,11 @@ import { Header } from '../../../components/shared/header/header';
 import { CardUsuario } from '../../../components/shared/usuario/card-usuario';
 import { User } from '../../../services/user';
 import { Search } from '../../../components/shared/search/search';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 
 @Component({
   selector: 'app-gdu',
-  imports: [CommonModule, RouterModule, FormsModule, Navbar, Header, CardUsuario, Search],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar, Header, CardUsuario, Search, Pagination],
   templateUrl: './gdu.html',
   styleUrl: './gdu.css'
 })
@@ -21,9 +22,11 @@ export class GDU {
   terminoBusqueda: string = '';
   filtroActivo: string = 'todos'; // 'todos', 'pendientes', 'bloqueados', 'validados'
   
-  // Configuración de paginación
-  paginaActual: number = 1;
-  limite: number = 100;
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 10;
 
   constructor(private UsuarioService: User) {}
 
@@ -39,8 +42,8 @@ export class GDU {
     
     // Preparar parámetros de filtrado
     const params: any = {
-      page: this.paginaActual,
-      limit: this.limite
+      page: this.currentPage,
+      limit: this.itemsPerPage
     };
     
     // Si hay término de búsqueda, intentar filtrar por nombre, apellidos o email
@@ -62,6 +65,9 @@ export class GDU {
       next: (response: any) => {
         this.arrayusuarios = response;
         this.aplicarFiltroEstado();
+        // Estimar total de items y páginas
+        this.totalItems = this.usuariosFiltrados.length;
+        this.totalPages = Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage));
         this.cargando = false;
       },
       error: (error) => {
@@ -94,8 +100,17 @@ export class GDU {
    */
   aplicarFiltros() {
     // Reiniciar a la primera página cuando se busca
-    this.paginaActual = 1;
+    this.currentPage = 1;
     this.cargarUsuarios();
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.cargarUsuarios();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**

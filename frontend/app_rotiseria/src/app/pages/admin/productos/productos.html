@@ -177,30 +177,40 @@
   </div>
 
   <!-- Lista de productos -->
-  <div *ngIf="!cargando && !modoEdicion && productosFiltrados.length > 0" class="row g-3">
-    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
-      <app-card-producto
-        [id]="p.id"
-        [nombre]="p.nombre"
-        [categoria]="p.categoria"
-        [precio]="p.precio"
-        [imagen]="p.imagen"
-        [disponible]="p.disponible">
-        <!-- Botones específicos del admin -->
-        <button 
-          class="btn btn-warning me-2" 
-          (click)="editarProducto(p)"
-          type="button">
-          <i class="bi bi-pencil-fill"></i> Editar
-        </button>
-        <button 
-          class="btn btn-danger" 
-          (click)="eliminarProducto(p)"
-          type="button">
-          <i class="bi bi-trash-fill"></i> Eliminar
-        </button>
-      </app-card-producto>
+  <div *ngIf="!cargando && !modoEdicion && productosFiltrados.length > 0">
+    <div class="row g-3">
+      <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
+        <app-card-producto
+          [id]="p.id"
+          [nombre]="p.nombre"
+          [categoria]="p.categoria"
+          [precio]="p.precio"
+          [imagen]="p.imagen"
+          [disponible]="p.disponible">
+          <!-- Botones específicos del admin -->
+          <button 
+            class="btn btn-warning me-2" 
+            (click)="editarProducto(p)"
+            type="button">
+            <i class="bi bi-pencil-fill"></i> Editar
+          </button>
+          <button 
+            class="btn btn-danger" 
+            (click)="eliminarProducto(p)"
+            type="button">
+            <i class="bi bi-trash-fill"></i> Eliminar
+          </button>
+        </app-card-producto>
+      </div>
     </div>
+
+    <!-- Componente de paginación -->
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [totalItems]="totalItems"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 
   <!-- Mensaje cuando no hay productos -->

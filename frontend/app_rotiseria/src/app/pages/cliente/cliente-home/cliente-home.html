@@ -20,34 +20,44 @@
   </div>
 
   <!-- Lista de productos -->
-  <div *ngIf="!cargando && productosFiltrados.length > 0" class="row g-3">
-    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
-      <app-card-producto
-        [id]="p.id"
-        [nombre]="p.nombre"
-        [categoria]="p.categoria"
-        [precio]="p.precio"
-        [imagen]="p.imagen">
-        
-        <!-- Botones exclusivos para clientes -->
-        <ng-container *ngIf="userRole === 'cliente'">
-          <!-- Solo mostrar botón si el usuario está activo -->
-          <button 
-            *ngIf="puedeAgregar()" 
-            class="btn btn-success" 
-            (click)="agregarAlCarrito(p)">
-            <i class="bi bi-cart-plus-fill"></i> Agregar
-          </button>
+  <div *ngIf="!cargando && productosFiltrados.length > 0">
+    <div class="row g-3">
+      <div class="col-12 col-sm-6 col-lg-4" *ngFor="let p of productosFiltrados">
+        <app-card-producto
+          [id]="p.id"
+          [nombre]="p.nombre"
+          [categoria]="p.categoria"
+          [precio]="p.precio"
+          [imagen]="p.imagen">
           
-          <!-- Mensaje si el usuario no puede agregar -->
-          <div *ngIf="!puedeAgregar()" class="alert alert-warning p-2 mb-0 small">
-            <i class="bi bi-exclamation-triangle"></i> 
-            <span *ngIf="userEstado === 'pendiente'">Tu cuenta está pendiente de validación</span>
-            <span *ngIf="userEstado === 'bloqueado'">Tu cuenta ha sido bloqueada</span>
-          </div>
-        </ng-container>
-      </app-card-producto>
+          <!-- Botones exclusivos para clientes -->
+          <ng-container *ngIf="userRole === 'cliente'">
+            <!-- Solo mostrar botón si el usuario está activo -->
+            <button 
+              *ngIf="puedeAgregar()" 
+              class="btn btn-success" 
+              (click)="agregarAlCarrito(p)">
+              <i class="bi bi-cart-plus-fill"></i> Agregar
+            </button>
+            
+            <!-- Mensaje si el usuario no puede agregar -->
+            <div *ngIf="!puedeAgregar()" class="alert alert-warning p-2 mb-0 small">
+              <i class="bi bi-exclamation-triangle"></i> 
+              <span *ngIf="userEstado === 'pendiente'">Tu cuenta está pendiente de validación</span>
+              <span *ngIf="userEstado === 'bloqueado'">Tu cuenta ha sido bloqueada</span>
+            </div>
+          </ng-container>
+        </app-card-producto>
+      </div>
     </div>
+
+    <!-- Componente de paginación -->
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [totalItems]="totalItems"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 
   <!-- Mensaje cuando no hay productos -->

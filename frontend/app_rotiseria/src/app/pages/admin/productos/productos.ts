@@ -5,13 +5,14 @@ import { CardProducto } from '../../../components/shared/producto/card-producto'
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { Search } from '../../../components/shared/search/search';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Productos as ProductosService } from '../../../services/productos';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header, Search],
+  imports: [CommonModule, FormsModule, CardProducto, Navbar, Header, Search, Pagination],
   templateUrl: './productos.html',
   styleUrls: ['./productos.css']
 })
@@ -20,6 +21,12 @@ export class Productos {
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
   terminoBusqueda: string = '';
+
+  // Propiedades de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 12;
 
   // Modo edición
   productoEditando: any = null;
@@ -42,10 +49,13 @@ export class Productos {
   /**
    * Carga la lista de productos desde el backend
    */
-  cargarProductos(nombre?: string) {
+  cargarProductos(nombre?: string, page: number = 1) {
     this.cargando = true;
 
-    const params: any = {};
+    const params: any = {
+      page: page,
+      per_page: this.itemsPerPage
+    };
 
     // Agregar filtro de nombre si existe
     if (nombre && nombre.trim()) {
@@ -57,10 +67,17 @@ export class Productos {
         // Verificar si la respuesta es un array o un objeto
         if (Array.isArray(response)) {
           this.arrayproductos = response;
+          this.totalItems = response.length;
+          this.totalPages = 1;
         } else if (response.productos && Array.isArray(response.productos)) {
           this.arrayproductos = response.productos;
+          this.totalItems = response.total || response.productos.length;
+          this.totalPages = response.pages || 1;
+          this.currentPage = response.page || page;
         } else {
           this.arrayproductos = [];
+          this.totalItems = 0;
+          this.totalPages = 1;
         }
         
         // Agregar imagen por defecto si no existe y convertir disponibilidad
@@ -77,6 +94,8 @@ export class Productos {
         this.cargando = false;
         this.arrayproductos = [];
         this.productosFiltrados = [];
+        this.totalItems = 0;
+        this.totalPages = 1;
         alert('Error al cargar productos. Verifica tu conexión.');
       }
     });
@@ -87,7 +106,16 @@ export class Productos {
    */
   onBusqueda(termino: string): void {
     this.terminoBusqueda = termino;
-    this.cargarProductos(termino);
+    this.currentPage = 1;
+    this.cargarProductos(termino, 1);
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.cargarProductos(this.terminoBusqueda, page);
   }
 
   /**

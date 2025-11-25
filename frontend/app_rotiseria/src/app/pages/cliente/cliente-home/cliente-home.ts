@@ -6,6 +6,7 @@ import { CartService } from '../../../services/cart.service';
 import { Navbar } from '../../../components/shared/navbar/navbar';
 import { Header } from '../../../components/shared/header/header';
 import { Search } from '../../../components/shared/search/search';
+import { Pagination } from '../../../components/shared/pagination/pagination';
 import { Auth } from '../../../services/auth';
 import { User } from '../../../services/user';
 import { Productos } from '../../../services/productos';
@@ -14,7 +15,7 @@ import { inject } from '@angular/core';
 @Component({
   selector: 'app-cliente-home',
   standalone: true,
-  imports: [CommonModule, Navbar, CardProducto, Header, Search], 
+  imports: [CommonModule, Navbar, CardProducto, Header, Search, Pagination], 
   templateUrl: './cliente-home.html',
   styleUrls: ['./cliente-home.css']
 })
@@ -27,6 +28,12 @@ export class ClienteHome {
   arrayproductos: any[] = [];
   productosFiltrados: any[] = [];
   terminoBusqueda: string = '';
+
+  // Datos de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  itemsPerPage: number = 12;
 
   constructor(
     private router: Router, 
@@ -75,10 +82,14 @@ export class ClienteHome {
   /**
    * Carga la lista de productos desde el backend
    */
-  cargarProductos(nombre?: string) {
+  cargarProductos(nombre?: string, page: number = 1) {
     this.cargando = true;
+    this.currentPage = page;
     
-    const params: any = {};
+    const params: any = {
+      page: page,
+      per_page: this.itemsPerPage
+    };
     
     // Agregar filtro de nombre si existe
     if (nombre && nombre.trim()) {
@@ -87,22 +98,22 @@ export class ClienteHome {
     
     this.productoService.getProductos(params).subscribe({
       next: (response: any) => {
-        // Verificar si la respuesta es un array o un objeto
-        if (Array.isArray(response)) {
-          this.arrayproductos = response;
-        } else if (response.productos && Array.isArray(response.productos)) {
-          this.arrayproductos = response.productos;
-        } else {
-          this.arrayproductos = [];
-        }
+        // Extraer datos de paginación
+        this.totalPages = response.pages || 1;
+        this.totalItems = response.total || 0;
+
+        // Extraer array de productos
+        const productos = Array.isArray(response) 
+          ? response 
+          : (response.productos || []);
         
         // Agregar imagen por defecto si no existe y filtrar solo disponibles
-        this.arrayproductos = this.arrayproductos
-          .map(p => ({
+        this.arrayproductos = productos
+          .map((p: any) => ({
             ...p,
             imagen: p.imagen || 'assets/buger1.jpg'
           }))
-          .filter(p => p.disponible !== false);
+          .filter((p: any) => p.disponible !== false);
         
         this.productosFiltrados = [...this.arrayproductos];
         this.cargando = false;
@@ -121,7 +132,15 @@ export class ClienteHome {
    */
   onBusqueda(termino: string): void {
     this.terminoBusqueda = termino;
-    this.cargarProductos(termino);
+    this.cargarProductos(termino, 1);
+  }
+
+  /**
+   * Maneja el cambio de página
+   */
+  onPageChange(page: number) {
+    this.cargarProductos(this.terminoBusqueda, page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   agregarAlCarrito(p: any) {

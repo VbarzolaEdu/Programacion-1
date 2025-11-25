@@ -90,6 +90,14 @@
         </button>
       </app-card-usuario>
     </div>
+
+    <!-- Componente de paginación -->
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [totalItems]="totalItems"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 
   <!-- Mensaje cuando no hay usuarios -->
