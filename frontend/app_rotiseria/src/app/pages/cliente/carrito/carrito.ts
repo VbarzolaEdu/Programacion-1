@@ -68,7 +68,7 @@ export class Carrito implements OnInit {
     const pedidoData = {
       id_user: userId,
       precio_final: this.total(),
-      fecha: new Date().toISOString(),
+      // No enviar fecha - el backend la generará automáticamente
       estado: 'Pendiente',
       productos: this.items.map(item => ({ 
         id: item.id, 

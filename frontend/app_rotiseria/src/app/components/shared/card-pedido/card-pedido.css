@@ -14,7 +14,26 @@
 .pedido-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
-  z-index: 10; /* Mayor que 1 pero menor que navbar (1000) */
+  z-index: 10;
+}
+
+.pedido-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pedido-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.pedido-info {
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .pedido-card p {
@@ -28,6 +47,28 @@
   color: #495057;
 }
 
+.comentario-text {
+  font-size: 0.9rem;
+}
+
+.productos-detalle {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.producto-mini-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.producto-info {
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 .pedido-acciones {
   margin-top: 0.75rem;
   display: flex;
@@ -38,7 +79,22 @@
 .pedido-acciones .btn {
   font-size: 0.85rem;
   flex: 1 1 auto;
-  min-width: 100px;
+  min-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive para tablets */
+@media (max-width: 768px) {
+  .pedido-content {
+    gap: 0.75rem;
+  }
+
+  .pedido-img {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 /* Responsive para móviles */
@@ -47,24 +103,89 @@
     padding: 0.75rem;
   }
 
-  .pedido-card img {
-    width: 60px;
-    height: 60px;
-    margin-right: 0.5rem !important;
+  .pedido-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pedido-img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .pedido-info {
+    width: 100%;
   }
 
   .pedido-card p {
     font-size: 0.875rem;
   }
 
+  .pedido-acciones {
+    width: 100%;
+  }
+
   .pedido-acciones .btn {
     font-size: 0.75rem;
     padding: 0.375rem 0.5rem;
-    min-width: 80px;
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .comentario-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive para pantallas muy pequeñas (320px) */
+@media (max-width: 400px) {
+  .pedido-card {
+    padding: 0.5rem;
+  }
+
+  .pedido-content {
+    gap: 0.5rem;
+  }
+
+  .pedido-img {
+    max-width: 150px;
+  }
+
+  .pedido-card p {
+    font-size: 0.8rem;
+  }
+
+  .pedido-card strong {
+    font-size: 0.85rem;
   }
 
   .pedido-acciones {
     gap: 0.25rem;
+  }
+
+  .pedido-acciones .btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .pedido-acciones .btn i {
+    font-size: 0.85rem;
+  }
+
+  .producto-mini-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .productos-detalle h6 {
+    font-size: 0.9rem;
+  }
+
+  .productos-detalle small {
+    font-size: 0.75rem;
   }
 }
 
@@ -84,5 +205,3 @@
 .text-secondary {
   color: #6c757d !important;
 }
-
-.img {width: 100px; height: 100px; object-fit: cover; border-radius: 8px}

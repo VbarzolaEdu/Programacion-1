@@ -1,0 +1,76 @@
+.estado-filter-container {
+  width: 100%;
+}
+
+.estado-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.estado-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.estado-btn i {
+  font-size: 1rem;
+}
+
+.btn-text {
+  display: inline;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .estado-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .estado-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 576px) {
+  .estado-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .estado-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .estado-btn i {
+    font-size: 0.9rem;
+  }
+}
+
+/* Pantallas muy pequeñas (320px) */
+@media (max-width: 400px) {
+  .estado-filter-grid {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .estado-btn {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+}

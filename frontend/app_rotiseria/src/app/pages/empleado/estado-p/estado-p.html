@@ -42,19 +42,19 @@
       </div>
 
       <!-- Botones de acción del empleado -->
-      <div class="d-flex gap-2">
+      <div class="d-flex flex-column flex-sm-row gap-2">
         <button 
-          class="btn btn-warning btn-sm text-white" 
+          class="btn btn-warning btn-sm text-white w-100" 
           (click)="cambiarEstado(p, '  En Preparación')">
-          <i class="bi bi-clock-history"></i> En Preparación
+          <i class="bi bi-clock-history"></i> <span class="d-none d-sm-inline">En Preparación</span><span class="d-sm-none">Preparando</span>
         </button>
         <button 
-          class="btn btn-success btn-sm" 
+          class="btn btn-success btn-sm w-100" 
           (click)="cambiarEstado(p, '  Listo')">
           <i class="bi bi-check-circle"></i> Listo
         </button>
         <button 
-          class="btn btn-danger btn-sm" 
+          class="btn btn-danger btn-sm w-100" 
           (click)="cambiarEstado(p, ' Rechazado')">
           <i class="bi bi-x-circle"></i> Rechazar
         </button>

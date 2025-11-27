@@ -31,11 +31,17 @@ class User(Resource):
     
     @jwt_required()
     def put(self,id):
-
         user=db.session.query(UserModel).get_or_404(id)
-        data = request.get_json().items()
-        for key, value in data:
-            setattr(user, key, value)
+        data = request.get_json()
+        
+        # Campos permitidos para actualizar
+        campos_permitidos = ['nombre', 'apellido', 'email', 'cellphone', 'password', 'rol', 'estado']
+        
+        for key, value in data.items():
+            # Solo actualizar campos permitidos (no relaciones)
+            if key in campos_permitidos:
+                setattr(user, key, value)
+        
         db.session.add(user)
         db.session.commit()
         return user.to_json(),200
